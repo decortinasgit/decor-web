@@ -3,7 +3,7 @@ import { MobileSidebar } from "./mobile-sidebar"
 
 export default function Header() {
   return (
-    <header className="sticky inset-x-0 top-0 w-full">
+    <header className="sticky inset-x-0 top-0 w-full border-b-2 md:border-b-0">
       <nav className="flex items-center justify-between px-4 pt-4 pb-2 md:pt-2 md:justify-end">
         <div className={cn("block md:!hidden")}>
           <MobileSidebar />

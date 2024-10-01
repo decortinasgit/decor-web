@@ -2,12 +2,6 @@
 
 import { MenuIcon } from "lucide-react"
 import { useState } from "react"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip"
 import { IconLogout } from "@tabler/icons-react"
 import { useAuth } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
@@ -18,11 +12,7 @@ import { navItems } from "@/constants/data"
 import { DashboardNav } from "@/components/dashboard-nav"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
-// import { Playlist } from "../data/playlists";
-
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-  // playlists: Playlist[];
-}
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function MobileSidebar({ className }: SidebarProps) {
   const [open, setOpen] = useState(false)
@@ -65,27 +55,13 @@ export function MobileSidebar({ className }: SidebarProps) {
                   setOpen={setOpen}
                 />
                 <div className="bottom-0 w-full cursor-pointer ">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          onClick={handleSignOut}
-                          className="flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full"
-                        >
-                          <IconLogout className="ml-3 size-5 flex-none" />
-                          <span className="mr-2 truncate">Cerrar sesión</span>
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent
-                        align="center"
-                        side="right"
-                        sideOffset={8}
-                        className={!open ? "hidden" : "inline-block"}
-                      >
-                        Cerrar sesión
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full"
+                  >
+                    <IconLogout className="ml-3 size-5 flex-none" />
+                    <span className="mr-2 truncate">Cerrar sesión</span>
+                  </button>
                 </div>
               </div>
             </div>
