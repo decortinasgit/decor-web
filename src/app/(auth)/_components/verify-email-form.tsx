@@ -1,3 +1,5 @@
+"use client"
+
 import { HTMLAttributes, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -15,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/custom/button"
 import { cn } from "@/lib/utils"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 type Inputs = z.infer<typeof verifyEmailSchema>

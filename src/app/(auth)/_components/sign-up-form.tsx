@@ -46,20 +46,35 @@ export function SignUpForm() {
     setLoading(true)
 
     try {
-      await signUp.create({
+      const user = await signUp.create({
         emailAddress: data.email,
         password: data.password,
       })
 
-      // Send email verification code
-      await signUp.prepareEmailAddressVerification({
-        strategy: "email_code",
-      })
+      if (user.id) {
+        const response = await fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: user.id,
+            email: data.email,
+            role: "user",
+          }),
+        })
 
-      router.push("/signup/verify-email")
-      toast.message("Check your email", {
-        description: "We sent you a 6-digit verification code.",
-      })
+        if (response.ok) {
+          await signUp.prepareEmailAddressVerification({
+            strategy: "email_code",
+          })
+
+          router.push("/signup/verify-email")
+          toast.message("Chequéa tu mail", {
+            description: "Enviamos un código de verificación de 6 dígitos.",
+          })
+        } else {
+          throw new Error("Failed to add user")
+        }
+      }
     } catch (err) {
       showErrorToast(err)
     } finally {
