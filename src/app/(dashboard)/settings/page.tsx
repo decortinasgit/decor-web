@@ -1,9 +1,12 @@
 import React from "react"
 
-type Props = {}
+import { getUsers } from "@/lib/actions/user"
+import { UsersTable } from "./_components/users-table"
 
-const SettingsPage = (props: Props) => {
-  return <div>SettingsPage</div>
+type DashboardPageProps = {}
+
+export default async function DashboardPage({}: DashboardPageProps) {
+  const usersTransaction = await getUsers()
+
+  return <UsersTable users={usersTransaction.data} />
 }
-
-export default SettingsPage
