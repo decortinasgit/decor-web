@@ -3,6 +3,7 @@ import { users } from "@/db/schema"
 import { getErrorMessage } from "../handle-error"
 import { z } from "zod"
 import { authSchema } from "../validations/auth"
+import { eq } from "drizzle-orm"
 
 export async function addUser(rawInput: z.infer<typeof authSchema>) {
   try {
@@ -30,7 +31,6 @@ export async function addUser(rawInput: z.infer<typeof authSchema>) {
   }
 }
 
-// Function to get users with pagination and limit
 export async function getUsers() {
   try {
     const transaction = await db.transaction(async (tx) => {
@@ -46,6 +46,29 @@ export async function getUsers() {
     return {
       data: [],
       pageCount: 0,
+      error: getErrorMessage(err),
+    }
+  }
+}
+
+export async function updateEmailVerifiedStatus(
+  userId: string,
+  status: boolean
+) {
+  try {
+    const result = await db
+      .update(users)
+      .set({ emailVerified: status })
+      .where(eq(users.email, userId))
+      .returning({ updatedId: users.email })
+
+    return {
+      data: result,
+      error: null,
+    }
+  } catch (err) {
+    return {
+      data: null,
       error: getErrorMessage(err),
     }
   }

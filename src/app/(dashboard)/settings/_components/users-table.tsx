@@ -36,8 +36,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { User } from "@/interfaces/user"
+import { IconLoader2 } from "@tabler/icons-react"
 
-export const columns: ColumnDef<User>[] = [
+export const columns = (
+  handleToggleUser: (email: string) => void
+): ColumnDef<User>[] => [
   {
     accessorKey: "email",
     header: ({ column }) => {
@@ -84,35 +87,10 @@ export const columns: ColumnDef<User>[] = [
       const [isLoading, setIsLoading] = React.useState(false)
       const user = row.original
 
-      const handleToggleUser = async () => {
+      const handleAction = async () => {
         setIsLoading(true)
         try {
-          const response = await fetch("/api/users/update-email-verified", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: user.email,
-              email_verified: !user.emailVerified,
-            }),
-          })
-
-          if (!response.ok) {
-            throw new Error("Failed to update emailVerified status")
-          }
-
-          toast.success(
-            `Usuario ${
-              user.emailVerified ? "habilitado" : "deshabilitado"
-            } con éxito`
-          )
-          location.reload()
-        } catch (error) {
-          toast.error("No se pudo habilitar al usuario", {
-            description: "Intente de nuevo más tarde.",
-          })
-          console.error(error)
+          await handleToggleUser(user.email)
         } finally {
           setIsLoading(false)
         }
@@ -138,8 +116,14 @@ export const columns: ColumnDef<User>[] = [
               Copiar email
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleToggleUser} disabled={isLoading}>
-              {user.emailVerified ? "Desabilitar Usuario" : "Confirmar usuario"}
+            <DropdownMenuItem onClick={handleAction} disabled={isLoading}>
+              {isLoading ? (
+                <IconLoader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : user.emailVerified ? (
+                "Desabilitar Usuario"
+              ) : (
+                "Confirmar usuario"
+              )}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -152,7 +136,8 @@ interface UserTableProps {
   users: User[]
 }
 
-export function UsersTable({ users }: UserTableProps) {
+export function UsersTable({ users: initialUsers }: UserTableProps) {
+  const [users, setUsers] = React.useState(initialUsers)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -161,9 +146,48 @@ export function UsersTable({ users }: UserTableProps) {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  const handleToggleUser = async (email: string) => {
+    const user = users.find((u) => u.email === email)
+    if (!user) return
+
+    try {
+      const response = await fetch("/api/users/update-email-verified", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          email_verified: !user.emailVerified,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update emailVerified status")
+      }
+
+      setUsers((prevUsers) =>
+        prevUsers.map((u) =>
+          u.email === email ? { ...u, emailVerified: !u.emailVerified } : u
+        )
+      )
+
+      toast.success(
+        `Usuario ${
+          user.emailVerified ? "habilitado" : "deshabilitado"
+        } con éxito`
+      )
+    } catch (error) {
+      toast.error("No se pudo habilitar al usuario", {
+        description: "Intente de nuevo más tarde.",
+      })
+      console.error(error)
+    }
+  }
+
   const table = useReactTable({
     data: users,
-    columns,
+    columns: columns(handleToggleUser),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

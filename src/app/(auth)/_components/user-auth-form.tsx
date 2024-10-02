@@ -102,7 +102,7 @@ export function UserAuthForm() {
           disabled={loading}
           loading={loading}
         >
-          Sign in
+          Iniciar Sesión
         </Button>
       </form>
     </Form>
