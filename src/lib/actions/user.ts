@@ -1,19 +1,31 @@
-import { db } from "@/db"
-import { users } from "@/db/schema"
-import { getErrorMessage } from "../handle-error"
 import { z } from "zod"
-import { authSchema } from "../validations/auth"
+import bcrypt from "bcryptjs"
 import { eq } from "drizzle-orm"
 
-export async function addUser(rawInput: z.infer<typeof authSchema>) {
+import { db } from "@/db"
+import { users } from "@/db/schema"
+import { signUpSchema } from "../validations/auth"
+
+export async function addUser(rawInput: z.infer<typeof signUpSchema>) {
   try {
+    const hashedPassword = await bcrypt.hash(rawInput.password, 10)
+
     const user = await db
       .insert(users)
       .values({
         id: rawInput.email,
-        name: "Test",
+        name: rawInput.firstName,
+        lastName: rawInput.lastName,
         email: rawInput.email,
         emailVerified: false,
+        phone: rawInput.phone,
+        businessName: rawInput.businessName,
+        cuitOrDni: rawInput.cuitOrDni,
+        province: rawInput.shippingAddress.province,
+        state: rawInput.shippingAddress.state,
+        address: rawInput.shippingAddress.address,
+        preferredTransport: rawInput.preferredTransport,
+        password: hashedPassword,
         createdAt: new Date(),
         updatedAt: new Date(),
       })
@@ -24,9 +36,12 @@ export async function addUser(rawInput: z.infer<typeof authSchema>) {
       error: null,
     }
   } catch (err) {
+    console.log("====================================")
+    console.log(err)
+    console.log("====================================")
     return {
       data: null,
-      error: getErrorMessage(err),
+      error: err,
     }
   }
 }
@@ -46,7 +61,7 @@ export async function getUsers() {
     return {
       data: [],
       pageCount: 0,
-      error: getErrorMessage(err),
+      error: err,
     }
   }
 }
@@ -69,7 +84,7 @@ export async function updateEmailVerifiedStatus(
   } catch (err) {
     return {
       data: null,
-      error: getErrorMessage(err),
+      error: err,
     }
   }
 }
