@@ -1,15 +1,16 @@
-import React from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React from "react"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import Loader from "../custom/loader"
 
 export default function PageContainer({
   children,
-  scrollable = false
+  scrollable = false,
 }: {
-  children: React.ReactNode;
-  scrollable?: boolean;
+  children: React.ReactNode
+  scrollable?: boolean
 }) {
   return (
-    <>
+    <React.Suspense fallback={<Loader />}>
       {scrollable ? (
         <ScrollArea className="h-[calc(100dvh-52px)]">
           <div className="h-full  p-4 md:px-8">{children}</div>
@@ -17,6 +18,6 @@ export default function PageContainer({
       ) : (
         <div className="h-full  p-4 md:px-8">{children}</div>
       )}
-    </>
-  );
+    </React.Suspense>
+  )
 }
