@@ -35,11 +35,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { User } from "@/interfaces/user"
+import { Role, User } from "@/interfaces/user"
 import { IconLoader2 } from "@tabler/icons-react"
+import { capitalize } from "@/lib/utils"
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import RolDialog from "./rol-dialog"
 
 export const columns = (
-  handleToggleUser: (email: string) => void
+  handleToggleUser: (email: string) => Promise<void>,
+  handleRoleChange: (userId: string, newRole: string) => void,
+  roles: Role[]
 ): ColumnDef<User>[] => [
   {
     accessorKey: "email",
@@ -81,13 +86,31 @@ export const columns = (
     ),
   },
   {
+    accessorKey: "roleName",
+    header: "Rol",
+    cell: ({ row }) => (
+      <div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button>{capitalize(row.getValue("roleName"))}</Button>
+          </AlertDialogTrigger>
+          <RolDialog
+            roles={roles}
+            userId={row.original.id}
+            onRoleChange={handleRoleChange}
+          />
+        </AlertDialog>
+      </div>
+    ),
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       const [isLoading, setIsLoading] = React.useState(false)
       const user = row.original
 
-      const handleAction = async () => {
+      const handleConfirmAction = async () => {
         setIsLoading(true)
         try {
           await handleToggleUser(user.email)
@@ -116,7 +139,10 @@ export const columns = (
               Copiar email
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleAction} disabled={isLoading}>
+            <DropdownMenuItem
+              onClick={handleConfirmAction}
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <IconLoader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : user.emailVerified ? (
@@ -134,9 +160,10 @@ export const columns = (
 
 interface UserTableProps {
   users: User[]
+  roles: Role[]
 }
 
-export function UsersTable({ users: initialUsers }: UserTableProps) {
+export function UsersTable({ users: initialUsers, roles }: UserTableProps) {
   const [users, setUsers] = React.useState(initialUsers)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -145,6 +172,19 @@ export function UsersTable({ users: initialUsers }: UserTableProps) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+
+  const handleRoleChange = (userId: string, newRole: string) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId
+          ? {
+              ...user,
+              roleName: roles.find((role) => role.id === newRole)!.name,
+            }
+          : user
+      )
+    )
+  }
 
   const handleToggleUser = async (email: string) => {
     const user = users.find((u) => u.email === email)
@@ -187,7 +227,7 @@ export function UsersTable({ users: initialUsers }: UserTableProps) {
 
   const table = useReactTable({
     data: users,
-    columns: columns(handleToggleUser),
+    columns: columns(handleToggleUser, handleRoleChange, roles),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

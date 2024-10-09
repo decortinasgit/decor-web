@@ -1,6 +1,11 @@
 import { pgTable, text, boolean } from "drizzle-orm/pg-core"
 import { lifecycleDates } from "./utils"
 
+export const roles = pgTable("roles", {
+  id: text("id").notNull().primaryKey(),
+  name: text("name").notNull(),
+})
+
 export const users = pgTable("users", {
   id: text("id").notNull().primaryKey(),
   name: text("name").notNull(),
@@ -15,8 +20,10 @@ export const users = pgTable("users", {
   address: text("address").notNull(),
   preferredTransport: text("preferred_transport").notNull(),
   password: text("password").notNull(),
+  roleId: text("role_id"),
   ...lifecycleDates,
 })
 
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
+export type Roles = typeof roles.$inferSelect
