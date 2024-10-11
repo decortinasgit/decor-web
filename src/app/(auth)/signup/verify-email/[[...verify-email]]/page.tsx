@@ -13,7 +13,7 @@ import { VerifyEmailForm } from "@/app/(auth)/_components/verify-email-form"
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: "Verify Email",
+  title: "Verificación",
   description: "Verify your email address to continue with your sign up",
 }
 

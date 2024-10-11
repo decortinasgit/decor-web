@@ -214,7 +214,7 @@ export function UsersTable({ users: initialUsers, roles }: UserTableProps) {
 
       toast.success(
         `Usuario ${
-          user.emailVerified ? "habilitado" : "deshabilitado"
+          user.emailVerified ? "deshabilitado" : "habilitado"
         } con éxito`
       )
     } catch (error) {

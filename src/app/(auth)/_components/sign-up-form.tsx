@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import type { z } from "zod"
+import bcrypt from "bcryptjs"
 
 import provinces from "@/assets/data/provinces.json"
 import states from "@/assets/data/states.json"
@@ -105,11 +106,14 @@ export function SignUpForm() {
       })
 
       if (user.id) {
+        const hashedPassword = await bcrypt.hash(data.password, 10)
+
         const response = await fetch("/api/users", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            data,
+            ...data,
+            password: hashedPassword,
           }),
         })
 

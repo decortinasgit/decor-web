@@ -4,12 +4,17 @@ import { getUserWithAttributes } from "@/lib/queries/user"
 
 export async function POST(req: Request) {
   try {
-    // Parseamos los datos entrantes para validarlos
     const userData = await req.json()
 
-    // Añadimos el usuario a la base de datos
-    await addUser(userData)
+    console.log("====================================")
+    console.log(userData)
+    console.log("====================================")
 
+    const response = await addUser(userData)
+
+    console.log("====================================")
+    console.log(response)
+    console.log("====================================")
     return new Response("User added successfully", { status: 201 })
   } catch (error) {
     console.error(error)

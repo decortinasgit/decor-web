@@ -2,15 +2,6 @@ import { type Metadata } from "next"
 import Link from "next/link"
 import { env } from "@/env.js"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Shell } from "@/components/shell"
 import { SignUpForm } from "@/app/(auth)/_components/sign-up-form"
 
 export const metadata: Metadata = {

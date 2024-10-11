@@ -1,5 +1,4 @@
 import { z } from "zod"
-import bcrypt from "bcryptjs"
 import { eq } from "drizzle-orm"
 
 import { db } from "@/db"
@@ -8,8 +7,6 @@ import { signUpSchema } from "../validations/auth"
 
 export async function addUser(rawInput: z.infer<typeof signUpSchema>) {
   try {
-    const hashedPassword = await bcrypt.hash(rawInput.password, 10)
-
     const user = await db
       .insert(users)
       .values({
@@ -25,7 +22,8 @@ export async function addUser(rawInput: z.infer<typeof signUpSchema>) {
         state: rawInput.shippingAddress.state,
         address: rawInput.shippingAddress.address,
         preferredTransport: rawInput.preferredTransport,
-        password: hashedPassword,
+        password: rawInput.password,
+        roleId: "1",
         createdAt: new Date(),
         updatedAt: new Date(),
       })
