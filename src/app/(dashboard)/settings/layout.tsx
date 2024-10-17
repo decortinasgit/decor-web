@@ -62,11 +62,11 @@ const sidebarNavItems = [
   {
     title: "Costos",
     icon: <IconPalette size={18} />,
-    href: "/settings/appearance",
+    href: "/settings/costs",
   },
   {
     title: "Cortinas",
     icon: <IconNotification size={18} />,
-    href: "/settings/notifications",
+    href: "/settings/curtains",
   },
 ]
