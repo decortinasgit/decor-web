@@ -1,12 +1,5 @@
 "use client"
 
-import {
-  IconNotification,
-  IconPalette,
-  IconTool,
-  IconUser,
-} from "@tabler/icons-react"
-
 import { Layout } from "@/components/custom/layout"
 import PageContainer from "@/components/layouts/page-container"
 
@@ -35,26 +28,3 @@ export default function HomeLayout({
     </PageContainer>
   )
 }
-
-const sidebarNavItems = [
-  {
-    title: "Usuarios",
-    icon: <IconUser size={18} />,
-    href: "/settings",
-  },
-  {
-    title: "Perfil",
-    icon: <IconTool size={18} />,
-    href: "/settings/account",
-  },
-  {
-    title: "Costos",
-    icon: <IconPalette size={18} />,
-    href: "/settings/costs",
-  },
-  {
-    title: "Cortinas",
-    icon: <IconNotification size={18} />,
-    href: "/settings/curtains",
-  },
-]

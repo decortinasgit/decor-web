@@ -1,6 +1,12 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { Active, DataRef, Over } from "@dnd-kit/core"
+
 import { env } from "@/env.js"
+import { ColumnDragData } from "@/app/(dashboard)/orders/_components/board-column"
+import { TaskDragData } from "@/app/(dashboard)/orders/_components/task-card"
+
+type DraggableData = ColumnDragData | TaskDragData
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -38,4 +44,22 @@ export function formatBytes(
   return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
     sizeType === "accurate" ? accurateSizes[i] ?? "Bytest" : sizes[i] ?? "Bytes"
   }`
+}
+
+export function hasDraggableData<T extends Active | Over>(
+  entry: T | null | undefined
+): entry is T & {
+  data: DataRef<DraggableData>
+} {
+  if (!entry) {
+    return false
+  }
+
+  const data = entry.data.current
+
+  if (data?.type === "Column" || data?.type === "Task") {
+    return true
+  }
+
+  return false
 }
