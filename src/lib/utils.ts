@@ -28,6 +28,18 @@ export function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
+export function formatDate(
+  date: Date | string | number,
+  opts: Intl.DateTimeFormatOptions = {}
+) {
+  return new Intl.DateTimeFormat("es-ES", {
+    month: opts.month ?? "long",
+    day: opts.day ?? "numeric",
+    year: opts.year ?? "numeric",
+    ...opts,
+  }).format(new Date(date))
+}
+
 export function formatBytes(
   bytes: number,
   opts: {

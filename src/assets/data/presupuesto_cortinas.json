@@ -1,0 +1,1801 @@
+[
+  {
+    "id": "BO01",
+    "name": "Roller",
+    "type": "Blackout",
+    "color": "Blanco",
+    "price": 38.25
+  },
+  {
+    "id": "BO03",
+    "name": "Roller",
+    "type": "Blackout",
+    "color": "Ivory",
+    "price": 38.25
+  },
+  {
+    "id": "BO04",
+    "name": "Roller",
+    "type": "Blackout",
+    "color": "Gris",
+    "price": 38.25
+  },
+  {
+    "id": "BO05",
+    "name": "Roller",
+    "type": "Blackout",
+    "color": "Beige",
+    "price": 61.0
+  },
+  {
+    "id": "BO02",
+    "name": "Roller",
+    "type": "Blackout",
+    "color": "Negro",
+    "price": 61.0
+  },
+  {
+    "id": "BO00",
+    "name": "Roller",
+    "type": "Blackout",
+    "color": "A definir",
+    "price": 45.0
+  },
+  {
+    "id": "SS01",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Blanco blanco",
+    "price": 43.35
+  },
+  {
+    "id": "SS02",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Blanco beige",
+    "price": 43.35
+  },
+  {
+    "id": "SS03",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Blanco gris",
+    "price": 43.35
+  },
+  {
+    "id": "SS04",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Beige Beige",
+    "price": 64.0
+  },
+  {
+    "id": "SS05",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Gris Gris",
+    "price": 64.0
+  },
+  {
+    "id": "SS06",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Negro Negro",
+    "price": 50.0
+  },
+  {
+    "id": "SS07",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Chocolate",
+    "price": 64.0
+  },
+  {
+    "id": "SS08",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Amarillo",
+    "price": 64.0
+  },
+  {
+    "id": "SS09",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Verde",
+    "price": 64.0
+  },
+  {
+    "id": "SS10",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Rojo",
+    "price": 64.0
+  },
+  {
+    "id": "SS11",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Azul",
+    "price": 64.0
+  },
+  {
+    "id": "SS12",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Bronce",
+    "price": 64.0
+  },
+  {
+    "id": "SS18",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Ceniza",
+    "price": 64.0
+  },
+  {
+    "id": "SS19",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Caliza",
+    "price": 64.0
+  },
+  {
+    "id": "SS20",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Cromo",
+    "price": 64.0
+  },
+  {
+    "id": "SS21",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Hierro",
+    "price": 64.0
+  },
+  {
+    "id": "SS22",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Cobre",
+    "price": 64.0
+  },
+  {
+    "id": "SS23",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Niquel",
+    "price": 64.0
+  },
+  {
+    "id": "SS24",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "Carbon",
+    "price": 64.0
+  },
+  {
+    "id": "SS01.1",
+    "name": "Roller",
+    "type": "Sunscreen 1%",
+    "color": "Blanco blanco",
+    "price": 64.0
+  },
+  {
+    "id": "SS02.1",
+    "name": "Roller",
+    "type": "Sunscreen 1%",
+    "color": "Blanco beige",
+    "price": 64.0
+  },
+  {
+    "id": "SS03.1",
+    "name": "Roller",
+    "type": "Sunscreen 1%",
+    "color": "Blanco gris",
+    "price": 64.0
+  },
+  {
+    "id": "SS00.1",
+    "name": "Roller",
+    "type": "Sunscreen 1%",
+    "color": "A definir",
+    "price": 64.0
+  },
+  {
+    "id": "SS06.1",
+    "name": "Roller",
+    "type": "Sunscreen 1%",
+    "color": "Negro Negro",
+    "price": 64.0
+  },
+  {
+    "id": "SS00",
+    "name": "Roller",
+    "type": "Sunscreen 5%",
+    "color": "A definir",
+    "price": 43.35
+  },
+  {
+    "id": "LX01",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Blanco",
+    "price": 43.35
+  },
+  {
+    "id": "LX02",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Ivory",
+    "price": 43.35
+  },
+  {
+    "id": "LX03",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Beige",
+    "price": 43.35
+  },
+  {
+    "id": "LX04",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Chocolate",
+    "price": 43.35
+  },
+  {
+    "id": "LX05",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Esmeralda",
+    "price": 43.35
+  },
+  {
+    "id": "LX06",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Perla",
+    "price": 43.35
+  },
+  {
+    "id": "LX07",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Terracota",
+    "price": 43.35
+  },
+  {
+    "id": "LX08",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Rojo",
+    "price": 43.35
+  },
+  {
+    "id": "LX09",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Gris Cemento",
+    "price": 43.35
+  },
+  {
+    "id": "LX10",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Tostado",
+    "price": 43.35
+  },
+  {
+    "id": "LX11",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "Gris Claro",
+    "price": 43.35
+  },
+  {
+    "id": "LX00",
+    "name": "Roller",
+    "type": "LUX",
+    "color": "A definir",
+    "price": 43.35
+  },
+  {
+    "id": "SB12",
+    "name": "Roller",
+    "type": "Southbeach",
+    "color": "SB12",
+    "price": 35.7
+  },
+  {
+    "id": "SB15",
+    "name": "Roller",
+    "type": "Southbeach",
+    "color": "SB15",
+    "price": 35.7
+  },
+  {
+    "id": "SB19",
+    "name": "Roller",
+    "type": "Southbeach",
+    "color": "SB19",
+    "price": 35.7
+  },
+  {
+    "id": "SB16",
+    "name": "Roller",
+    "type": "Southbeach",
+    "color": "SB16",
+    "price": 42.5
+  },
+  {
+    "id": "SB17",
+    "name": "Roller",
+    "type": "Southbeach",
+    "color": "SB17",
+    "price": 42.5
+  },
+  {
+    "id": "SB18",
+    "name": "Roller",
+    "type": "Southbeach",
+    "color": "SB18",
+    "price": 42.5
+  },
+  {
+    "id": "SB00",
+    "name": "Roller",
+    "type": "Southbeach",
+    "color": "A definir",
+    "price": 35.7
+  },
+  {
+    "id": "SH01",
+    "name": "Roller",
+    "type": "SH",
+    "color": "Blanco",
+    "price": 42.5
+  },
+  {
+    "id": "SH02",
+    "name": "Roller",
+    "type": "SH",
+    "color": "Marfil",
+    "price": 42.5
+  },
+  {
+    "id": "SH04",
+    "name": "Roller",
+    "type": "SH",
+    "color": "Vison",
+    "price": 42.5
+  },
+  {
+    "id": "SH00",
+    "name": "Roller",
+    "type": "SH",
+    "color": "A definir",
+    "price": 42.5
+  },
+  {
+    "id": "CB01",
+    "name": "Roller",
+    "type": "Cordoba",
+    "color": "Nieve",
+    "price": 42.5
+  },
+  {
+    "id": "CB02",
+    "name": "Roller",
+    "type": "Cordoba",
+    "color": "Marfil",
+    "price": 42.5
+  },
+  {
+    "id": "CB03",
+    "name": "Roller",
+    "type": "Cordoba",
+    "color": "Centeno",
+    "price": 42.5
+  },
+  {
+    "id": "CB04",
+    "name": "Roller",
+    "type": "Cordoba",
+    "color": "Camel",
+    "price": 42.5
+  },
+  {
+    "id": "CB06",
+    "name": "Roller",
+    "type": "Cordoba",
+    "color": "Tostado",
+    "price": 42.5
+  },
+  {
+    "id": "CB07",
+    "name": "Roller",
+    "type": "Cordoba",
+    "color": "Grafito",
+    "price": 42.5
+  },
+  {
+    "id": "CB08",
+    "name": "Roller",
+    "type": "Cordoba",
+    "color": "Plomo",
+    "price": 42.5
+  },
+  {
+    "id": "CB00",
+    "name": "Roller",
+    "type": "Cordoba",
+    "color": "A definir",
+    "price": 42.5
+  },
+  {
+    "id": "ZE05",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.05",
+    "price": 120.0
+  },
+  {
+    "id": "ZE06",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.06",
+    "price": 120.0
+  },
+  {
+    "id": "ZE07",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.07",
+    "price": 120.0
+  },
+  {
+    "id": "ZE08",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.08",
+    "price": 120.0
+  },
+  {
+    "id": "ZE09",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.09",
+    "price": 120.0
+  },
+  {
+    "id": "ZE10",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.10",
+    "price": 120.0
+  },
+  {
+    "id": "ZE11",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.11",
+    "price": 160.0
+  },
+  {
+    "id": "ZE12",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.12",
+    "price": 160.0
+  },
+  {
+    "id": "ZE13",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.13",
+    "price": 160.0
+  },
+  {
+    "id": "ZE14",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.14",
+    "price": 160.0
+  },
+  {
+    "id": "ZE15",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.15",
+    "price": 160.0
+  },
+  {
+    "id": "ZE16",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.16",
+    "price": 160.0
+  },
+  {
+    "id": "ZE17",
+    "name": "Roller",
+    "type": "Zebra",
+    "color": "ZE.17",
+    "price": 160.0
+  },
+  {
+    "id": "BABO01",
+    "name": "Bandas",
+    "type": "Blackout",
+    "color": "Blanco",
+    "price": 50.0
+  },
+  {
+    "id": "BABO02",
+    "name": "Bandas",
+    "type": "Blackout",
+    "color": "Ivory",
+    "price": 50.0
+  },
+  {
+    "id": "BABO03",
+    "name": "Bandas",
+    "type": "Blackout",
+    "color": "Gris",
+    "price": 50.0
+  },
+  {
+    "id": "BABO04",
+    "name": "Bandas",
+    "type": "Blackout",
+    "color": "Beige",
+    "price": 57.0
+  },
+  {
+    "id": "BABO05",
+    "name": "Bandas",
+    "type": "Blackout",
+    "color": "Negro",
+    "price": 57.0
+  },
+  {
+    "id": "BABO00",
+    "name": "Bandas",
+    "type": "Blackout",
+    "color": "A definir",
+    "price": 50.0
+  },
+  {
+    "id": "BASS01",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Blanco blanco",
+    "price": 55.0
+  },
+  {
+    "id": "BASS02",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Blanco beige",
+    "price": 55.0
+  },
+  {
+    "id": "BASS03",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Blanco gris",
+    "price": 55.0
+  },
+  {
+    "id": "BASS04",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Beige Beige",
+    "price": 74.0
+  },
+  {
+    "id": "BASS05",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Gris Gris",
+    "price": 74.0
+  },
+  {
+    "id": "BASS06",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Negro Negro",
+    "price": 74.0
+  },
+  {
+    "id": "BASS07",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Chocolate",
+    "price": 74.0
+  },
+  {
+    "id": "BASS08",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Amarillo",
+    "price": 74.0
+  },
+  {
+    "id": "BASS09",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Verde",
+    "price": 74.0
+  },
+  {
+    "id": "BASS10",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Rojo",
+    "price": 74.0
+  },
+  {
+    "id": "BASS11",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Azul",
+    "price": 74.0
+  },
+  {
+    "id": "BASS12",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Bronce",
+    "price": 74.0
+  },
+  {
+    "id": "BASS18",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Ceniza",
+    "price": 74.0
+  },
+  {
+    "id": "BASS19",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Caliza",
+    "price": 74.0
+  },
+  {
+    "id": "BASS20",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Niquel",
+    "price": 74.0
+  },
+  {
+    "id": "BASS21",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Hierro",
+    "price": 74.0
+  },
+  {
+    "id": "BASS22",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Cobre",
+    "price": 74.0
+  },
+  {
+    "id": "BASS23",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Niquel",
+    "price": 74.0
+  },
+  {
+    "id": "BASS24",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "Carbon",
+    "price": 74.0
+  },
+  {
+    "id": "BASS01.1",
+    "name": "Bandas",
+    "type": "Sunscreen 1%",
+    "color": "Blanco blanco",
+    "price": 74.0
+  },
+  {
+    "id": "BASS02.1",
+    "name": "Bandas",
+    "type": "Sunscreen 1%",
+    "color": "Blanco beige",
+    "price": 74.0
+  },
+  {
+    "id": "BASS03.1",
+    "name": "Bandas",
+    "type": "Sunscreen 1%",
+    "color": "Blanco gris",
+    "price": 74.0
+  },
+  {
+    "id": "BASS06.1",
+    "name": "Bandas",
+    "type": "Sunscreen 1%",
+    "color": "Negro Negro",
+    "price": 74.0
+  },
+  {
+    "id": "BASS00.1",
+    "name": "Bandas",
+    "type": "Sunscreen 1%",
+    "color": "A definir",
+    "price": 74.0
+  },
+  {
+    "id": "BASS00",
+    "name": "Bandas",
+    "type": "Sunscreen 5%",
+    "color": "A definir",
+    "price": 57.0
+  },
+  {
+    "id": "BALX01",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Blanco",
+    "price": 48.45
+  },
+  {
+    "id": "BALX02",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Ivory",
+    "price": 48.45
+  },
+  {
+    "id": "BALX03",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Beige",
+    "price": 48.45
+  },
+  {
+    "id": "BALX04",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Chocolate",
+    "price": 48.45
+  },
+  {
+    "id": "BALX05",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Esmeralda",
+    "price": 48.45
+  },
+  {
+    "id": "BALX06",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Perla",
+    "price": 48.45
+  },
+  {
+    "id": "BALX07",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Terracota",
+    "price": 48.45
+  },
+  {
+    "id": "BALX08",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Rojo",
+    "price": 48.45
+  },
+  {
+    "id": "BALX09",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Gris Cemento",
+    "price": 48.45
+  },
+  {
+    "id": "BALX10",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Tostado",
+    "price": 48.45
+  },
+  {
+    "id": "BALX11",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "Gris Claro",
+    "price": 48.45
+  },
+  {
+    "id": "BALX00",
+    "name": "Bandas",
+    "type": "LUX",
+    "color": "A definir",
+    "price": 48.45
+  },
+  {
+    "id": "BASB12",
+    "name": "Bandas",
+    "type": "Southbeach",
+    "color": "SB12",
+    "price": 45.0
+  },
+  {
+    "id": "BASB15",
+    "name": "Bandas",
+    "type": "Southbeach",
+    "color": "SB15",
+    "price": 45.0
+  },
+  {
+    "id": "BASB19",
+    "name": "Bandas",
+    "type": "Southbeach",
+    "color": "SB19",
+    "price": 45.0
+  },
+  {
+    "id": "BASB16",
+    "name": "Bandas",
+    "type": "Southbeach",
+    "color": "SB16",
+    "price": 48.45
+  },
+  {
+    "id": "BASB17",
+    "name": "Bandas",
+    "type": "Southbeach",
+    "color": "SB17",
+    "price": 48.45
+  },
+  {
+    "id": "BASB18",
+    "name": "Bandas",
+    "type": "Southbeach",
+    "color": "SB18",
+    "price": 48.45
+  },
+  {
+    "id": "BASB00",
+    "name": "Bandas",
+    "type": "Southbeach",
+    "color": "A definir",
+    "price": 48.45
+  },
+  {
+    "id": "BASH01",
+    "name": "Bandas",
+    "type": "SH",
+    "color": "Blanco",
+    "price": 48.45
+  },
+  {
+    "id": "BASH02",
+    "name": "Bandas",
+    "type": "SH",
+    "color": "Marfil",
+    "price": 48.45
+  },
+  {
+    "id": "BASH04",
+    "name": "Bandas",
+    "type": "SH",
+    "color": "Vison",
+    "price": 48.45
+  },
+  {
+    "id": "BASH00",
+    "name": "Bandas",
+    "type": "SH",
+    "color": "A definir",
+    "price": 48.45
+  },
+  {
+    "id": "BACB01",
+    "name": "Bandas",
+    "type": "Cordoba",
+    "color": "Nieve",
+    "price": 48.45
+  },
+  {
+    "id": "BACB02",
+    "name": "Bandas",
+    "type": "Cordoba",
+    "color": "Marfil",
+    "price": 48.45
+  },
+  {
+    "id": "BACB03",
+    "name": "Bandas",
+    "type": "Cordoba",
+    "color": "Centeno",
+    "price": 48.45
+  },
+  {
+    "id": "BACB04",
+    "name": "Bandas",
+    "type": "Cordoba",
+    "color": "Camel",
+    "price": 48.45
+  },
+  {
+    "id": "BACB06",
+    "name": "Bandas",
+    "type": "Cordoba",
+    "color": "Tostado",
+    "price": 48.45
+  },
+  {
+    "id": "BACB07",
+    "name": "Bandas",
+    "type": "Cordoba",
+    "color": "Grafito",
+    "price": 48.45
+  },
+  {
+    "id": "BACB08",
+    "name": "Bandas",
+    "type": "Cordoba",
+    "color": "Plomo",
+    "price": 48.45
+  },
+  {
+    "id": "BACB00",
+    "name": "Bandas",
+    "type": "Cordoba",
+    "color": "A definir",
+    "price": 48.45
+  },
+  {
+    "id": "STBO01",
+    "name": "Solo Type",
+    "type": "Blackout",
+    "color": "Blanco",
+    "price": 25.0
+  },
+  {
+    "id": "STBO03",
+    "name": "Solo Type",
+    "type": "Blackout",
+    "color": "Ivory",
+    "price": 25.0
+  },
+  {
+    "id": "STBO04",
+    "name": "Solo Type",
+    "type": "Blackout",
+    "color": "Gris",
+    "price": 25.0
+  },
+  {
+    "id": "STBO05",
+    "name": "Solo Type",
+    "type": "Blackout",
+    "color": "Beige",
+    "price": 35.0
+  },
+  {
+    "id": "STBO02",
+    "name": "Solo Type",
+    "type": "Blackout",
+    "color": "Negro",
+    "price": 35.0
+  },
+  {
+    "id": "STBO00",
+    "name": "Solo Type",
+    "type": "Blackout",
+    "color": "A definir",
+    "price": 25.0
+  },
+  {
+    "id": "STSS01",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Blanco blanco",
+    "price": 30.0
+  },
+  {
+    "id": "STSS02",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Blanco beige",
+    "price": 30.0
+  },
+  {
+    "id": "STSS03",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Blanco gris",
+    "price": 30.0
+  },
+  {
+    "id": "STSS04",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Beige Beige",
+    "price": 45.0
+  },
+  {
+    "id": "STSS05",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Gris Gris",
+    "price": 45.0
+  },
+  {
+    "id": "STSS06",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Negro Negro",
+    "price": 45.0
+  },
+  {
+    "id": "STSS07",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Chocolate",
+    "price": 45.0
+  },
+  {
+    "id": "STSS08",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Amarillo",
+    "price": 45.0
+  },
+  {
+    "id": "STSS09",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Verde",
+    "price": 45.0
+  },
+  {
+    "id": "STSS10",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Rojo",
+    "price": 45.0
+  },
+  {
+    "id": "STSS11",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Azul",
+    "price": 45.0
+  },
+  {
+    "id": "STSS12",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Bronce",
+    "price": 45.0
+  },
+  {
+    "id": "STSS18",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Ceniza",
+    "price": 45.0
+  },
+  {
+    "id": "STSS19",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Caliza",
+    "price": 45.0
+  },
+  {
+    "id": "STSS20",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Niquel",
+    "price": 45.0
+  },
+  {
+    "id": "STSS21",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Hierro",
+    "price": 45.0
+  },
+  {
+    "id": "STSS22",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Cobre",
+    "price": 45.0
+  },
+  {
+    "id": "STSS23",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Niquel",
+    "price": 45.0
+  },
+  {
+    "id": "STSS24",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "Carbon",
+    "price": 45.0
+  },
+  {
+    "id": "STSS01.1",
+    "name": "Solo Type",
+    "type": "Sunscreen 1%",
+    "color": "Blanco blanco",
+    "price": 45.0
+  },
+  {
+    "id": "STSS02.1",
+    "name": "Solo Type",
+    "type": "Sunscreen 1%",
+    "color": "Blanco beige",
+    "price": 45.0
+  },
+  {
+    "id": "STSS03.1",
+    "name": "Solo Type",
+    "type": "Sunscreen 1%",
+    "color": "Blanco gris",
+    "price": 45.0
+  },
+  {
+    "id": "STSS00.1",
+    "name": "Solo Type",
+    "type": "Sunscreen 1%",
+    "color": "A definir",
+    "price": 45.0
+  },
+  {
+    "id": "STSS00",
+    "name": "Solo Type",
+    "type": "Sunscreen 5%",
+    "color": "A definir",
+    "price": 30.0
+  },
+  {
+    "id": "STLX01",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Blanco",
+    "price": 30.0
+  },
+  {
+    "id": "STLX02",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Ivory",
+    "price": 30.0
+  },
+  {
+    "id": "STLX03",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Beige",
+    "price": 30.0
+  },
+  {
+    "id": "STLX04",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Chocolate",
+    "price": 30.0
+  },
+  {
+    "id": "STLX05",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Esmeralda",
+    "price": 30.0
+  },
+  {
+    "id": "STLX06",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Perla",
+    "price": 30.0
+  },
+  {
+    "id": "STLX07",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Terracota",
+    "price": 30.0
+  },
+  {
+    "id": "STLX08",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Rojo",
+    "price": 30.0
+  },
+  {
+    "id": "STLX09",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Gris Cemento",
+    "price": 30.0
+  },
+  {
+    "id": "STLX10",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Tostado",
+    "price": 30.0
+  },
+  {
+    "id": "STLX11",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "Gris Claro",
+    "price": 30.0
+  },
+  {
+    "id": "STLX00",
+    "name": "Solo Type",
+    "type": "LUX",
+    "color": "A definir",
+    "price": 30.0
+  },
+  {
+    "id": "STSB12",
+    "name": "Solo Type",
+    "type": "Southbeach",
+    "color": "SB12",
+    "price": 27.0
+  },
+  {
+    "id": "STSB15",
+    "name": "Solo Type",
+    "type": "Southbeach",
+    "color": "SB15",
+    "price": 27.0
+  },
+  {
+    "id": "STSB19",
+    "name": "Solo Type",
+    "type": "Southbeach",
+    "color": "SB19",
+    "price": 27.0
+  },
+  {
+    "id": "STSB16",
+    "name": "Solo Type",
+    "type": "Southbeach",
+    "color": "SB16",
+    "price": 30.0
+  },
+  {
+    "id": "STSB17",
+    "name": "Solo Type",
+    "type": "Southbeach",
+    "color": "SB17",
+    "price": 30.0
+  },
+  {
+    "id": "STSB18",
+    "name": "Solo Type",
+    "type": "Southbeach",
+    "color": "SB18",
+    "price": 30.0
+  },
+  {
+    "id": "STSB00",
+    "name": "Solo Type",
+    "type": "Southbeach",
+    "color": "A definir",
+    "price": 30.0
+  },
+  {
+    "id": "STSH01",
+    "name": "Solo Type",
+    "type": "SH",
+    "color": "Blanco",
+    "price": 30.0
+  },
+  {
+    "id": "STSH02",
+    "name": "Solo Type",
+    "type": "SH",
+    "color": "Marfil",
+    "price": 30.0
+  },
+  {
+    "id": "STSH04",
+    "name": "Solo Type",
+    "type": "SH",
+    "color": "Vison",
+    "price": 30.0
+  },
+  {
+    "id": "STSH00",
+    "name": "Solo Type",
+    "type": "SH",
+    "color": "A definir",
+    "price": 30.0
+  },
+  {
+    "id": "STCB01",
+    "name": "Solo Type",
+    "type": "Cordoba",
+    "color": "Nieve",
+    "price": 30.0
+  },
+  {
+    "id": "STCB02",
+    "name": "Solo Type",
+    "type": "Cordoba",
+    "color": "Marfil",
+    "price": 30.0
+  },
+  {
+    "id": "STCB03",
+    "name": "Solo Type",
+    "type": "Cordoba",
+    "color": "Centeno",
+    "price": 30.0
+  },
+  {
+    "id": "STCB04",
+    "name": "Solo Type",
+    "type": "Cordoba",
+    "color": "Camel",
+    "price": 30.0
+  },
+  {
+    "id": "STCB06",
+    "name": "Solo Type",
+    "type": "Cordoba",
+    "color": "Tostado",
+    "price": 30.0
+  },
+  {
+    "id": "STCB07",
+    "name": "Solo Type",
+    "type": "Cordoba",
+    "color": "Grafito",
+    "price": 30.0
+  },
+  {
+    "id": "STCB08",
+    "name": "Solo Type",
+    "type": "Cordoba",
+    "color": "Plomo",
+    "price": 30.0
+  },
+  {
+    "id": "STCB00",
+    "name": "Solo Type",
+    "type": "Cordoba",
+    "color": "A definir",
+    "price": 30.0
+  },
+  {
+    "id": "STPA",
+    "name": "Solo Type",
+    "type": "Pa\u00f1alera",
+    "color": "Natural",
+    "price": 13.0
+  },
+  {
+    "id": "STME",
+    "name": "Solo Type",
+    "type": "Melody",
+    "color": "-",
+    "price": 23.0
+  },
+  {
+    "id": "STJU",
+    "name": "Solo Type",
+    "type": "Juliette",
+    "color": "Antique ",
+    "price": 28.0
+  },
+  {
+    "id": "STLI",
+    "name": "Solo Type",
+    "type": "Licia",
+    "color": "-",
+    "price": 16.0
+  },
+  {
+    "id": "STLO",
+    "name": "Solo Type",
+    "type": "Lola",
+    "color": "-",
+    "price": 15.5
+  },
+  {
+    "id": "RPA",
+    "name": "Riel Europeo",
+    "type": "Pa\u00f1alera",
+    "color": "Natural",
+    "price": 13.0
+  },
+  {
+    "id": "RME",
+    "name": "Riel Europeo",
+    "type": "Melody",
+    "color": "-",
+    "price": 23.0
+  },
+  {
+    "id": "RJU",
+    "name": "Riel Europeo",
+    "type": "Juliette",
+    "color": "Chalk ",
+    "price": 28.0
+  },
+  {
+    "id": "RLI",
+    "name": "Riel Europeo",
+    "type": "Licia",
+    "color": "-",
+    "price": 16.0
+  },
+  {
+    "id": "RLO",
+    "name": "Riel Europeo",
+    "type": "Lola",
+    "color": "-",
+    "price": 15.5
+  },
+  {
+    "id": "RTU",
+    "name": "Riel Europeo",
+    "type": "Tussor",
+    "color": "-",
+    "price": 24.0
+  },
+  {
+    "id": "RPORT",
+    "name": "Riel Europeo",
+    "type": "Portobello",
+    "color": "-",
+    "price": 19.0
+  },
+  {
+    "id": "RVS",
+    "name": "Riel Europeo",
+    "type": "Voile Suizo",
+    "color": "-",
+    "price": 17.0
+  },
+  {
+    "id": "RGBAM",
+    "name": "Riel Europeo",
+    "type": "Gasa Bamboo",
+    "color": "-",
+    "price": 24.0
+  },
+  {
+    "id": "RVRV",
+    "name": "Riel Europeo",
+    "type": "Voile Rustico Varese",
+    "color": "-",
+    "price": 26.0
+  },
+  {
+    "id": "RPT",
+    "name": "Riel Europeo",
+    "type": "Pana Touch",
+    "color": "Mostaza",
+    "price": 42.0
+  },
+  {
+    "id": "RLOC",
+    "name": "Riel Europeo",
+    "type": "Lola Crush",
+    "color": "-",
+    "price": 20.0
+  },
+  {
+    "id": "RAME",
+    "name": "Riel Europeo",
+    "type": "Amelie",
+    "color": "Jasper",
+    "price": 31.0
+  },
+  {
+    "id": "RCHA",
+    "name": "Riel Europeo",
+    "type": "Charo",
+    "color": "-",
+    "price": 44.0
+  },
+  {
+    "id": "RLEON",
+    "name": "Riel Europeo",
+    "type": "Leonor",
+    "color": "Plata",
+    "price": 30.0
+  },
+  {
+    "id": "RMEL",
+    "name": "Riel Europeo",
+    "type": "Melanie",
+    "color": "Piedra",
+    "price": 49.0
+  },
+  {
+    "id": "RLAR",
+    "name": "Riel Europeo",
+    "type": "Larisa",
+    "color": "-",
+    "price": 17.0
+  },
+  {
+    "id": "RVOH",
+    "name": "Riel Europeo",
+    "type": "Voile\u00a0de\u00a0hilo",
+    "color": "-",
+    "price": 15.0
+  },
+  {
+    "id": "BPA",
+    "name": "Barral",
+    "type": "Pa\u00f1alera",
+    "color": "Offwhite",
+    "price": 13.0
+  },
+  {
+    "id": "BME",
+    "name": "Barral",
+    "type": "Melody",
+    "color": "Tiza",
+    "price": 23.0
+  },
+  {
+    "id": "BJU",
+    "name": "Barral",
+    "type": "Juliette",
+    "color": "Ivory",
+    "price": 28.0
+  },
+  {
+    "id": "BLI",
+    "name": "Barral",
+    "type": "Licia",
+    "color": "Arena",
+    "price": 16.0
+  },
+  {
+    "id": "BLO",
+    "name": "Barral",
+    "type": "Lola",
+    "color": "-",
+    "price": 15.5
+  },
+  {
+    "id": "BTU",
+    "name": "Barral",
+    "type": "Tussor",
+    "color": "-",
+    "price": 24.0
+  },
+  {
+    "id": "BPORT",
+    "name": "Barral",
+    "type": "Portobello",
+    "color": "-",
+    "price": 19.0
+  },
+  {
+    "id": "BVS",
+    "name": "Barral",
+    "type": "Voile Suizo",
+    "color": "-",
+    "price": 17.0
+  },
+  {
+    "id": "BGBAM",
+    "name": "Barral",
+    "type": "Gasa Bamboo",
+    "color": "-",
+    "price": 24.0
+  },
+  {
+    "id": "BVRV",
+    "name": "Barral",
+    "type": "Voile Rustico Varese",
+    "color": "-",
+    "price": 26.0
+  },
+  {
+    "id": "BPT",
+    "name": "Barral",
+    "type": "Pana Touch",
+    "color": "-",
+    "price": 42.0
+  },
+  {
+    "id": "BLOC",
+    "name": "Barral",
+    "type": "Lola Crush",
+    "color": "-",
+    "price": 20.0
+  },
+  {
+    "id": "BAME",
+    "name": "Barral",
+    "type": "Amelie",
+    "color": "-",
+    "price": 31.0
+  },
+  {
+    "id": "BCHA",
+    "name": "Barral",
+    "type": "Charo",
+    "color": "-",
+    "price": 44.0
+  },
+  {
+    "id": "BLEON",
+    "name": "Barral",
+    "type": "Leonor",
+    "color": "-",
+    "price": 30.0
+  },
+  {
+    "id": "BMEL",
+    "name": "Barral",
+    "type": "Melanie",
+    "color": "-",
+    "price": 49.0
+  },
+  {
+    "id": "BLAR",
+    "name": "Barral",
+    "type": "Larisa",
+    "color": "-",
+    "price": 17.0
+  },
+  {
+    "id": "BVOH",
+    "name": "Barral",
+    "type": "Voile\u00a0de\u00a0hilo",
+    "color": "-",
+    "price": 15.0
+  },
+  {
+    "id": "VPA",
+    "name": "Visillo",
+    "type": "Pa\u00f1alera",
+    "color": "-",
+    "price": 13.0
+  },
+  {
+    "id": "VME",
+    "name": "Visillo",
+    "type": "Melody",
+    "color": "-",
+    "price": 23.0
+  },
+  {
+    "id": "VJU",
+    "name": "Visillo",
+    "type": "Juliette",
+    "color": "-",
+    "price": 28.0
+  },
+  {
+    "id": "VLI",
+    "name": "Visillo",
+    "type": "Licia",
+    "color": "-",
+    "price": 16.0
+  },
+  {
+    "id": "VLO",
+    "name": "Visillo",
+    "type": "Lola",
+    "color": "-",
+    "price": 15.5
+  },
+  {
+    "id": "VTU",
+    "name": "Visillo",
+    "type": "Tussor",
+    "color": "-",
+    "price": 24.0
+  },
+  {
+    "id": "VPORT",
+    "name": "Visillo",
+    "type": "Portobello",
+    "color": "-",
+    "price": 19.0
+  },
+  {
+    "id": "VVS",
+    "name": "Visillo",
+    "type": "Voile Suizo",
+    "color": "-",
+    "price": 17.0
+  },
+  {
+    "id": "VGBAM",
+    "name": "Visillo",
+    "type": "Gasa Bamboo",
+    "color": "-",
+    "price": 24.0
+  },
+  {
+    "id": "VVRV",
+    "name": "Visillo",
+    "type": "Voile Rustico Varese",
+    "color": "-",
+    "price": 26.0
+  },
+  {
+    "id": "VPT",
+    "name": "Visillo",
+    "type": "Pana Touch",
+    "color": "-",
+    "price": 42.0
+  },
+  {
+    "id": "VLOC",
+    "name": "Visillo",
+    "type": "Lola Crush",
+    "color": "-",
+    "price": 20.0
+  },
+  {
+    "id": "VAME",
+    "name": "Visillo",
+    "type": "Amelie",
+    "color": "-",
+    "price": 31.0
+  },
+  {
+    "id": "VCHA",
+    "name": "Visillo",
+    "type": "Charo",
+    "color": "-",
+    "price": 44.0
+  },
+  {
+    "id": "VLEON",
+    "name": "Visillo",
+    "type": "Leonor",
+    "color": "-",
+    "price": 30.0
+  },
+  {
+    "id": "VMEL",
+    "name": "Visillo",
+    "type": "Melanie",
+    "color": "-",
+    "price": 49.0
+  },
+  {
+    "id": "VLAR",
+    "name": "Visillo",
+    "type": "Larisa",
+    "color": "-",
+    "price": 17.0
+  },
+  {
+    "id": "VVOH",
+    "name": "Visillo",
+    "type": "Voile\u00a0de\u00a0hilo",
+    "color": "-",
+    "price": 15.0
+  }
+]
