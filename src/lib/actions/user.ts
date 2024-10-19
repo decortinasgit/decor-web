@@ -1,9 +1,10 @@
 import { z } from "zod"
-import { eq } from "drizzle-orm"
+import { and, asc, desc, eq, sql } from "drizzle-orm"
 
 import { db } from "@/db"
-import { roles, users } from "@/db/schema"
-import { signUpSchema } from "../validations/auth"
+import { roles, User, users } from "@/db/schema"
+import { getUsersSchema, signUpSchema } from "../validations/auth"
+import { SearchParams } from "@/types"
 
 export async function addUser(rawInput: z.infer<typeof signUpSchema>) {
   try {
@@ -44,8 +45,28 @@ export async function addUser(rawInput: z.infer<typeof signUpSchema>) {
   }
 }
 
-export async function getUsers() {
+export async function getUsers(input: SearchParams) {
   try {
+    const search = getUsersSchema.parse(input)
+
+    const limit = search.per_page
+    const offset = ((search.page ?? 1) - 1) * (limit ?? 10)
+
+    const [column, order] = (search.sort?.split(".") as [
+      keyof User | undefined,
+      "asc" | "desc" | undefined
+    ]) ?? ["createdAt", "asc"]
+
+    const filters = and(
+      search.name
+        ? sql`LOWER(${users.name}) LIKE LOWER(${`%${search.name}%`})`
+        : undefined,
+      search.email
+        ? sql`LOWER(${users.email}) LIKE LOWER(${`%${search.email}%`})`
+        : undefined,
+      search.roleId ? eq(users.roleId, search.roleId) : undefined
+    )
+
     const transaction = await db.transaction(async (tx) => {
       const data = await tx
         .select({
@@ -66,17 +87,42 @@ export async function getUsers() {
         })
         .from(users)
         .leftJoin(roles, eq(roles.id, users.roleId))
+        .where(filters)
+        .limit(limit)
+        .offset(offset)
+        .orderBy(
+          column && column in users
+            ? order === "asc"
+              ? asc(users[column])
+              : desc(users[column])
+            : asc(users.createdAt)
+        )
+
+      const total = await tx
+        .select({
+          count: sql`COUNT(${users.id})`,
+        })
+        .from(users)
+        .where(filters)
+        .execute()
+        .then((res) => res[0]?.count ?? 0)
+
+      const pageCount = Math.ceil((total as number) / limit)
 
       return {
         data,
+        pageCount,
+        total,
       }
     })
 
     return transaction
   } catch (err) {
+    console.error("Error fetching users:", err)
     return {
       data: [],
       pageCount: 0,
+      total: 0,
       error: err,
     }
   }

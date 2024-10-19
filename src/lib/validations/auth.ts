@@ -84,6 +84,15 @@ export const userPrivateMetadataSchema = z.object({
   stripeCurrentPeriodEnd: z.string().optional().nullable(),
 })
 
+export const getUsersSchema = z.object({
+  page: z.number().default(1),
+  per_page: z.number().default(10),
+  sort: z.string().optional(),
+  name: z.string().optional(),
+  email: z.string().optional(),
+  roleId: z.string().optional(),
+})
+
 export type UserPrivateMetadataSchema = z.infer<
   typeof userPrivateMetadataSchema
 >
