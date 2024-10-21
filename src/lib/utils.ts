@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { Active, DataRef, Over } from "@dnd-kit/core"
+import isEqual from "lodash/isEqual"
 
 import { env } from "@/env.js"
 import { ColumnDragData } from "@/app/(dashboard)/orders/_components/board-column"
@@ -74,4 +75,23 @@ export function hasDraggableData<T extends Active | Over>(
   }
 
   return false
+}
+
+export function filterCompareArrays(
+  existingProducts: any[],
+  newProducts: any[]
+) {
+  const changedOrNewProducts = []
+  const existingProductsMap = new Map(
+    existingProducts.map((product) => [product.id, product])
+  )
+
+  for (const newProduct of newProducts) {
+    const existingProduct = existingProductsMap.get(newProduct.id)
+    if (!existingProduct || !isEqual(existingProduct, newProduct)) {
+      changedOrNewProducts.push(newProduct)
+    }
+  }
+
+  return changedOrNewProducts
 }
