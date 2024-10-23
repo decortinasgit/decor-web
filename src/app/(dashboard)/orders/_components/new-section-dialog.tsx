@@ -31,14 +31,14 @@ export default function NewSectionDialog() {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="secondary" size="lg" className="w-full">
-          ＋ Add New Section
+          ＋ Agregar sección
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New Section</DialogTitle>
+          <DialogTitle>Agregar sección</DialogTitle>
           <DialogDescription>
-            What section you want to add today?
+            Escríbe el nombre de la nueva sección.
           </DialogDescription>
         </DialogHeader>
         <form
@@ -50,7 +50,7 @@ export default function NewSectionDialog() {
             <Input
               id="title"
               name="title"
-              placeholder="Section title..."
+              placeholder="Título sección..."
               className="col-span-4"
             />
           </div>
@@ -58,7 +58,7 @@ export default function NewSectionDialog() {
         <DialogFooter>
           <DialogTrigger asChild>
             <Button type="submit" size="sm" form="todo-form">
-              Add Section
+              Agregar sección
             </Button>
           </DialogTrigger>
         </DialogFooter>

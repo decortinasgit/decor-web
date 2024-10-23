@@ -144,18 +144,18 @@ export const CreateOrderForm: React.FC<ProfileFormType> = () => {
           {steps.map((step, index) => (
             <li key={step.name} className="md:flex-1">
               {currentStep > index ? (
-                <div className="group flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                  <span className="text-sm font-medium text-sky-600 transition-colors ">
+                <div className="group flex w-full flex-col border-l-4 border-primary py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                  <span className="text-sm font-medium text-primary transition-colors ">
                     {step.id}
                   </span>
                   <span className="text-sm font-medium">{step.name}</span>
                 </div>
               ) : currentStep === index ? (
                 <div
-                  className="flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
+                  className="flex w-full flex-col border-l-4 border-primary py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
                   aria-current="step"
                 >
-                  <span className="text-sm font-medium text-sky-600">
+                  <span className="text-sm font-medium text-primary">
                     {step.id}
                   </span>
                   <span className="text-sm font-medium">{step.name}</span>
@@ -239,7 +239,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = () => {
                           errors?.jobs?.[index] && "text-red-700"
                         )}
                       >
-                        {`Work Experience ${index + 1}`}
+                        {`Cortinas ${index + 1}`}
 
                         <Button
                           variant="outline"
@@ -418,7 +418,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = () => {
                       })
                     }
                   >
-                    Add More
+                    Agregar Más
                   </Button>
                 </div>
               </>
@@ -445,7 +445,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = () => {
             type="button"
             onClick={prev}
             disabled={currentStep === 0}
-            className="rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded bg-white px-2 py-1 text-sm font-semibold text-primary shadow-sm ring-1 ring-inset ring-primary hover:bg-primarydisabled:cursor-not-allowed disabled:opacity-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -466,7 +466,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = () => {
             type="button"
             onClick={next}
             disabled={currentStep === steps.length - 1}
-            className="rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded bg-white px-2 py-1 text-sm font-semibold text-primary shadow-sm ring-1 ring-inset ring-primary hover:bg-primarydisabled:cursor-not-allowed disabled:opacity-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

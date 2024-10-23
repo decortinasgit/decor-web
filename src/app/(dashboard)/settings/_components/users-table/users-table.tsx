@@ -73,7 +73,7 @@ export function UsersTable({ data, pageCount, roles }: UsersTableProps) {
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(
     () => getColumns(handleToggleUser, handleRoleChange, roles),
-    []
+    [roles, handleToggleUser, handleRoleChange]
   )
 
   /**
@@ -96,7 +96,7 @@ export function UsersTable({ data, pageCount, roles }: UsersTableProps) {
   ]
 
   const { table } = useDataTable({
-    data,
+    data: users,
     columns,
     pageCount,
     filterFields,

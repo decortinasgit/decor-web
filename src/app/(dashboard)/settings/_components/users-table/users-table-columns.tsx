@@ -53,7 +53,7 @@ export const getColumns = (
       )
     },
     cell: ({ row }) => (
-      <div>{row.getValue("emailVerified") ? "Activo" : "Desabilitado"}</div>
+      <div>{row.getValue("emailVerified") ? "Activo" : "Inactivo"}</div>
     ),
   },
   {
