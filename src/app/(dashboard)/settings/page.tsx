@@ -4,6 +4,9 @@ import { getRoles, getUsers } from "@/lib/actions/user"
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
 import { SearchParams } from "@/types"
 import { UsersTable } from "./_components/users-table/users-table"
+import { getUserWithAttributes } from "@/lib/queries/user"
+
+import AdminAlert from "@/components/admin-alert"
 
 type DashboardPageProps = {
   searchParams: SearchParams
@@ -12,8 +15,14 @@ type DashboardPageProps = {
 export default async function DashboardPage({
   searchParams,
 }: DashboardPageProps) {
-  const usersTransaction = await getUsers(searchParams)
-  const rolesTransaction = await getRoles()
+  const user = await getUserWithAttributes()
+  let usersTransaction;
+  let rolesTransaction;
+
+  if (user?.roleId === '0') {
+    usersTransaction = await getUsers(searchParams)
+    rolesTransaction = await getRoles()
+  }
 
   return (
     <React.Suspense
@@ -27,11 +36,11 @@ export default async function DashboardPage({
         />
       }
     >
-      <UsersTable
+      {user?.roleId === '0' && usersTransaction && rolesTransaction ? <UsersTable
         data={usersTransaction.data}
         pageCount={usersTransaction.pageCount}
         roles={rolesTransaction.data}
-      />
+      /> : <AdminAlert />}
     </React.Suspense>
   )
 }
