@@ -22,9 +22,9 @@ export default function VerifyEmailPage() {
     <Shell className="max-w-lg">
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Verify email</CardTitle>
+          <CardTitle className="text-2xl">Verificar email</CardTitle>
           <CardDescription>
-            Verify your email address to complete your account creation
+            Verifíca tu email para completar la creación de tu cuenta.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">

@@ -1,33 +1,15 @@
-import * as z from 'zod';
+import * as z from "zod"
 
 export const profileSchema = z.object({
-  company: z
-    .string()
-    .min(1, { message: "Por favor ingresa un nombre empresa" }),
-  client: z.string().min(1, {
-    message: "Por favor ingresa un nombre de cliente",
-  }),
-  // jobs array is for the dynamic fields
-  jobs: z.array(
+  company: z.string().min(1, { message: "La empresa es requerida" }),
+  client: z.string().min(1, { message: "El cliente es requerido" }),
+  curtains: z.array(
     z.object({
-      jobcountry: z.string().min(1, { message: 'Please select a category' }),
-      jobcity: z.string().min(1, { message: 'Please select a category' }),
-      jobtitle: z
-        .string()
-        .min(3, { message: 'Product Name must be at least 3 characters' }),
-      employer: z
-        .string()
-        .min(3, { message: 'Product Name must be at least 3 characters' }),
-      startdate: z
-        .string()
-        .refine((value) => /^\d{4}-\d{2}-\d{2}$/.test(value), {
-          message: 'Start date should be in the format YYYY-MM-DD'
-        }),
-      enddate: z.string().refine((value) => /^\d{4}-\d{2}-\d{2}$/.test(value), {
-        message: 'End date should be in the format YYYY-MM-DD'
-      })
+      name: z.string().min(1, { message: "El nombre es requerido" }),
+      type: z.string().min(1, { message: "El tipo es requerido" }),
+      color: z.string().min(1, { message: "El color es requerido" }),
     })
-  )
-});
+  ).min(1, { message: "Se requiere al menos una cortina" })
+})
 
-export type ProfileFormValues = z.infer<typeof profileSchema>;
+export type ProfileFormValues = z.infer<typeof profileSchema>
