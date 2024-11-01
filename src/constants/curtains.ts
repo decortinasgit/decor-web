@@ -1,0 +1,7 @@
+export const supportOptions = ["Techo", "Pared"]
+export const fallOptions = ["Atrás", "Adelante"]
+export const chainOptions = ["PVC", "Metalica"]
+export const chainSideOptions = ["Derecha", "Izquierda"]
+export const openingOptions = ["Derecha", "Izquierda", "Bilateral"]
+export const pinchesOptions = ["1", "2", "3"]
+export const panelsOptions = ["1", "2", "3", "4"]
