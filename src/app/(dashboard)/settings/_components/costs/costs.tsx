@@ -26,18 +26,13 @@ const Costs = ({ cost: initalCosts }: Props) => {
     return (
         <Shell className="flex flex-col">
             <CostCard
-                title="Dólar Roller"
-                price={cost.dolarRollerPrice}
+                title="Dólar"
+                price={cost.dolarPrice}
                 updatedAt={cost.updatedAt}
             />
             <CostCard
-                title="Dólar Riel"
-                price={cost.dolarRielPrice}
-                updatedAt={cost.updatedAt}
-            />
-            <CostCard
-                title="Dólar Riel Europeo"
-                price={cost.dolarEuropeanRielPrice}
+                title="Mano de obra"
+                price={cost.making}
                 updatedAt={cost.updatedAt}
             />
             <CostsDialog cost={cost} onSave={handleUpdate} />

@@ -10,7 +10,9 @@ const CostsPage = async () => {
   const cost = costsTransaction.data.find((cost) => cost.id === "0")
 
   if (!cost) {
-    return <div>No cost data found for id 0</div>
+    return <p className="text-muted-foreground">
+      No cost data found for id 0
+    </p>
   }
 
   return (

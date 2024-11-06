@@ -15,13 +15,10 @@ import {
 import CostsForm from "./cost-form"
 import { z } from "zod"
 import { costsSchema } from "@/lib/validations/costs"
+import { Costs } from "@/db/schema"
 
 type CostsDialogProps = {
-  cost: {
-    dolarRollerPrice: string
-    dolarRielPrice: string
-    dolarEuropeanRielPrice: string
-  }
+  cost: Costs
   onSave: (data: Inputs) => void
 }
 

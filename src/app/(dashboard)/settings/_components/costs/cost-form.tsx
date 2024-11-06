@@ -18,13 +18,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/custom/button"
 import { getErrorMessage, showErrorToast } from "@/lib/handle-error"
+import { Costs } from "@/db/schema"
 
 type CostsFormProps = {
-  initialData: {
-    dolarRollerPrice: string
-    dolarRielPrice: string
-    dolarEuropeanRielPrice: string
-  }
+  initialData: Costs
   onSave: (data: Inputs) => void
 }
 
@@ -36,9 +33,8 @@ const CostsForm: React.FC<CostsFormProps> = ({ initialData, onSave }) => {
   const form = useForm<Inputs>({
     resolver: zodResolver(costsSchema),
     defaultValues: {
-      dolarRollerPrice: initialData.dolarRollerPrice,
-      dolarRielPrice: initialData.dolarRielPrice,
-      dolarEuropeanRielPrice: initialData.dolarEuropeanRielPrice,
+      dolarPrice: initialData.dolarPrice,
+      making: initialData.making,
     },
   })
 
@@ -62,10 +58,10 @@ const CostsForm: React.FC<CostsFormProps> = ({ initialData, onSave }) => {
         <div className="grid gap-2">
           <FormField
             control={form.control}
-            name="dolarRollerPrice"
+            name="dolarPrice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Dolar Roller</FormLabel>
+                <FormLabel>Dolar</FormLabel>
                 <FormControl>
                   <Input disabled={loading} placeholder="1000" {...field} />
                 </FormControl>
@@ -75,23 +71,10 @@ const CostsForm: React.FC<CostsFormProps> = ({ initialData, onSave }) => {
           />
           <FormField
             control={form.control}
-            name="dolarRielPrice"
+            name="making"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Dolar Riel</FormLabel>
-                <FormControl>
-                  <Input disabled={loading} placeholder="1000" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="dolarEuropeanRielPrice"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Dolar Roller Europeo</FormLabel>
+                <FormLabel>Mano de Obra</FormLabel>
                 <FormControl>
                   <Input disabled={loading} placeholder="1000" {...field} />
                 </FormControl>

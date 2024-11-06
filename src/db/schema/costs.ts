@@ -3,15 +3,11 @@ import { decimal, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 
 export const costs = pgTable("costs", {
   id: text("id").notNull().primaryKey(),
-  dolarRollerPrice: decimal("dolar_roller_price", {
+  dolarPrice: decimal("dolar_price", {
     precision: 10,
     scale: 2,
   }).notNull(),
-  dolarRielPrice: decimal("dolar_riel_price", {
-    precision: 10,
-    scale: 2,
-  }).notNull(),
-  dolarEuropeanRielPrice: decimal("dolar_european_riel_price", {
+  making: decimal("making", {
     precision: 10,
     scale: 2,
   }).notNull(),

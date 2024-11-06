@@ -1,18 +1,14 @@
 import { z } from "zod"
 
 export const costsSchema = z.object({
-  dolarRollerPrice: z.string().refine((val) => {
+  dolarPrice: z.string().refine((val) => {
     const regex = /^\d+(\.\d{1,2})?$/
     return regex.test(val)
-  }, "Invalid format for dolarRollerPrice"),
-  dolarRielPrice: z.string().refine((val) => {
+  }, "Formato invalido para el valor del dolar."),
+  making: z.string().refine((val) => {
     const regex = /^\d+(\.\d{1,2})?$/
     return regex.test(val)
-  }, "Invalid format for dolarRielPrice"),
-  dolarEuropeanRielPrice: z.string().refine((val) => {
-    const regex = /^\d+(\.\d{1,2})?$/
-    return regex.test(val)
-  }, "Invalid format for dolarEuropeanRielPrice"),
+  }, "Formato invalido para el valor de la mano de obra."),
 })
 
 export type CostsInput = z.infer<typeof costsSchema>
