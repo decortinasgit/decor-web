@@ -81,6 +81,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
     client: clientParam,
     curtains: [
       {
+        qty: 0,
         name: "",
         type: "",
         color: "",
@@ -158,6 +159,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
       name: "Agregar cortinas",
       fields: fields
         ?.map((_, index) => [
+          `curtains.${index}.qty`,
           `curtains.${index}.name`,
           `curtains.${index}.type`,
           `curtains.${index}.color`,
@@ -249,7 +251,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
                         >
                           {`Cortinas ${index + 1}`}
                           <div className="absolute right-8 flex gap-5 items-center">
-                            <span className="font-medium ml-auto">Precio: ${getCurtainObject(index) ? parseFloat(getCurtainObject(index)?.price!) * parseFloat(costs[0].dolarRollerPrice) : "-"}</span>
+                            <span className="font-medium ml-auto">Precio: ${getCurtainObject(index) ? parseFloat(getCurtainObject(index)?.price!) * parseFloat(costs[0].dolarPrice) : "-"}</span>
                             {fields.length > 1 && (
                               <Button variant="outline" size="icon" onClick={() => remove(index)}>
                                 <Trash2Icon className="h-4 w-4 " />
@@ -265,6 +267,15 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
                         <AccordionContent>
                           <div className={cn("relative mb-4 gap-8 rounded-md border p-4 md:grid md:grid-cols-3")}>
                             {/* Campos principales */}
+                            <FormField control={form.control} name={`curtains.${index}.qty`} render={({ field }) => (
+                              <FormItem className="mb-5 md:mb-0">
+                                <FormLabel>Cantidad</FormLabel>
+                                <FormControl>
+                                  <Input type="number" min={0} disabled={loading} placeholder="Ingrese la cantidad" value={field.value || ""} onChange={(e) => field.onChange(Number(e.target.value) || 0)} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )} />
                             <FormField control={form.control} name={`curtains.${index}.name`} render={({ field }) => (
                               <FormItem className="mb-5 md:mb-0">
                                 <FormLabel>Nombre</FormLabel>
@@ -504,6 +515,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
 
                 <div className="mt-4 flex justify-center">
                   <Button type="button" className="flex justify-center" size={"lg"} onClick={() => append({
+                    qty: 0,
                     name: '',
                     type: '',
                     color: '',

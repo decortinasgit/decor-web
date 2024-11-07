@@ -15,6 +15,7 @@ type Props = {
         company: string;
         client: string;
         curtains: {
+            qty: number,
             name: string;
             type: string;
             color: string;

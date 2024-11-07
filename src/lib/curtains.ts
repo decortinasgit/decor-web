@@ -12,3 +12,20 @@ export const additionalFields = (curtainName: string) => {
   }
   return []
 }
+
+export const priceCalculation = (
+  quantity: number,
+  price: number,
+  category: string,
+  sizes?: {
+    width: number
+    height: number
+  },
+  support?: string,
+  fall?: string,
+  chain?: string,
+  chainSide?: string,
+  opening?: string,
+  pinches?: string,
+  panels?: string
+) => {}

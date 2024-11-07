@@ -15,7 +15,7 @@ export default function BudgetLayout({
                 <Layout.Header>
                     <div className="space-y-0.5">
                         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-                            Prespuestador
+                            Presupuestador
                         </h1>
                         <p className="text-muted-foreground">Agrega un nuevo pedido.</p>
                     </div>

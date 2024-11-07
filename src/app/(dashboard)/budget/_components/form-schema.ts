@@ -6,6 +6,9 @@ export const profileSchema = z.object({
   curtains: z
     .array(
       z.object({
+        qty: z
+          .number()
+          .positive({ message: "La cantidad debe ser un número positivo" }),
         name: z.string().min(1, { message: "El nombre es requerido" }),
         type: z.string().min(1, { message: "El tipo es requerido" }),
         color: z.string().min(1, { message: "El color es requerido" }),
