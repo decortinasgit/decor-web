@@ -8,14 +8,18 @@ export const filterExcel = async (data: CurtainExcel[]): Promise<Curtain[]> => {
       const type = dataItem["TELA"]
       const color = dataItem["Color"]
       const price = parseFloat(dataItem["PRECIO EN USD"])
+      const unity = dataItem["UNIDAD"]
+      const category = dataItem["TIPO DE ITEM"]
 
-      if (id && name && type && color && !isNaN(price)) {
+      if (id && name && type && color && !isNaN(price) && unity && category) {
         return {
           id,
           name,
           type,
           color,
           price,
+          unity,
+          category,
         }
       }
       return null

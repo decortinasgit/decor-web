@@ -4,6 +4,8 @@ export interface Curtain {
   type: string
   color: string
   price: number
+  unity: string
+  category: string
 }
 
 export interface CurtainExcel {
@@ -13,4 +15,6 @@ export interface CurtainExcel {
   Color: string
   "PRECIO EN USD": string
   "PRECIO EN $": string
+  UNIDAD: string
+  "TIPO DE ITEM": string
 }

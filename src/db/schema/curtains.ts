@@ -7,6 +7,8 @@ export const curtains = pgTable("curtains", {
   type: text("type").notNull(),
   color: text("color"),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  unity: text("unity"),
+  category: text("category"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").default(sql`current_timestamp`),
 })

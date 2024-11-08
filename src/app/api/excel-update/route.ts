@@ -21,7 +21,7 @@ export const PUT = async () => {
     const worksheet = workbook.Sheets[sheetName!]
     const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet!)
 
-    const filteredData = await filterExcel(jsonData)
+    const filteredData = await filterExcel(jsonData)    
     const existingCurtains = await getCurtains()
 
     console.log("=============total=======================")
