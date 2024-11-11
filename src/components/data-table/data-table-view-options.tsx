@@ -1,7 +1,7 @@
 "use client"
 
 import { MixerHorizontalIcon } from "@radix-ui/react-icons"
-import type { Table } from "@tanstack/react-table"
+import type { Table, HeaderContext } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -43,6 +43,12 @@ export function DataTableViewOptions<TData>({
               typeof column.accessorFn !== "undefined" && column.getCanHide()
           )
           .map((column) => {
+            const headerContent = column.columnDef.header
+              ? typeof column.columnDef.header === "function"
+                ? column.columnDef.header({ column, table } as HeaderContext<TData, unknown>)
+                : column.columnDef.header
+              : column.id;
+
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
@@ -50,11 +56,13 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                <span className="truncate">{column.id}</span>
+                <span className="truncate">
+                  {headerContent}
+                </span>
               </DropdownMenuCheckboxItem>
-            )
+            );
           })}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

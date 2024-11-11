@@ -1,11 +1,17 @@
 export interface Curtain {
-  id: string
   name: string
   type: string
   color: string
-  price: number
-  unity: string
-  category: string
+  qty: number
+  height: number
+  width: number
+  support?: string | undefined
+  fall?: string | undefined
+  chain?: string | undefined
+  chainSide?: string | undefined
+  opening?: string | undefined
+  pinches?: string | undefined
+  panels?: string | undefined
 }
 
 export interface CurtainExcel {

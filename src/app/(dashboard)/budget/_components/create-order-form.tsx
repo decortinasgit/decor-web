@@ -45,6 +45,14 @@ import Step0 from "./create-order/step-0"
 import CreateOrderFormNavigation from "./create-order/create-order-form-navigation"
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper"
 import { additionalFields } from "@/lib/curtains"
+import { CurtainsTable } from "./curtains-table/curtains-table"
+import { Curtain } from "@/types/curtains"
+
+interface FormType {
+  curtains: Curtain[];
+  company: string;
+  client: string;
+}
 
 interface ProfileFormType {
   curtains: Curtains[]
@@ -54,7 +62,12 @@ interface ProfileFormType {
 export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) => {
   const [loading, setLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
-  const [data, setData] = useState({})
+  const [data, setData] = useState<FormType>({} as FormType)
+
+  const itemsPerPage = 10;
+  const totalItems = data.curtains ? data.curtains.length : 0;
+  const pageCount = Math.ceil(totalItems / itemsPerPage);
+
 
   const [selectedCurtainValues, setSelectedCurtainValues] = useState(
     curtains.map(() => ({ name: "", type: "", color: "" }))
@@ -528,15 +541,18 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
                 </div>
               </>
             )}
-            {currentStep === 2 && (
-              <div>
-                <h1>Completed</h1>
-                <pre className="whitespace-pre-wrap">
-                  {JSON.stringify(data)}
-                </pre>
-              </div>
-            )}
           </div>
+          {currentStep === 2 && (
+            <div className="w-full flex-1">
+              <div className="space-y-0.5">
+                <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                  Resumen del Pedido
+                </h1>
+                <p className="text-muted-foreground">Pedido para: {data.company}</p>
+              </div>
+              <CurtainsTable data={data.curtains} pageCount={pageCount} />
+            </div>
+          )}
         </form>
       </Form>
       {/* Navigation */}
