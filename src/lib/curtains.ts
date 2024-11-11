@@ -13,6 +13,10 @@ export const additionalFields = (curtainName: string) => {
   return []
 }
 
+export const getUniqueValues = <T, K extends keyof T>(items: T[], key: K): T[K][] => {
+  return Array.from(new Set(items.map(item => item[key]))).sort() as T[K][];
+}
+
 export const priceCalculation = (
   quantity: number,
   price: number,
@@ -29,3 +33,4 @@ export const priceCalculation = (
   pinches?: string,
   panels?: string
 ) => {}
+

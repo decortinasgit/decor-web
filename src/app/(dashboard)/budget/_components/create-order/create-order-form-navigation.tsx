@@ -15,9 +15,10 @@ type Props = {
         fields?: undefined;
     })[]
     loading: boolean
+    confirm: () => void
 }
 
-const CreateOrderFormNavigation = ({ prev, currentStep, steps, next, loading }: Props) => {
+const CreateOrderFormNavigation = ({ prev, currentStep, steps, next, loading, confirm }: Props) => {
     return (
         <div className="flex justify-between gap-5 mt-10">
             <Button
@@ -35,14 +36,14 @@ const CreateOrderFormNavigation = ({ prev, currentStep, steps, next, loading }: 
                 </Button>
             ) : (
                 <Button
-                    type="submit"
+                    onClick={confirm}
                     className="w-full"
                     disabled={loading}
                     loading={loading}
                 >
-                    Continuar
+                    Confirmar
                     <span className="sr-only">
-                        Continuar para la verificación
+                        Confirmar para la verificación
                     </span>
                 </Button>
             )}
