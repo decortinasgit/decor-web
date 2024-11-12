@@ -6,15 +6,8 @@ export async function POST(req: Request) {
   try {
     const userData = await req.json()
 
-    console.log("====================================")
-    console.log(userData)
-    console.log("====================================")
+    await addUser(userData)
 
-    const response = await addUser(userData)
-
-    console.log("====================================")
-    console.log(response)
-    console.log("====================================")
     return new Response("User added successfully", { status: 201 })
   } catch (error) {
     console.error(error)

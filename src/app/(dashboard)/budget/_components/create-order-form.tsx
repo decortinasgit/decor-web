@@ -19,6 +19,7 @@ import {
   Form,
 } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
+import axios from "axios"
 
 interface FormType {
   curtains: Curtain[];
@@ -180,10 +181,59 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
     }
   }
 
-  const handleConfirm = () => {
-    console.log(data)
-    console.log('Finalizado');
-  }
+  const handleConfirm = async () => {
+    setLoading(true)
+    try {
+      // Create the order first
+      const orderResponse = await axios.post("/api/order", {
+        company: data.company,
+        client: data.client,
+        curtains: data.curtains,
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      
+      // Validate order creation and ensure insertedId is present
+      const insertedOrder = orderResponse.data[0];
+      console.log(insertedOrder);
+      if (!insertedOrder || !insertedOrder.insertedId) {
+        throw new Error("Failed to create order: No ID returned");
+      }
+
+      const orderId = insertedOrder.insertedId;
+
+      // Prepare order items with the received orderId
+      const orderItems = data.curtains.map((curtain) => ({
+        orderId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        ...curtain,
+      }));
+
+      // Create order items
+      const orderItemsResponse = await axios.post("/api/order-items", orderItems, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("Order and items created successfully:", {
+        order: orderResponse.data,
+        orderItems: orderItemsResponse.data,
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Failed to create order or order items:", error.response?.data || error.message);
+      } else {
+        console.error("An unexpected error occurred:", error);
+      }
+    } finally {
+      setLoading(false)
+    }
+  };
+
 
   return (
     <>
