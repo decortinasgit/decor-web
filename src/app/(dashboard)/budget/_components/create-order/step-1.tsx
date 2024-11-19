@@ -40,7 +40,7 @@ interface FormType {
 type Props = {
     fields: FieldArrayWithId<FormType, "curtains", "id">[]
     curtains: Curtains[]
-    selectedCurtainValues: Curtains[]
+    selectedCurtainValues: Curtain[]
     errors: FieldErrors<FormType>
     form: UseFormReturn<FormType, any, undefined>
     append: UseFieldArrayAppend<FormType, "curtains">
@@ -356,7 +356,8 @@ const Step1 = ({ fields, curtains, selectedCurtainValues, errors, form, costs, l
                     color: '',
                     width: 0,
                     height: 0,
-                    support: ""
+                    support: "",
+                    price: ""
                 })}>
                     Agregar Más
                 </Button>

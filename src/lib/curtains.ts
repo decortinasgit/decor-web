@@ -13,8 +13,11 @@ export const additionalFields = (curtainName: string) => {
   return []
 }
 
-export const getUniqueValues = <T, K extends keyof T>(items: T[], key: K): T[K][] => {
-  return Array.from(new Set(items.map(item => item[key]))).sort() as T[K][];
+export const getUniqueValues = <T, K extends keyof T>(
+  items: T[],
+  key: K
+): T[K][] => {
+  return Array.from(new Set(items.map((item) => item[key]))).sort() as T[K][]
 }
 
 export const priceCalculation = (
@@ -34,3 +37,19 @@ export const priceCalculation = (
   panels?: string
 ) => {}
 
+export const resetCurtain = {
+  name: "",
+  type: "",
+  color: "",
+  price: "",
+  height: 0,
+  width: 0,
+  qty: 0,
+  chain: undefined,
+  chainSide: undefined,
+  fall: undefined,
+  opening: undefined,
+  panels: undefined,
+  pinches: undefined,
+  support: undefined,
+}

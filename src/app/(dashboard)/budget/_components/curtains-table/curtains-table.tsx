@@ -10,13 +10,14 @@ import { Curtain } from "@/types/curtains"
 interface CurtainsTableProps {
     data: Curtain[]
     pageCount: number
+    hideActions?: boolean
 }
 
-export function CurtainsTable({ data, pageCount }: CurtainsTableProps) {
+export function CurtainsTable({ data, pageCount, hideActions }: CurtainsTableProps) {
 
     // Memoize the columns so they don't re-render on every render
     const columns = React.useMemo(
-        () => getColumns(),
+        () => getColumns({ hideActions }),
         []
     )
 

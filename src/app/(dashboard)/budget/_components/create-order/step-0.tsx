@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-    Form,
     FormControl,
     FormField,
     FormItem,
@@ -9,26 +8,13 @@ import {
 } from "@/components/ui/form"
 import { UseFormReturn } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
+import { Curtain } from '@/types/curtains';
 
 type Props = {
     form: UseFormReturn<{
         company: string;
         client: string;
-        curtains: {
-            qty: number,
-            name: string;
-            type: string;
-            color: string;
-            height: number;
-            width: number;
-            support?: string | undefined;
-            fall?: string | undefined;
-            chain?: string | undefined;
-            chainSide?: string | undefined;
-            opening?: string | undefined;
-            pinches?: string | undefined;
-            panels?: string | undefined;
-        }[];
+        curtains: Curtain[]
     }, any, undefined>
     loading: boolean
 }

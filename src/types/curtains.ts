@@ -12,6 +12,7 @@ export interface Curtain {
   opening?: string | undefined
   pinches?: string | undefined
   panels?: string | undefined
+  price?: string | undefined
 }
 
 export interface CurtainExcel {

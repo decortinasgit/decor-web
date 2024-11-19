@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import axios from "axios"
+import { resetCurtain } from "@/lib/curtains"
 
 interface FormType {
   curtains: Curtain[];
@@ -42,8 +43,8 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
   const pageCount = Math.ceil(totalItems / itemsPerPage);
 
 
-  const [selectedCurtainValues, setSelectedCurtainValues] = useState<Curtains[]>(
-    curtains.map(() => ({ name: "", type: "", color: "", price: "", unity: "", category: "", id: "", createdAt: new Date, updatedAt: new Date }))
+  const [selectedCurtainValues, setSelectedCurtainValues] = useState<Curtain[]>(
+    curtains.map(() => (resetCurtain))
   )
 
   const getCurtainObject = (index: number) => {
@@ -93,20 +94,57 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
     name: "curtains",
   })
 
-  const processForm: SubmitHandler<ProfileFormValues> = (data) => {
-    console.log("data ==>", data)
-    setData(data)
+  const processForm: SubmitHandler<ProfileFormValues> = (formData) => {
+    const updatedCurtains = formData.curtains.map((curtain, index) => {
+      const matchingCurtain = getCurtainObject(index);
+      console.log(matchingCurtain);
+
+      return {
+        ...curtain,
+        price: matchingCurtain ? matchingCurtain.price : "0",
+      };
+    });
+
+    setData({
+      ...formData,
+      curtains: updatedCurtains,
+    });
+
+    console.log("data with prices ==>", {
+      ...formData,
+      curtains: updatedCurtains,
+    });
+
     // api call and reset
     // form.reset();
-  }
+  };
+
 
   const handleNameChange = (index: number, value: string) => {
-    const updatedValues = [...selectedCurtainValues]
-    updatedValues[index].name = value
-    updatedValues[index].type = ""
-    updatedValues[index].color = ""
-    setSelectedCurtainValues(updatedValues)
-  }
+    const updatedValues = [...selectedCurtainValues];
+
+    updatedValues[index] = {
+      ...resetCurtain,
+      name: value,
+      qty: updatedValues[index].qty,
+      price: updatedValues[index].price,
+    };
+
+    setSelectedCurtainValues(updatedValues);
+
+    form.setValue(`curtains.${index}.type`, "");
+    form.setValue(`curtains.${index}.color`, "");
+    form.setValue(`curtains.${index}.height`, 0);
+    form.setValue(`curtains.${index}.width`, 0);
+    form.setValue(`curtains.${index}.chain`, undefined);
+    form.setValue(`curtains.${index}.chainSide`, undefined);
+    form.setValue(`curtains.${index}.fall`, undefined);
+    form.setValue(`curtains.${index}.opening`, undefined);
+    form.setValue(`curtains.${index}.panels`, undefined);
+    form.setValue(`curtains.${index}.pinches`, undefined);
+    form.setValue(`curtains.${index}.support`, undefined);
+  };
+
 
   const handleTypeChange = (index: number, value: string) => {
     const updatedValues = [...selectedCurtainValues]
@@ -194,7 +232,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
           "Content-Type": "application/json",
         },
       });
-      
+
       // Validate order creation and ensure insertedId is present
       const insertedOrder = orderResponse.data[0];
       console.log(insertedOrder);

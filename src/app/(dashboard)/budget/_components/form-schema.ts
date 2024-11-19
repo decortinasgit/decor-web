@@ -27,6 +27,7 @@ export const profileSchema = z.object({
         opening: z.string().optional(), // Apertura
         pinches: z.string().optional(), // Pellizcos
         panels: z.string().optional(), // Paños
+        price: z.string().optional(),
       })
     )
     .min(1, { message: "Se requiere al menos una cortina" }),
