@@ -1,3 +1,5 @@
+import { Category } from "@/types/curtains"
+
 export const additionalFields = (curtainName: string) => {
   if (curtainName.toLowerCase().trim() === "roller") {
     return ["support", "fall", "chain", "chainSide"]
@@ -36,11 +38,13 @@ export const priceCalculation = (
   pinches?: string,
   panels?: string
 ) => {
-
-  console.log(quantity);
-  console.log(price);
-  console.log(category);
-  
+  if (category === Category.ITEM_A) {
+    if (sizes?.width) return price * sizes.width * quantity
+  } else if (category === Category.ITEM_B) {
+    if (sizes) return price * sizes.width * (sizes.height + 0.3)
+  } else {
+    return price * quantity
+  }
 }
 
 export const resetCurtain = {

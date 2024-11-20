@@ -73,7 +73,10 @@ const Step1 = ({ fields, curtains, selectedCurtainValues, errors, form, costs, l
 
                 const price = getCurtainObject(index) ? parseFloat(getCurtainObject(index)?.price!) * parseFloat(costs[0].dolarPrice) : 0
 
-                const calculatedPrice = priceCalculation(form.getValues(`curtains.${index}.qty`), price, selectedCurtainValues[index].category)
+                const calculatedPrice = priceCalculation(form.watch(`curtains.${index}.qty`), price, selectedCurtainValues[index].category, {
+                    width: form.watch(`curtains.${index}.width`),
+                    height: form.watch(`curtains.${index}.height`),
+                })
 
 
                 return (
@@ -87,7 +90,7 @@ const Step1 = ({ fields, curtains, selectedCurtainValues, errors, form, costs, l
                             >
                                 {`Cortinas ${index + 1}`}
                                 <div className="absolute right-8 flex gap-5 items-center">
-                                    <span className="font-medium ml-auto">Precio: ${price}</span>
+                                    <span className="font-medium ml-auto">Precio: ${calculatedPrice}</span>
                                     {fields.length > 1 && (
                                         <Button variant="outline" size="icon" onClick={() => remove(index)}>
                                             <Trash2Icon className="h-4 w-4 " />

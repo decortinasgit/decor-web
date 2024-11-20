@@ -24,5 +24,15 @@ export interface CurtainExcel {
   "PRECIO EN USD": string
   "PRECIO EN $": string
   UNIDAD: string
-  "TIPO DE ITEM": string
+  "TIPO DE ITEM": Category
+}
+
+export enum Category {
+  ITEM_A = "ITEM A",
+  ITEM_B = "ITEM B",
+  ITEM_C = "ITEM C",
+  ITEM_D = "ITEM D",
+  ITEM_E = "ITEM E",
+  ITEM_F = "ITEM F",
+  ITEM_G = "ITEM G",
 }

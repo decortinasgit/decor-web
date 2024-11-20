@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form"
 
@@ -34,6 +34,8 @@ interface ProfileFormType {
 }
 
 export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) => {
+  const router = useRouter()
+
   const [loading, setLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const [data, setData] = useState<FormType>({} as FormType)
@@ -155,11 +157,19 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
 
 
   const handleTypeChange = (index: number, value: string) => {
-    const updatedValues = [...selectedCurtainValues]
-    updatedValues[index].type = value
-    updatedValues[index].color = ""
-    setSelectedCurtainValues(updatedValues)
-  }
+    const updatedValues = [...selectedCurtainValues];
+
+    const matchingCurtain = curtains.find(
+      (curtain) => curtain.type === value && curtain.name === updatedValues[index].name
+    );
+
+    updatedValues[index].type = value;
+    updatedValues[index].color = "";
+    updatedValues[index].category = matchingCurtain?.category || "";
+
+    setSelectedCurtainValues(updatedValues);
+  };
+
 
   const handleColorChange = (index: number, value: string) => {
     const updatedValues = [...selectedCurtainValues]
@@ -269,6 +279,8 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
         order: orderResponse.data,
         orderItems: orderItemsResponse.data,
       });
+
+      router.push(`/budget/${orderId}`)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Failed to create order or order items:", error.response?.data || error.message);
