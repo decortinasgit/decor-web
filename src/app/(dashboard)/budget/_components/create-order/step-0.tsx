@@ -8,14 +8,10 @@ import {
 } from "@/components/ui/form"
 import { UseFormReturn } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
-import { Curtain } from '@/types/curtains';
+import { ProfileFormValues } from '../form-schema';
 
 type Props = {
-    form: UseFormReturn<{
-        company: string;
-        client: string;
-        curtains: Curtain[]
-    }, any, undefined>
+    form: UseFormReturn<ProfileFormValues, any, undefined>
     loading: boolean
 }
 

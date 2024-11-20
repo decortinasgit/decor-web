@@ -34,3 +34,4 @@ export const profileSchema = z.object({
 })
 
 export type ProfileFormValues = z.infer<typeof profileSchema>
+export type CurtainsFormValues = z.infer<typeof profileSchema>["curtains"]

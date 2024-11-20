@@ -55,7 +55,10 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
         curtain.type === selectedCurtain.type &&
         curtain.color === selectedCurtain.color
     );
-    return matchingCurtain || null;
+
+    return matchingCurtain
+      ? { ...matchingCurtain, category: matchingCurtain.category }
+      : null;
   };
 
 
@@ -74,6 +77,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
         color: "",
         width: 0,
         height: 0,
+        category: "",
       },
     ],
   }
@@ -102,6 +106,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
       return {
         ...curtain,
         price: matchingCurtain ? matchingCurtain.price : "0",
+        category: matchingCurtain?.category || "",
       };
     });
 
@@ -123,11 +128,14 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
   const handleNameChange = (index: number, value: string) => {
     const updatedValues = [...selectedCurtainValues];
 
+    const matchingCurtain = curtains.find((curtain) => curtain.name === value);
+
     updatedValues[index] = {
       ...resetCurtain,
       name: value,
       qty: updatedValues[index].qty,
       price: updatedValues[index].price,
+      category: matchingCurtain?.category || "",
     };
 
     setSelectedCurtainValues(updatedValues);

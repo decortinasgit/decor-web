@@ -5,6 +5,7 @@ export interface Curtain {
   qty: number
   height: number
   width: number
+  category: string
   support?: string | undefined
   fall?: string | undefined
   chain?: string | undefined

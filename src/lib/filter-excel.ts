@@ -1,17 +1,20 @@
-import { Curtain, CurtainExcel } from "@/types/curtains"
+import { Curtains } from "@/db/schema"
+import { CurtainExcel } from "@/types/curtains"
 
-export const filterExcel = async (data: CurtainExcel[]): Promise<Curtain[]> => {
+export const filterExcel = async (
+  data: CurtainExcel[]
+): Promise<Curtains[]> => {
   return data
     .map((dataItem) => {
       const id = dataItem["Codigos"]
       const name = dataItem["NOMBRE"]
       const type = dataItem["TELA"]
-      const color = dataItem["Color"]
-      const price = parseFloat(dataItem["PRECIO EN USD"])
-      const unity = dataItem["UNIDAD"]
-      const category = dataItem["TIPO DE ITEM"]
+      const color = dataItem["Color"] || null
+      const price = dataItem["PRECIO EN USD"]
+      const unity = dataItem["UNIDAD"] || null
+      const category = dataItem["TIPO DE ITEM"] || null
 
-      if (id && name && type && color && !isNaN(price) && unity && category) {
+      if (id && name && type && price) {
         return {
           id,
           name,
@@ -20,9 +23,11 @@ export const filterExcel = async (data: CurtainExcel[]): Promise<Curtain[]> => {
           price,
           unity,
           category,
+          createdAt: new Date(),
+          updatedAt: null as Date | null,
         }
       }
       return null
     })
-    .filter((curtain): curtain is Curtain => curtain !== null)
+    .filter((curtain): curtain is Curtains => curtain !== null)
 }

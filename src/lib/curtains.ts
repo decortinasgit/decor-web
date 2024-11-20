@@ -35,7 +35,13 @@ export const priceCalculation = (
   opening?: string,
   pinches?: string,
   panels?: string
-) => {}
+) => {
+
+  console.log(quantity);
+  console.log(price);
+  console.log(category);
+  
+}
 
 export const resetCurtain = {
   name: "",
@@ -45,6 +51,7 @@ export const resetCurtain = {
   height: 0,
   width: 0,
   qty: 0,
+  category: "",
   chain: undefined,
   chainSide: undefined,
   fall: undefined,

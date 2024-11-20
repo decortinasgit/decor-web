@@ -54,7 +54,7 @@ export const PUT = async () => {
       await addMultipleCurtains(changedOrNewCurtains)
     }
 
-    return NextResponse.json(filteredData)
+    return NextResponse.json(changedOrNewCurtains)
   } catch (error) {
     console.error("API request failed:", error)
     return NextResponse.error()

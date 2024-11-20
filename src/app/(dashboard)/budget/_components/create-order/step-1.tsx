@@ -2,7 +2,7 @@ import React from 'react'
 import { FieldArrayWithId, FieldErrors, UseFieldArrayAppend, UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
 import { AlertTriangleIcon, Trash2Icon } from 'lucide-react';
 
-import { additionalFields, getUniqueValues } from '@/lib/curtains';
+import { additionalFields, getUniqueValues, priceCalculation } from '@/lib/curtains';
 import { Costs, Curtains } from '@/db/schema';
 import { Curtain } from '@/types/curtains';
 import { cn } from '@/lib/utils';
@@ -30,20 +30,16 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { chainOptions, chainSideOptions, fallOptions, openingOptions, panelsOptions, pinchesOptions, supportOptions } from '@/constants/curtains';
+import { ProfileFormValues } from '../form-schema';
 
-interface FormType {
-    curtains: Curtain[];
-    company: string;
-    client: string;
-}
 
 type Props = {
-    fields: FieldArrayWithId<FormType, "curtains", "id">[]
+    fields: FieldArrayWithId<ProfileFormValues, "curtains", "id">[]
     curtains: Curtains[]
     selectedCurtainValues: Curtain[]
-    errors: FieldErrors<FormType>
-    form: UseFormReturn<FormType, any, undefined>
-    append: UseFieldArrayAppend<FormType, "curtains">
+    errors: FieldErrors<ProfileFormValues>
+    form: UseFormReturn<ProfileFormValues, any, undefined>
+    append: UseFieldArrayAppend<ProfileFormValues, "curtains">
     costs: Costs[]
     loading: boolean
     getCurtainObject: (index: number) => Curtains | null
@@ -75,6 +71,11 @@ const Step1 = ({ fields, curtains, selectedCurtainValues, errors, form, costs, l
 
                 const showField = (fieldName: string) => additionalFields(selectedCurtainValues[index].name).includes(fieldName);
 
+                const price = getCurtainObject(index) ? parseFloat(getCurtainObject(index)?.price!) * parseFloat(costs[0].dolarPrice) : 0
+
+                const calculatedPrice = priceCalculation(form.getValues(`curtains.${index}.qty`), price, selectedCurtainValues[index].category)
+
+
                 return (
                     <Accordion key={field.id} type="single" collapsible defaultValue="item-1">
                         <AccordionItem value="item-1">
@@ -86,7 +87,7 @@ const Step1 = ({ fields, curtains, selectedCurtainValues, errors, form, costs, l
                             >
                                 {`Cortinas ${index + 1}`}
                                 <div className="absolute right-8 flex gap-5 items-center">
-                                    <span className="font-medium ml-auto">Precio: ${getCurtainObject(index) ? parseFloat(getCurtainObject(index)?.price!) * parseFloat(costs[0].dolarPrice) : "-"}</span>
+                                    <span className="font-medium ml-auto">Precio: ${price}</span>
                                     {fields.length > 1 && (
                                         <Button variant="outline" size="icon" onClick={() => remove(index)}>
                                             <Trash2Icon className="h-4 w-4 " />
@@ -357,7 +358,7 @@ const Step1 = ({ fields, curtains, selectedCurtainValues, errors, form, costs, l
                     width: 0,
                     height: 0,
                     support: "",
-                    price: ""
+                    price: "",
                 })}>
                     Agregar Más
                 </Button>
