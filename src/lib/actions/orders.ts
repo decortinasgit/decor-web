@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { db } from "@/db"
-import { orders, orderItems } from "@/db/schema"
+import { orders, orderItems, OrderItem } from "@/db/schema"
 import { eq, inArray, sql } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { orderItemSchema, orderSchema } from "../validations/orders"
@@ -74,17 +74,39 @@ export async function addOrderItems(
 export async function getOrders() {
   try {
     const transaction = await db.transaction(async (tx) => {
-      const data = await tx.select().from(orders)
+      // Obtener las órdenes junto con sus ítems
+      const ordersWithItems = await tx
+        .select({
+          orderId: orders.id,
+          company: orders.company,
+          client: orders.client,
+          email: orders.email,
+          createdAt: orders.createdAt,
+          updatedAt: orders.updatedAt,
+          items: sql`JSON_AGG(${orderItems})`.as("items"),
+        })
+        .from(orders)
+        .leftJoin(orderItems, eq(orders.id, orderItems.orderId))
+        .groupBy(orders.id)
+
       const total = await tx
         .select({
           count: sql`COUNT(${orders.id})`,
         })
         .from(orders)
         .execute()
-        .then((res) => res[0]?.count ?? 0)
+        .then((res) => Number(res[0]?.count ?? 0))
 
       return {
-        data,
+        data: ordersWithItems.map((order) => ({
+          id: order.orderId,
+          company: order.company,
+          client: order.client,
+          email: order.email,
+          createdAt: order.createdAt,
+          updatedAt: order.updatedAt,
+          items: (order.items as OrderItem[]) || [],
+        })),
         total,
       }
     })
