@@ -1,11 +1,15 @@
 'use client'
 
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
+
 import { Button } from "@/components/custom/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Download, CheckCircle, Store } from 'lucide-react'
 import { CurtainsTable } from "../_components/curtains-table/curtains-table"
 import { useRouter } from "next/navigation"
-import { Curtains, OrderItem } from "@/db/schema"
+import { OrderItem } from "@/db/schema"
 import { totalAmount } from "@/lib/curtains"
 
 interface OrderSuccessProps {
@@ -16,11 +20,29 @@ interface OrderSuccessProps {
 export default function DetailOrder({ orderId, curtains }: OrderSuccessProps) {
     const router = useRouter()
 
-    console.log(curtains);
+    async function downloadPDFFromHTML() {
+        const element = document.getElementById("order-summary"); // Asegúrate de tener un ID único para el contenedor
 
+        if (!element) {
+            console.error("No se encontró el elemento a renderizar");
+            return;
+        }
+
+        // Generar captura del contenido
+        const canvas = await html2canvas(element, { scale: 2 }); // Aumenta la escala para mejor calidad
+        const imgData = canvas.toDataURL("image/png");
+
+        // Crear PDF
+        const pdf = new jsPDF("p", "mm", "a4");
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("detalle_pedido.pdf");
+    }
 
     return (
-        <Card className="w-full mx-auto">
+        <Card className="w-full mx-auto" id="order-summary">
             <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                     <CheckCircle className="text-green-500" />
@@ -47,7 +69,7 @@ export default function DetailOrder({ orderId, curtains }: OrderSuccessProps) {
                 <Button onClick={() => router.replace('/orders')} className="w-full" variant='outline'>
                     <Store className="mr-2 h-4 w-4" /> Ver Pedidos
                 </Button>
-                <Button onClick={() => { }} className="w-full">
+                <Button onClick={downloadPDFFromHTML} className="w-full">
                     <Download className="mr-2 h-4 w-4" /> Descargar PDF
                 </Button>
             </CardFooter>
