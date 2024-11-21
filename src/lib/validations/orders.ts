@@ -5,6 +5,7 @@ export const orderSchema = z.object({
   id: z.string().uuid().optional(), // ID opcional porque se puede generar automáticamente
   company: z.string().min(1, "Company name is required"),
   client: z.string().min(1, "Client name is required"),
+  email: z.string().min(1, "Client email is required"),
   createdAt: z.date().optional(), // Campo opcional para validaciones automáticas
   updatedAt: z.date().optional(), // Campo opcional para validaciones automáticas
 })

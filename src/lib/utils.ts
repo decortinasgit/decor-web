@@ -6,6 +6,7 @@ import isEqual from "lodash/isEqual"
 import { env } from "@/env.js"
 import { ColumnDragData } from "@/app/(dashboard)/orders/_components/board-column"
 import { TaskDragData } from "@/app/(dashboard)/orders/_components/task-card"
+import { User } from "@clerk/nextjs/server"
 
 type DraggableData = ColumnDragData | TaskDragData
 
@@ -94,4 +95,12 @@ export function filterCompareArrays(
   }
 
   return changedOrNewProducts
+}
+
+export function getUserEmail(user: User | null) {
+  const email =
+    user?.emailAddresses?.find((e) => e.id === user.primaryEmailAddressId)
+      ?.emailAddress ?? ""
+
+  return email
 }

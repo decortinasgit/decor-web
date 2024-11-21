@@ -13,6 +13,7 @@ export async function addOrder(rawInput: z.infer<typeof orderSchema>) {
         id: rawInput.id,
         company: rawInput.company,
         client: rawInput.client,
+        email: rawInput.email,
         createdAt: new Date(),
         updatedAt: new Date(),
       })

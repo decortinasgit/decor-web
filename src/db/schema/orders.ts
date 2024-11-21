@@ -5,6 +5,7 @@ export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
   company: text("company").notNull(),
   client: text("client").notNull(),
+  email: text("email").notNull(),
   ...lifecycleDates,
 })
 

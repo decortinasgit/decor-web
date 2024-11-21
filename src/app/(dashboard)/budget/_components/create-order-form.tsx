@@ -7,7 +7,7 @@ import { SubmitHandler, useFieldArray, useForm } from "react-hook-form"
 
 import { Costs, Curtains } from "@/db/schema"
 import { Curtain } from "@/types/curtains"
-import { cn } from "@/lib/utils"
+import { cn, getUserEmail } from "@/lib/utils"
 import { profileSchema, type ProfileFormValues } from "./form-schema"
 
 import Step0 from "./create-order/step-0"
@@ -21,6 +21,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import axios from "axios"
 import { priceCalculation, resetCurtain } from "@/lib/curtains"
+import { User } from "@clerk/nextjs/server"
 
 interface FormType {
   curtains: Curtain[];
@@ -31,9 +32,10 @@ interface FormType {
 interface ProfileFormType {
   curtains: Curtains[]
   costs: Costs[]
+  userEmail: string
 }
 
-export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) => {
+export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, userEmail }) => {
   const router = useRouter()
 
   const [loading, setLoading] = useState(false)
@@ -249,11 +251,14 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
 
   const handleConfirm = async () => {
     setLoading(true)
+
+
     try {
       // Create the order first
       const orderResponse = await axios.post("/api/order", {
         company: data.company,
         client: data.client,
+        email: userEmail,
         curtains: data.curtains,
       }, {
         headers: {
