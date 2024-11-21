@@ -1,3 +1,4 @@
+import { OrderItem } from "@/db/schema"
 import { Category } from "@/types/curtains"
 
 export const additionalFields = (curtainName: string) => {
@@ -63,4 +64,10 @@ export const resetCurtain = {
   panels: undefined,
   pinches: undefined,
   support: undefined,
+}
+
+export function totalAmount(data: OrderItem[]) {
+  return data.reduce((total, data) => {
+      return total + parseFloat(data.price!);
+  }, 0);
 }

@@ -42,12 +42,12 @@ export const getColumns = ({ hideActions }: GetColumnsOptions = {}): ColumnDef<C
         {
             accessorKey: "height",
             header: "Largo",
-            cell: ({ row }) => <div>{row.getValue("height")} cm</div>,
+            cell: ({ row }) => <div>{row.getValue("height")} mts</div>,
         },
         {
             accessorKey: "width",
             header: "Ancho",
-            cell: ({ row }) => <div>{row.getValue("width")} cm</div>,
+            cell: ({ row }) => <div>{row.getValue("width")} mts</div>,
         },
         {
             accessorKey: "support",

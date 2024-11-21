@@ -76,7 +76,7 @@ const Step1 = ({ fields, curtains, selectedCurtainValues, errors, form, costs, l
                 const calculatedPrice = priceCalculation(form.watch(`curtains.${index}.qty`), price, selectedCurtainValues[index].category, {
                     width: form.watch(`curtains.${index}.width`),
                     height: form.watch(`curtains.${index}.height`),
-                })
+                })?.toFixed(2)
 
 
                 return (

@@ -26,6 +26,7 @@ export const orderItems = pgTable("order_items", {
   opening: text("opening"),
   pinches: text("pinches"),
   panels: text("panels"),
+  price: text("price"),
   ...lifecycleDates,
 })
 

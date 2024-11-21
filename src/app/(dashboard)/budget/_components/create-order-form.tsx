@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import axios from "axios"
-import { resetCurtain } from "@/lib/curtains"
+import { priceCalculation, resetCurtain } from "@/lib/curtains"
 
 interface FormType {
   curtains: Curtain[];
@@ -103,11 +103,23 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
   const processForm: SubmitHandler<ProfileFormValues> = (formData) => {
     const updatedCurtains = formData.curtains.map((curtain, index) => {
       const matchingCurtain = getCurtainObject(index);
-      console.log(matchingCurtain);
+      const price = matchingCurtain
+        ? parseFloat(matchingCurtain.price) * parseFloat(costs[0].dolarPrice)
+        : 0;
+
+      const calculatedPrice = priceCalculation(
+        form.watch(`curtains.${index}.qty`),
+        price,
+        selectedCurtainValues[index].category,
+        {
+          width: form.watch(`curtains.${index}.width`),
+          height: form.watch(`curtains.${index}.height`),
+        }
+      )?.toFixed(2)
 
       return {
         ...curtain,
-        price: matchingCurtain ? matchingCurtain.price : "0",
+        price: calculatedPrice?.toString(),
         category: matchingCurtain?.category || "",
       };
     });
@@ -117,14 +129,12 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
       curtains: updatedCurtains,
     });
 
-    console.log("data with prices ==>", {
+    console.log("Data with calculated prices:", {
       ...formData,
       curtains: updatedCurtains,
     });
-
-    // api call and reset
-    // form.reset();
   };
+
 
 
   const handleNameChange = (index: number, value: string) => {
@@ -251,7 +261,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
         },
       });
 
-      // Validate order creation and ensure insertedId is present
       const insertedOrder = orderResponse.data[0];
       console.log(insertedOrder);
       if (!insertedOrder || !insertedOrder.insertedId) {
@@ -260,7 +269,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
 
       const orderId = insertedOrder.insertedId;
 
-      // Prepare order items with the received orderId
       const orderItems = data.curtains.map((curtain) => ({
         orderId,
         createdAt: new Date(),
@@ -268,7 +276,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs }) 
         ...curtain,
       }));
 
-      // Create order items
       const orderItemsResponse = await axios.post("/api/order-items", orderItems, {
         headers: {
           "Content-Type": "application/json",

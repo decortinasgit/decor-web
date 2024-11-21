@@ -51,6 +51,7 @@ export async function addOrderItems(
         opening: item.opening,
         pinches: item.pinches,
         panels: item.panels,
+        price: item.price,
         createdAt: new Date(),
         updatedAt: new Date(),
       }))
@@ -131,6 +132,45 @@ export async function deleteOrders(orderIds: string[]) {
       data: null,
       error: err,
       deletedCount: 0,
+    }
+  }
+}
+
+export async function getOrderById(orderId: string) {
+  try {
+    const order = await db
+      .select()
+      .from(orders)
+      .where(eq(orders.id, orderId))
+      .limit(1) // Asegurarnos de traer solo un resultado
+      .execute()
+      .then((res) => res[0] || null) // Si no se encuentra, devolver null
+
+    if (!order) {
+      return {
+        data: null,
+        error: `Order with ID ${orderId} not found.`,
+      }
+    }
+
+    const items = await db
+      .select()
+      .from(orderItems)
+      .where(eq(orderItems.orderId, orderId))
+      .execute()
+
+    return {
+      data: {
+        ...order,
+        items,
+      },
+      error: null,
+    }
+  } catch (err) {
+    console.error(`Error fetching order with ID ${orderId}:`, err)
+    return {
+      data: null,
+      error: err,
     }
   }
 }
