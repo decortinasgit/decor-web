@@ -14,6 +14,7 @@ export async function addOrder(rawInput: z.infer<typeof orderSchema>) {
         company: rawInput.company,
         client: rawInput.client,
         email: rawInput.email,
+        status: "Pendiente",
         createdAt: new Date(),
         updatedAt: new Date(),
       })
@@ -81,6 +82,7 @@ export async function getOrders() {
           company: orders.company,
           client: orders.client,
           email: orders.email,
+          status: orders.status,
           createdAt: orders.createdAt,
           updatedAt: orders.updatedAt,
           items: sql`JSON_AGG(${orderItems})`.as("items"),
@@ -103,6 +105,7 @@ export async function getOrders() {
           company: order.company,
           client: order.client,
           email: order.email,
+          status: order.status,
           createdAt: order.createdAt,
           updatedAt: order.updatedAt,
           items: (order.items as OrderItem[]) || [],

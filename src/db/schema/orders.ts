@@ -1,11 +1,21 @@
-import { pgTable, text, integer, uuid } from "drizzle-orm/pg-core"
+import { pgTable, text, integer, uuid, pgEnum } from "drizzle-orm/pg-core"
 import { lifecycleDates } from "./utils"
+
+export const orderStatus = pgEnum("order_status", [
+  "Pendiente",
+  "Procesando",
+  "En producción",
+  "Enviado",
+  "Entregado",
+  "Completado",
+])
 
 export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
   company: text("company").notNull(),
   client: text("client").notNull(),
   email: text("email").notNull(),
+  status: orderStatus("status").default("Pendiente").notNull(), // Nueva columna de estado
   ...lifecycleDates,
 })
 
