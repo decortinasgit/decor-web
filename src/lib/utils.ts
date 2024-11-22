@@ -5,10 +5,10 @@ import isEqual from "lodash/isEqual"
 
 import { env } from "@/env.js"
 import { ColumnDragData } from "@/app/(dashboard)/orders/_components/board-column"
-import { TaskDragData } from "@/app/(dashboard)/orders/_components/task-card"
+import { OrderDragData } from "@/app/(dashboard)/orders/_components/order-card"
 import { User } from "@clerk/nextjs/server"
 
-type DraggableData = ColumnDragData | TaskDragData
+type DraggableData = ColumnDragData | OrderDragData
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -71,7 +71,7 @@ export function hasDraggableData<T extends Active | Over>(
 
   const data = entry.data.current
 
-  if (data?.type === "Column" || data?.type === "Task") {
+  if (data?.type === "Column" || data?.type === "OrderWithItems") {
     return true
   }
 

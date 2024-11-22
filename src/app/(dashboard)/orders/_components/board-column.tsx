@@ -1,15 +1,13 @@
-import { Task } from '@/lib/store';
 import { useDndContext, type UniqueIdentifier } from '@dnd-kit/core';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { cva } from 'class-variance-authority';
-import { GripVertical } from 'lucide-react';
 import { useMemo } from 'react';
-import { ColumnActions } from './column-action';
-import { TaskCard } from './task-card';
+import { OrderCard } from './order-card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Button } from '@/components/custom/button';
+import { Badge } from '@/components/ui/badge';
+import { OrderWithItems } from '@/types/orders';
 
 export interface Column {
   id: UniqueIdentifier;
@@ -25,14 +23,14 @@ export interface ColumnDragData {
 
 interface BoardColumnProps {
   column: Column;
-  tasks: Task[];
+  orders: OrderWithItems[];
   isOverlay?: boolean;
 }
 
-export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
-  const tasksIds = useMemo(() => {
-    return tasks.map((task) => task.id);
-  }, [tasks]);
+export function BoardColumn({ column, orders, isOverlay }: BoardColumnProps) {
+  const ordersIds = useMemo(() => {
+    return orders.map((order) => order.id);
+  }, [orders]);
 
   const {
     setNodeRef,
@@ -79,27 +77,13 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
       })}
     >
       <CardHeader className="space-between flex flex-row items-center border-b-2 p-4 text-left font-semibold">
-        <Button
-          variant={'ghost'}
-          {...attributes}
-          {...listeners}
-          className=" relative -ml-2 h-auto cursor-grab p-1 text-primary/50"
-        >
-          <span className="sr-only">{`Move column: ${column.title}`}</span>
-          <GripVertical />
-        </Button>
-        {/* <span className="mr-auto !mt-0"> {column.title}</span> */}
-        {/* <Input
-          defaultValue={column.title}
-          className="text-base !mt-0 mr-auto"
-        /> */}
-        <ColumnActions id={column.id} title={column.title} />
+        <Badge className="mr-auto !mt-0">{column.title}</Badge>
       </CardHeader>
       <CardContent className="flex flex-grow flex-col gap-4 overflow-x-hidden p-2">
         <ScrollArea className="h-full">
-          <SortableContext items={tasksIds}>
-            {tasks.map((task) => (
-              <TaskCard key={task.id} task={task} />
+          <SortableContext items={ordersIds}>
+            {orders.map((order) => (
+              <OrderCard key={order.id} order={order} />
             ))}
           </SortableContext>
         </ScrollArea>

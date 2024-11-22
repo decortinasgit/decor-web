@@ -1,95 +1,101 @@
-import { create } from 'zustand';
-import { v4 as uuid } from 'uuid';
-import { persist } from 'zustand/middleware';
-import { UniqueIdentifier } from '@dnd-kit/core';
-import { Column } from '@/app/(dashboard)/orders/_components/board-column';
+import { create } from "zustand";
+import { v4 as uuid } from "uuid";
+import { persist } from "zustand/middleware";
+import { UniqueIdentifier } from "@dnd-kit/core";
+import { Column } from "@/app/(dashboard)/orders/_components/board-column";
+import { OrderWithItems } from "@/types/orders";
 
-export type Status = 'TODO' | 'IN_PROGRESS' | 'DONE';
-
-const defaultCols = [
-  {
-    id: 'TODO' as const,
-    title: 'Todo'
-  }
+export const defaultCols = [
+  { id: "Pendiente", title: "Pendiente" },
+  { id: "Procesando", title: "Procesando" },
+  { id: "En_producción", title: "En producción" },
+  { id: "Enviado", title: "Enviado" },
+  { id: "Entregado", title: "Entregado" },
+  { id: "Completado", title: "Completado" },
 ] satisfies Column[];
 
-export type ColumnId = (typeof defaultCols)[number]['id'];
-
-export type Task = {
-  id: string;
-  title: string;
-  description?: string;
-  status: Status;
-};
+export type ColumnId = (typeof defaultCols)[number]["id"];
 
 export type State = {
-  tasks: Task[];
+  orders: OrderWithItems[];
   columns: Column[];
-  draggedTask: string | null;
+  draggedOrder: string | null;
 };
 
-const initialTasks: Task[] = [
+const initialOrders: OrderWithItems[] = [
   {
-    id: 'task1',
-    status: 'TODO',
-    title: 'Project initiation and planning'
+    id: "2e590737-d802-447a-8391-c0415a802f50",
+    company: "Decortinas",
+    client: "Facundo Teran",
+    email: "molporron@gmail.com",
+    status: "Pendiente",
+    createdAt: new Date("2024-11-21T02:18:49.318Z"),
+    updatedAt: new Date("2024-11-21T02:18:49.318Z"),
+    items: [], // Adjust as needed
   },
-  {
-    id: 'task2',
-    status: 'TODO',
-    title: 'Gather requirements from stakeholders'
-  }
 ];
 
 export type Actions = {
-  addTask: (title: string, description?: string) => void;
+  addOrder: (
+    order: Omit<OrderWithItems, "id" | "createdAt" | "updatedAt">
+  ) => void;
   addCol: (title: string) => void;
-  dragTask: (id: string | null) => void;
-  removeTask: (title: string) => void;
+  dragOrder: (id: string | null) => void;
+  removeOrder: (id: string) => void;
   removeCol: (id: UniqueIdentifier) => void;
-  setTasks: (updatedTask: Task[]) => void;
+  setOrders: (updatedOrder: OrderWithItems[]) => void;
   setCols: (cols: Column[]) => void;
   updateCol: (id: UniqueIdentifier, newName: string) => void;
 };
 
-export const useTaskStore = create<State & Actions>()(
+export const useOrderStore = create<State & Actions>()(
   persist(
     (set) => ({
-      tasks: initialTasks,
+      orders: initialOrders,
       columns: defaultCols,
-      draggedTask: null,
-      addTask: (title: string, description?: string) =>
+      draggedOrder: null,
+      addOrder: (
+        order: Omit<OrderWithItems, "id" | "createdAt" | "updatedAt">
+      ) =>
         set((state) => ({
-          tasks: [
-            ...state.tasks,
-            { id: uuid(), title, description, status: 'TODO' }
-          ]
+          orders: [
+            ...state.orders,
+            {
+              ...order,
+              id: uuid(),
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          ],
         })),
       updateCol: (id: UniqueIdentifier, newName: string) =>
         set((state) => ({
           columns: state.columns.map((col) =>
             col.id === id ? { ...col, title: newName } : col
-          )
+          ),
         })),
       addCol: (title: string) =>
         set((state) => ({
           columns: [
             ...state.columns,
-            { title, id: state.columns.length ? title.toUpperCase() : 'TODO' }
-          ]
+            {
+              title,
+              id: state.columns.length ? title.toUpperCase() : "Pendiente",
+            },
+          ],
         })),
-      dragTask: (id: string | null) => set({ draggedTask: id }),
-      removeTask: (id: string) =>
+      dragOrder: (id: string | null) => set({ draggedOrder: id }),
+      removeOrder: (id: string) =>
         set((state) => ({
-          tasks: state.tasks.filter((task) => task.id !== id)
+          orders: state.orders.filter((order) => order.id !== id),
         })),
       removeCol: (id: UniqueIdentifier) =>
         set((state) => ({
-          columns: state.columns.filter((col) => col.id !== id)
+          columns: state.columns.filter((col) => col.id !== id),
         })),
-      setTasks: (newTasks: Task[]) => set({ tasks: newTasks }),
-      setCols: (newCols: Column[]) => set({ columns: newCols })
+      setOrders: (newOrders: OrderWithItems[]) => set({ orders: newOrders }),
+      setCols: (newCols: Column[]) => set({ columns: newCols }),
     }),
-    { name: 'task-store', skipHydration: true }
+    { name: "order-store", skipHydration: true }
   )
 );

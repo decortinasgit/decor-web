@@ -6,6 +6,9 @@ import { OrdersTable } from "./_components/orders-table/orders-table";
 export default async function OrdersPage() {
   const orders = await getOrders()
 
+  console.log(orders);
+  
+
   return (
     <Tabs defaultValue="overview" className="space-y-4">
       <TabsList>
