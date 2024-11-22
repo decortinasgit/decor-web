@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 // Esquema de validación para un pedido (order)
 export const orderSchema = z.object({
@@ -8,7 +8,7 @@ export const orderSchema = z.object({
   email: z.string().min(1, "Client email is required"),
   createdAt: z.date().optional(), // Campo opcional para validaciones automáticas
   updatedAt: z.date().optional(), // Campo opcional para validaciones automáticas
-})
+});
 
 // Esquema de validación para un elemento de pedido (order item)
 export const orderItemSchema = z.object({
@@ -30,4 +30,13 @@ export const orderItemSchema = z.object({
   price: z.string().min(1, "Item name is required"),
   createdAt: z.date().optional(), // Campo opcional para validaciones automáticas
   updatedAt: z.date().optional(), // Campo opcional para validaciones automáticas
-})
+});
+
+export const orderStatusSchema = z.enum([
+  "pending",
+  "processing",
+  "production",
+  "shipped",
+  "delivered",
+  "completed",
+]);

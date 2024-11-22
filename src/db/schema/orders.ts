@@ -2,12 +2,12 @@ import { pgTable, text, integer, uuid, pgEnum } from "drizzle-orm/pg-core"
 import { lifecycleDates } from "./utils"
 
 export const orderStatus = pgEnum("order_status", [
-  "Pendiente",
-  "Procesando",
-  "En producción",
-  "Enviado",
-  "Entregado",
-  "Completado",
+  "pending",
+  "processing",
+  "production",
+  "shipped",
+  "delivered",
+  "completed",
 ])
 
 export const orders = pgTable("orders", {
@@ -15,7 +15,7 @@ export const orders = pgTable("orders", {
   company: text("company").notNull(),
   client: text("client").notNull(),
   email: text("email").notNull(),
-  status: orderStatus("status").default("Pendiente").notNull(), // Nueva columna de estado
+  status: orderStatus("status").default("pending").notNull(), // Nueva columna de estado
   ...lifecycleDates,
 })
 

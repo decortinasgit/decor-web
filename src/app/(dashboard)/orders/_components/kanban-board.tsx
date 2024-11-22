@@ -21,12 +21,17 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import type { Column } from "./board-column";
 import { BoardColumn, BoardContainer } from "./board-column";
-import { OrderStatus } from "@/db/schema";
 import { OrderWithItems } from "@/types/orders";
 import { OrderCard } from "./order-card";
+import axios from "axios";
 
-export function KanbanBoard() {
+interface KanbanBoardProps {
+  data: OrderWithItems[];
+}
+
+export function KanbanBoard({ data }: KanbanBoardProps) {
   // const [columns, setColumns] = useState<Column[]>(defaultCols);
+  const initializeData = useOrderStore((state) => state.initializeData);
   const columns = useOrderStore((state) => state.columns);
   const pickedUpOrderColumn = useRef<ColumnId | null>(null);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
@@ -48,12 +53,15 @@ export function KanbanBoard() {
   );
 
   useEffect(() => {
+    // Initialize store with data
+    initializeData(data);
     setIsMounted(true);
-  }, [isMounted]);
+  }, [data, initializeData, isMounted]);
 
   useEffect(() => {
     useOrderStore.persist.rehydrate();
   }, []);
+
   if (!isMounted) return;
 
   function getDraggingOrderData(orderId: UniqueIdentifier, columnId: ColumnId) {
@@ -67,6 +75,19 @@ export function KanbanBoard() {
       orderPosition,
       column,
     };
+  }
+
+  async function updateOrderStatus(orderId: string, status: string) {
+    try {
+      const response = await axios.put("/api/order", {
+        orderId,
+        status,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      throw new Error("Failed to update order status");
+    }
   }
 
   const announcements: Announcements = {
@@ -203,10 +224,10 @@ export function KanbanBoard() {
   );
 
   function onDragStart(event: DragStartEvent) {
-    console.log('hey');
-    
+    console.log("hey");
+
     if (!hasDraggableData(event.active)) return;
-    console.log('hoy');
+    console.log("hoy");
 
     const data = event.active.data.current;
     if (data?.type === "Column") {
@@ -260,7 +281,7 @@ export function KanbanBoard() {
     }
   }
 
-  function onDragEnd(event: DragEndEvent) {
+  async function onDragEnd(event: DragEndEvent) {
     setActiveColumn(null);
     setActiveOrder(null);
 
@@ -275,21 +296,31 @@ export function KanbanBoard() {
     const activeData = active.data.current;
     const overData = over.data.current;
 
-    // Move order between columns
+    // Mover órdenes entre columnas
     if (activeData?.type === "OrderWithItems" && overData?.type === "Column") {
       const updatedOrders = orders.map((order) =>
         order.id === activeId ? { ...order, status: overId as ColumnId } : order
       );
+
+      // Actualizar estado local
       setOrders(updatedOrders);
+
+      // Llamar a la API para actualizar la base de datos
+      try {
+        await updateOrderStatus(activeId as string, overId as string);
+        console.log(`Order ${activeId} status updated to ${overId}`);
+      } catch (error) {
+        console.error(`Failed to update order ${activeId} status:`, error);
+      }
     }
 
-    // Move columns
+    // Mover columnas
     if (activeData?.type === "Column" && overData?.type === "Column") {
       const oldIndex = columns.findIndex((col) => col.id === activeId);
       const newIndex = columns.findIndex((col) => col.id === overId);
 
       const reorderedColumns = arrayMove(columns, oldIndex, newIndex);
-      // Update the state with reordered columns (adjust if `columns` is managed elsewhere)
+      // Actualizar el estado con las columnas reordenadas
       useOrderStore.setState({ columns: reorderedColumns });
     }
   }

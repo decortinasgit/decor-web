@@ -6,12 +6,12 @@ import { Column } from "@/app/(dashboard)/orders/_components/board-column";
 import { OrderWithItems } from "@/types/orders";
 
 export const defaultCols = [
-  { id: "Pendiente", title: "Pendiente" },
-  { id: "Procesando", title: "Procesando" },
-  { id: "En_producción", title: "En producción" },
-  { id: "Enviado", title: "Enviado" },
-  { id: "Entregado", title: "Entregado" },
-  { id: "Completado", title: "Completado" },
+  { id: "pending", title: "Pendiente" },
+  { id: "processing", title: "Procesando" },
+  { id: "production", title: "En producción" },
+  { id: "shipped", title: "Enviado" },
+  { id: "delivered", title: "Entregado" },
+  { id: "completed", title: "Completado" },
 ] satisfies Column[];
 
 export type ColumnId = (typeof defaultCols)[number]["id"];
@@ -28,7 +28,7 @@ const initialOrders: OrderWithItems[] = [
     company: "Decortinas",
     client: "Facundo Teran",
     email: "molporron@gmail.com",
-    status: "Pendiente",
+    status: "pending",
     createdAt: new Date("2024-11-21T02:18:49.318Z"),
     updatedAt: new Date("2024-11-21T02:18:49.318Z"),
     items: [], // Adjust as needed
@@ -39,6 +39,7 @@ export type Actions = {
   addOrder: (
     order: Omit<OrderWithItems, "id" | "createdAt" | "updatedAt">
   ) => void;
+  initializeData: (data: OrderWithItems[]) => void;
   addCol: (title: string) => void;
   dragOrder: (id: string | null) => void;
   removeOrder: (id: string) => void;
@@ -54,6 +55,10 @@ export const useOrderStore = create<State & Actions>()(
       orders: initialOrders,
       columns: defaultCols,
       draggedOrder: null,
+      initializeData: (data: OrderWithItems[]) =>
+        set(() => ({
+          orders: data,
+        })),
       addOrder: (
         order: Omit<OrderWithItems, "id" | "createdAt" | "updatedAt">
       ) =>

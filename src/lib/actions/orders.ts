@@ -1,9 +1,13 @@
-import { z } from "zod"
-import { db } from "@/db"
-import { orders, orderItems, OrderItem } from "@/db/schema"
-import { eq, inArray, sql } from "drizzle-orm"
-import { revalidatePath } from "next/cache"
-import { orderItemSchema, orderSchema } from "../validations/orders"
+import { z } from "zod";
+import { db } from "@/db";
+import { orders, orderItems, OrderItem, OrderStatus } from "@/db/schema";
+import { eq, inArray, sql } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import {
+  orderItemSchema,
+  orderSchema,
+  orderStatusSchema,
+} from "../validations/orders";
 
 export async function addOrder(rawInput: z.infer<typeof orderSchema>) {
   try {
@@ -14,22 +18,22 @@ export async function addOrder(rawInput: z.infer<typeof orderSchema>) {
         company: rawInput.company,
         client: rawInput.client,
         email: rawInput.email,
-        status: "Pendiente",
+        status: "pending",
         createdAt: new Date(),
         updatedAt: new Date(),
       })
-      .returning({ insertedId: orders.id })
+      .returning({ insertedId: orders.id });
 
     return {
       data: order,
       error: null,
-    }
+    };
   } catch (err) {
-    console.error("Error adding order:", err)
+    console.error("Error adding order:", err);
     return {
       data: null,
       error: err,
-    }
+    };
   }
 }
 
@@ -57,18 +61,18 @@ export async function addOrderItems(
         createdAt: new Date(),
         updatedAt: new Date(),
       }))
-    )
+    );
 
     return {
       data: insertedItems,
       error: null,
-    }
+    };
   } catch (err) {
-    console.error("Error adding order items:", err)
+    console.error("Error adding order items:", err);
     return {
       data: null,
       error: err,
-    }
+    };
   }
 }
 
@@ -89,7 +93,7 @@ export async function getOrders() {
         })
         .from(orders)
         .leftJoin(orderItems, eq(orders.id, orderItems.orderId))
-        .groupBy(orders.id)
+        .groupBy(orders.id);
 
       const total = await tx
         .select({
@@ -97,7 +101,7 @@ export async function getOrders() {
         })
         .from(orders)
         .execute()
-        .then((res) => Number(res[0]?.count ?? 0))
+        .then((res) => Number(res[0]?.count ?? 0));
 
       return {
         data: ordersWithItems.map((order) => ({
@@ -111,54 +115,54 @@ export async function getOrders() {
           items: (order.items as OrderItem[]) || [],
         })),
         total,
-      }
-    })
+      };
+    });
 
-    return transaction
+    return transaction;
   } catch (err) {
-    console.error("Error fetching orders:", err)
+    console.error("Error fetching orders:", err);
     return {
       data: [],
       total: 0,
       error: err,
-    }
+    };
   }
 }
 
 export async function deleteOrders(orderIds: string[]) {
   try {
     if (orderIds.length === 0) {
-      console.log("No orders to delete.")
+      console.log("No orders to delete.");
       return {
         data: null,
         error: null,
         deletedCount: 0,
-      }
+      };
     }
 
-    console.log("Attempting to delete the following order IDs:", orderIds)
+    console.log("Attempting to delete the following order IDs:", orderIds);
 
     await db.transaction(async (trx) => {
       const result = await trx
         .delete(orders)
-        .where(inArray(orders.id, orderIds))
-      console.log(`${result.count} orders were deleted from the database.`)
-    })
+        .where(inArray(orders.id, orderIds));
+      console.log(`${result.count} orders were deleted from the database.`);
+    });
 
-    revalidatePath(`/dashboard/orders`)
+    revalidatePath(`/dashboard/orders`);
 
     return {
       data: null,
       error: null,
       deletedCount: orderIds.length,
-    }
+    };
   } catch (err) {
-    console.error("Error deleting orders:", err)
+    console.error("Error deleting orders:", err);
     return {
       data: null,
       error: err,
       deletedCount: 0,
-    }
+    };
   }
 }
 
@@ -170,20 +174,20 @@ export async function getOrderById(orderId: string) {
       .where(eq(orders.id, orderId))
       .limit(1) // Asegurarnos de traer solo un resultado
       .execute()
-      .then((res) => res[0] || null) // Si no se encuentra, devolver null
+      .then((res) => res[0] || null); // Si no se encuentra, devolver null
 
     if (!order) {
       return {
         data: null,
         error: `Order with ID ${orderId} not found.`,
-      }
+      };
     }
 
     const items = await db
       .select()
       .from(orderItems)
       .where(eq(orderItems.orderId, orderId))
-      .execute()
+      .execute();
 
     return {
       data: {
@@ -191,12 +195,48 @@ export async function getOrderById(orderId: string) {
         items,
       },
       error: null,
-    }
+    };
   } catch (err) {
-    console.error(`Error fetching order with ID ${orderId}:`, err)
+    console.error(`Error fetching order with ID ${orderId}:`, err);
     return {
       data: null,
       error: err,
+    };
+  }
+}
+
+export async function updateOrderStatus(
+  orderId: string,
+  newStatus: OrderStatus
+) {
+  try {
+    orderStatusSchema.parse(newStatus);
+
+    const result = await db
+      .update(orders)
+      .set({
+        status: newStatus,
+        updatedAt: new Date(),
+      })
+      .where(eq(orders.id, orderId))
+      .returning();
+
+    if (result.length === 0) {
+      return {
+        data: null,
+        error: `Order with ID ${orderId} not found.`,
+      };
     }
+
+    return {
+      data: result[0],
+      error: null,
+    };
+  } catch (err: any) {
+    console.error(`Error updating order status for ID ${orderId}:`, err);
+    return {
+      data: null,
+      error: err instanceof z.ZodError ? err.errors : err.message,
+    };
   }
 }
