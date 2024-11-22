@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next"
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { env } from "@/env.js"
 import { ClerkProvider } from "@clerk/nextjs"
 
@@ -75,7 +76,9 @@ export default function RootLayout({
             fontHeading.variable
           )}
         >
-          {children}
+          <NuqsAdapter>
+            {children}
+          </NuqsAdapter>
           <Toaster />
         </body>
       </html>
