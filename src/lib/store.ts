@@ -5,7 +5,7 @@ import { UniqueIdentifier } from "@dnd-kit/core";
 import { Column } from "@/app/(dashboard)/orders/_components/board-column";
 import { OrderWithItems } from "@/types/orders";
 
-export const defaultCols = [
+export const defaultStatusCols = [
   { id: "pending", title: "Pendiente" },
   { id: "processing", title: "Procesando" },
   { id: "production", title: "En producción" },
@@ -14,7 +14,7 @@ export const defaultCols = [
   { id: "completed", title: "Completado" },
 ] satisfies Column[];
 
-export type ColumnId = (typeof defaultCols)[number]["id"];
+export type ColumnId = (typeof defaultStatusCols)[number]["id"];
 
 export type State = {
   orders: OrderWithItems[];
@@ -53,7 +53,7 @@ export const useOrderStore = create<State & Actions>()(
   persist(
     (set) => ({
       orders: initialOrders,
-      columns: defaultCols,
+      columns: defaultStatusCols,
       draggedOrder: null,
       initializeData: (data: OrderWithItems[]) =>
         set(() => ({

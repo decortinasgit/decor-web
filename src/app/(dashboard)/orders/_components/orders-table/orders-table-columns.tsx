@@ -14,6 +14,7 @@ import { MoreHorizontal } from "lucide-react";
 import { OrderWithItems } from "@/types/orders";
 import { formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { defaultStatusCols } from "@/lib/store";
 
 interface GetColumnsOptions {
   hideActions?: boolean;
@@ -57,9 +58,12 @@ export const getColumns = ({
       accessorKey: "status",
       header: "Estado",
       cell: ({ row }) => {
+        const statusId = row.getValue<string>("status");
+        const status = defaultStatusCols.find((col) => col.id === statusId);
+
         return (
           <Badge variant={"default"} className="ml-auto font-semibold">
-            {row.getValue("status")}
+            {status ? status.title : "Desconocido"}
           </Badge>
         );
       },

@@ -8,7 +8,7 @@ export default function OrdersLayout({
     children: React.ReactNode
 }) {
     return (
-        <PageContainer scrollable={true}>
+        <PageContainer>
             <Layout>
                 {/* ===== Top Heading ===== */}
                 <Layout.Header>
