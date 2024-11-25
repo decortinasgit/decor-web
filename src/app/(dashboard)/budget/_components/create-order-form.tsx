@@ -1,27 +1,25 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form"
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
-import { Costs, Curtains } from "@/db/schema"
-import { Curtain } from "@/types/curtains"
-import { cn, getUserEmail } from "@/lib/utils"
-import { profileSchema, type ProfileFormValues } from "./form-schema"
+import { Costs, Curtains } from "@/db/schema";
+import { Curtain } from "@/types/curtains";
+import { cn, getUserEmail } from "@/lib/utils";
+import { profileSchema, type ProfileFormValues } from "./form-schema";
 
-import Step0 from "./create-order/step-0"
-import Step1 from "./create-order/step-1"
-import CreateOrderFormNavigation from "./create-order/create-order-form-navigation"
-import CreateOrderFormStepper from "./create-order/create-order-form-stepper"
-import { CurtainsTable } from "./curtains-table/curtains-table"
-import {
-  Form,
-} from "@/components/ui/form"
-import { Separator } from "@/components/ui/separator"
-import axios from "axios"
-import { priceCalculation, resetCurtain } from "@/lib/curtains"
-import { User } from "@clerk/nextjs/server"
+import Step0 from "./create-order/step-0";
+import Step1 from "./create-order/step-1";
+import CreateOrderFormNavigation from "./create-order/create-order-form-navigation";
+import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
+import { CurtainsTable } from "./curtains-table/curtains-table";
+import { Form } from "@/components/ui/form";
+import { Separator } from "@/components/ui/separator";
+import axios from "axios";
+import { priceCalculation, resetCurtain } from "@/lib/curtains";
+import { User } from "@clerk/nextjs/server";
 
 interface FormType {
   curtains: Curtain[];
@@ -30,45 +28,20 @@ interface FormType {
 }
 
 interface ProfileFormType {
-  curtains: Curtains[]
-  costs: Costs[]
-  userEmail: string
+  curtains: Curtains[];
+  costs: Costs[];
+  userEmail: string;
 }
 
-export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, userEmail }) => {
-  const router = useRouter()
-
-  const [loading, setLoading] = useState(false)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [data, setData] = useState<FormType>({} as FormType)
-
-  const itemsPerPage = 10;
-  const totalItems = data.curtains ? data.curtains.length : 0;
-  const pageCount = Math.ceil(totalItems / itemsPerPage);
-
-
-  const [selectedCurtainValues, setSelectedCurtainValues] = useState<Curtain[]>(
-    curtains.map(() => (resetCurtain))
-  )
-
-  const getCurtainObject = (index: number) => {
-    const selectedCurtain = selectedCurtainValues[index];
-    const matchingCurtain = curtains.find(
-      (curtain) =>
-        curtain.name === selectedCurtain.name &&
-        curtain.type === selectedCurtain.type &&
-        curtain.color === selectedCurtain.color
-    );
-
-    return matchingCurtain
-      ? { ...matchingCurtain, category: matchingCurtain.category }
-      : null;
-  };
-
-
-  const searchParams = useSearchParams()
-  const companyParam = searchParams.get("company") || ""
-  const clientParam = searchParams.get("client") || ""
+export const CreateOrderForm: React.FC<ProfileFormType> = ({
+  curtains,
+  costs,
+  userEmail,
+}) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const companyParam = searchParams.get("company") || "";
+  const clientParam = searchParams.get("client") || "";
 
   const defaultValues = {
     company: companyParam,
@@ -84,23 +57,49 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, us
         category: "",
       },
     ],
-  }
+  };
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues,
     mode: "onChange",
-  })
+  });
 
   const {
     control,
     formState: { errors },
-  } = form
+  } = form;
 
   const { append, remove, fields } = useFieldArray({
     control,
     name: "curtains",
-  })
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [data, setData] = useState<FormType>({} as FormType);
+
+  const itemsPerPage = 10;
+  const totalItems = data.curtains ? data.curtains.length : 0;
+  const pageCount = Math.ceil(totalItems / itemsPerPage);
+
+  const [selectedCurtainValues, setSelectedCurtainValues] = useState<Curtain[]>(
+    curtains.map(() => resetCurtain)
+  );
+
+  const getCurtainObject = (index: number) => {
+    const selectedCurtain = selectedCurtainValues[index];
+    const matchingCurtain = curtains.find(
+      (curtain) =>
+        curtain.name === selectedCurtain.name &&
+        curtain.type === selectedCurtain.type &&
+        curtain.color === selectedCurtain.color
+    );
+
+    return matchingCurtain
+      ? { ...matchingCurtain, category: matchingCurtain.category }
+      : null;
+  };
 
   const processForm: SubmitHandler<ProfileFormValues> = (formData) => {
     const updatedCurtains = formData.curtains.map((curtain, index) => {
@@ -117,7 +116,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, us
           width: form.watch(`curtains.${index}.width`),
           height: form.watch(`curtains.${index}.height`),
         }
-      )?.toFixed(2)
+      )?.toFixed(2);
 
       return {
         ...curtain,
@@ -136,8 +135,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, us
       curtains: updatedCurtains,
     });
   };
-
-
 
   const handleNameChange = (index: number, value: string) => {
     const updatedValues = [...selectedCurtainValues];
@@ -167,12 +164,12 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, us
     form.setValue(`curtains.${index}.support`, undefined);
   };
 
-
   const handleTypeChange = (index: number, value: string) => {
     const updatedValues = [...selectedCurtainValues];
 
     const matchingCurtain = curtains.find(
-      (curtain) => curtain.type === value && curtain.name === updatedValues[index].name
+      (curtain) =>
+        curtain.type === value && curtain.name === updatedValues[index].name
     );
 
     updatedValues[index].type = value;
@@ -182,20 +179,19 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, us
     setSelectedCurtainValues(updatedValues);
   };
 
-
   const handleColorChange = (index: number, value: string) => {
-    const updatedValues = [...selectedCurtainValues]
-    updatedValues[index].color = value
-    setSelectedCurtainValues(updatedValues)
-  }
+    const updatedValues = [...selectedCurtainValues];
+    updatedValues[index].color = value;
+    setSelectedCurtainValues(updatedValues);
+  };
 
   useEffect(() => {
     if (companyParam && clientParam) {
-      setCurrentStep(1)
+      setCurrentStep(1);
     }
-  }, [companyParam, clientParam])
+  }, [companyParam, clientParam]);
 
-  type FieldName = keyof ProfileFormValues
+  type FieldName = keyof ProfileFormValues;
 
   const steps = [
     {
@@ -218,53 +214,56 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, us
         .flat(),
     },
     { id: "Paso 3", name: "Resumen" },
-  ]
+  ];
 
   useEffect(() => {
     if (companyParam && clientParam) {
-      setCurrentStep(1)
+      setCurrentStep(1);
     }
-  }, [companyParam, clientParam])
+  }, [companyParam, clientParam]);
 
   const next = async () => {
-    const fields = steps[currentStep].fields
+    const fields = steps[currentStep].fields;
 
     const output = await form.trigger(fields as FieldName[], {
       shouldFocus: true,
-    })
+    });
 
-    if (!output) return
+    if (!output) return;
 
     if (currentStep < steps.length - 1) {
       if (currentStep === steps.length - 2) {
-        await form.handleSubmit(processForm)()
+        await form.handleSubmit(processForm)();
       }
-      setCurrentStep((step) => step + 1)
+      setCurrentStep((step) => step + 1);
     }
-  }
+  };
 
   const prev = () => {
     if (currentStep > 0) {
-      setCurrentStep((step) => step - 1)
+      setCurrentStep((step) => step - 1);
     }
-  }
+  };
 
   const handleConfirm = async () => {
-    setLoading(true)
-
+    setLoading(true);
 
     try {
       // Create the order first
-      const orderResponse = await axios.post("/api/order", {
-        company: data.company,
-        client: data.client,
-        email: userEmail,
-        curtains: data.curtains,
-      }, {
-        headers: {
-          "Content-Type": "application/json",
+      const orderResponse = await axios.post(
+        "/api/order",
+        {
+          company: data.company,
+          client: data.client,
+          email: userEmail,
+          curtains: data.curtains,
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const insertedOrder = orderResponse.data[0];
       console.log(insertedOrder);
@@ -281,29 +280,67 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, us
         ...curtain,
       }));
 
-      const orderItemsResponse = await axios.post("/api/order-items", orderItems, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const orderItemsResponse = await axios.post(
+        "/api/order-items",
+        orderItems,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       console.log("Order and items created successfully:", {
         order: orderResponse.data,
         orderItems: orderItemsResponse.data,
       });
 
-      router.push(`/budget/${orderId}`)
+      router.push(`/budget/${orderId}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Failed to create order or order items:", error.response?.data || error.message);
+        console.error(
+          "Failed to create order or order items:",
+          error.response?.data || error.message
+        );
       } else {
         console.error("An unexpected error occurred:", error);
       }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
+  const duplicateRow = (index: number) => {
+    const updatedCurtains = [...form.getValues("curtains")];
+    const rowToDuplicate = updatedCurtains[index];
+
+    console.log(rowToDuplicate);
+
+    if (rowToDuplicate) {
+      const newRow = {
+        ...rowToDuplicate,
+        id: Date.now().toString(),
+      };
+      updatedCurtains.splice(index + 1, 0, newRow);
+
+      form.setValue("curtains", updatedCurtains);
+      setData((prev) => ({
+        ...prev,
+        curtains: updatedCurtains as Curtain[],
+      }));
+    }
+  };
+
+  const deleteRow = (index: number) => {
+    const updatedCurtains = [...form.getValues("curtains")];
+    updatedCurtains.splice(index, 1);
+
+    form.setValue("curtains", updatedCurtains);
+    setData((prev) => ({
+      ...prev,
+      curtains: updatedCurtains as Curtain[],
+    }));
+  };
 
   return (
     <>
@@ -321,9 +358,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, us
                 : "gap-8 md:grid md:grid-cols-3"
             )}
           >
-            {currentStep === 0 && (
-              <Step0 form={form} loading={loading} />
-            )}
+            {currentStep === 0 && <Step0 form={form} loading={loading} />}
             {currentStep === 1 && (
               <Step1
                 fields={fields}
@@ -352,11 +387,23 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({ curtains, costs, us
             </h1>
             <p className="text-muted-foreground">Pedido para: {data.company}</p>
           </div>
-          <CurtainsTable data={data.curtains} pageCount={pageCount} />
+          <CurtainsTable
+            data={data.curtains}
+            pageCount={pageCount}
+            duplicateRow={duplicateRow}
+            deleteRow={deleteRow}
+          />
         </div>
       )}
       {/* Navigation */}
-      <CreateOrderFormNavigation prev={prev} next={next} steps={steps} currentStep={currentStep} loading={loading} confirm={handleConfirm} />
+      <CreateOrderFormNavigation
+        prev={prev}
+        next={next}
+        steps={steps}
+        currentStep={currentStep}
+        loading={loading}
+        confirm={handleConfirm}
+      />
     </>
-  )
-}
+  );
+};
