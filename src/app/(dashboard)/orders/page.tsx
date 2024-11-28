@@ -1,22 +1,82 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { KanbanBoard } from "./_components/kanban-board";
-import { getOrders } from "@/lib/actions/orders";
-import { OrdersTable } from "./_components/orders-table/orders-table";
+"use client";
 
-export default async function OrdersPage() {
-  const orders = await getOrders();
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { KanbanBoard } from "./_components/kanban/kanban-board";
+import { OrdersTable } from "./_components/orders-table/orders-table";
+import { OrderWithItems } from "@/types/orders";
+import Loader from "@/components/custom/loader";
+import { useSearchParams } from "next/navigation";
+import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
+import { KanbanBoardSkeleton } from "./_components/kanban/kanban-board-skeleton";
+
+export default function OrdersPage() {
+  const searchParams = useSearchParams();
+
+  const [orders, setOrders] = useState<{
+    data: OrderWithItems[];
+    total: number;
+    pageCount: number;
+  }>({
+    data: [],
+    total: 0,
+    pageCount: 0,
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleFetchOrders = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/api/order?${searchParams}}`);
+      setOrders(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleFetchOrders();
+  }, [searchParams]);
 
   return (
-    <Tabs defaultValue="overview" className="space-y-4">
+    <Tabs
+      defaultValue="overview"
+      className="space-y-4"
+      onValueChange={handleFetchOrders}
+    >
       <TabsList>
         <TabsTrigger value="overview">General</TabsTrigger>
         <TabsTrigger value="status">Estado</TabsTrigger>
       </TabsList>
       <TabsContent value="overview" className="space-y-4">
-        <OrdersTable data={orders.data} pageCount={orders.total} />
+        {loading ? (
+          <DataTableSkeleton
+            columnCount={5}
+            searchableColumnCount={1}
+            filterableColumnCount={2}
+            cellWidths={["10rem", "40rem", "12rem", "12rem", "8rem"]}
+            shrinkZero
+          />
+        ) : (
+          <OrdersTable data={orders.data} pageCount={orders.pageCount} />
+        )}
       </TabsContent>
       <TabsContent value="status" className="space-y-4">
-        <KanbanBoard data={orders.data} />
+        {loading ? (
+          <KanbanBoardSkeleton
+            columnCount={4}
+            cardsPerColumn={5}
+            showColumnTitles={true}
+            columnWidth="300px"
+            cardHeight="100px"
+            className="bg-gray-100"
+          />
+        ) : (
+          <KanbanBoard data={orders.data} />
+        )}
       </TabsContent>
     </Tabs>
   );

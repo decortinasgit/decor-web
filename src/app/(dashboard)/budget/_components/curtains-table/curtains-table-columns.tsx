@@ -91,7 +91,7 @@ export const getColumns = ({
     },
     {
       accessorKey: "panels",
-      header: () => <div className="text-center">Paneles</div>,
+      header: () => <div className="text-center">Paños</div>,
       cell: ({ row }) => (
         <div className="text-center">{row.getValue("panels") || "N/A"}</div>
       ),

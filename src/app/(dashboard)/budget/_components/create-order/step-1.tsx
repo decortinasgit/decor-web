@@ -328,16 +328,16 @@ const Step1 = ({ fields, curtains, selectedCurtainValues, errors, form, costs, l
                                     {showField("panels") && (
                                         <FormField control={form.control} name={`curtains.${index}.panels`} render={({ field }) => (
                                             <FormItem className="mb-5 md:mb-0">
-                                                <FormLabel>Paneles</FormLabel>
+                                                <FormLabel>Paños</FormLabel>
                                                 <Select onValueChange={(value) => { field.onChange(value) }} {...field}>
                                                     <FormControl>
                                                         <SelectTrigger>
-                                                            <SelectValue placeholder="Seleccione los paneles" />
+                                                            <SelectValue placeholder="Seleccione los paños" />
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
                                                         {panelsOptions.map(value => (
-                                                            <SelectItem key={value} value={value}>{value} Paneles</SelectItem>
+                                                            <SelectItem key={value} value={value}>{value} Paños</SelectItem>
                                                         ))}
                                                     </SelectContent>
                                                 </Select>

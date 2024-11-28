@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { addOrder, updateOrderStatus } from "@/lib/actions/orders";
+import { addOrder, getOrders, updateOrderStatus } from "@/lib/actions/orders";
 import { orderStatusSchema } from "@/lib/validations/orders";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
@@ -66,5 +67,30 @@ export async function PUT(req: Request) {
     return new Response(JSON.stringify({ message: "Something went wrong" }), {
       status: 500,
     });
+  }
+}
+
+export async function GET(req: Request) {
+  try {
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+
+    const result = await getOrders({ page, limit });
+
+    return new NextResponse(JSON.stringify(result), { status: 200 });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+
+    if (error instanceof Error) {
+      return new NextResponse(JSON.stringify({ message: error.message }), {
+        status: 500,
+      });
+    }
+
+    return new NextResponse(
+      JSON.stringify({ message: "Something went wrong" }),
+      { status: 500 }
+    );
   }
 }

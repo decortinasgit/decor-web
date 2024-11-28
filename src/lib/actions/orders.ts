@@ -76,7 +76,13 @@ export async function addOrderItems(
   }
 }
 
-export async function getOrders() {
+export async function getOrders({
+  page = 1,
+  limit = 10,
+}: {
+  page?: number;
+  limit?: number;
+} = {}) {
   try {
     const transaction = await db.transaction(async (tx) => {
       // Obtener las órdenes junto con sus ítems
@@ -93,7 +99,9 @@ export async function getOrders() {
         })
         .from(orders)
         .leftJoin(orderItems, eq(orders.id, orderItems.orderId))
-        .groupBy(orders.id);
+        .groupBy(orders.id)
+        .limit(limit)
+        .offset((page - 1) * limit);
 
       const total = await tx
         .select({
@@ -102,6 +110,8 @@ export async function getOrders() {
         .from(orders)
         .execute()
         .then((res) => Number(res[0]?.count ?? 0));
+
+      const pageCount = Math.ceil((total as number) / limit);
 
       return {
         data: ordersWithItems.map((order) => ({
@@ -115,6 +125,7 @@ export async function getOrders() {
           items: (order.items as OrderItem[]) || [],
         })),
         total,
+        pageCount,
       };
     });
 
@@ -123,6 +134,7 @@ export async function getOrders() {
     console.error("Error fetching orders:", err);
     return {
       data: [],
+      pageCount: 0,
       total: 0,
       error: err,
     };

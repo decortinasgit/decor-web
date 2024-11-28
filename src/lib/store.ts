@@ -22,18 +22,7 @@ export type State = {
   draggedOrder: string | null;
 };
 
-const initialOrders: OrderWithItems[] = [
-  {
-    id: "2e590737-d802-447a-8391-c0415a802f50",
-    company: "Decortinas",
-    client: "Facundo Teran",
-    email: "molporron@gmail.com",
-    status: "pending",
-    createdAt: new Date("2024-11-21T02:18:49.318Z"),
-    updatedAt: new Date("2024-11-21T02:18:49.318Z"),
-    items: [], // Adjust as needed
-  },
-];
+const initialOrders: OrderWithItems[] = [];
 
 export type Actions = {
   addOrder: (
@@ -91,14 +80,22 @@ export const useOrderStore = create<State & Actions>()(
         })),
       dragOrder: (id: string | null) => set({ draggedOrder: id }),
       removeOrder: (id: string) =>
-        set((state) => ({
-          orders: state.orders.filter((order) => order.id !== id),
-        })),
+        set((state) => {
+          const updatedState = {
+            ...state,
+            orders: state.orders.filter((order) => order.id !== id),
+          };
+          return updatedState;
+        }, true),
       removeCol: (id: UniqueIdentifier) =>
         set((state) => ({
           columns: state.columns.filter((col) => col.id !== id),
         })),
-      setOrders: (newOrders: OrderWithItems[]) => set({ orders: newOrders }),
+      setOrders: (newOrders: OrderWithItems[]) =>
+        set((state) => {
+          const updatedState = { ...state, orders: newOrders };
+          return updatedState;
+        }, true),
       setCols: (newCols: Column[]) => set({ columns: newCols }),
     }),
     { name: "order-store", skipHydration: true }
