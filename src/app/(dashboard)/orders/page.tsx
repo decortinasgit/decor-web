@@ -67,12 +67,11 @@ export default function OrdersPage() {
       <TabsContent value="status" className="space-y-4">
         {loading ? (
           <KanbanBoardSkeleton
-            columnCount={4}
-            cardsPerColumn={5}
-            showColumnTitles={true}
+            columnCount={5}
+            cardsPerColumn={4}
             columnWidth="300px"
             cardHeight="100px"
-            className="bg-gray-100"
+            showColumnHeaders={true}
           />
         ) : (
           <KanbanBoard data={orders.data} />
