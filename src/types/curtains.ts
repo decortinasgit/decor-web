@@ -1,10 +1,10 @@
 export interface Curtain {
   name: string;
   type: string;
-  color: string;
+  color?: string | undefined;
   qty: number;
-  height: number;
-  width: number;
+  height?: number | undefined;
+  width?: number | undefined;
   category: string;
   accessories?: Accesory[] | undefined;
   support?: string | undefined;

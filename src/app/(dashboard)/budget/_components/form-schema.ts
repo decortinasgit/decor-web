@@ -11,13 +11,18 @@ export const profileSchema = z.object({
           .positive({ message: "La cantidad debe ser un número positivo" }),
         name: z.string().min(1, { message: "El nombre es requerido" }),
         type: z.string().min(1, { message: "El tipo es requerido" }),
-        color: z.string().min(1, { message: "El color es requerido" }),
+        color: z
+          .string()
+          .min(1, { message: "El color es requerido" })
+          .optional(),
         height: z
           .number()
-          .positive({ message: "La altura debe ser un número positivo" }),
+          .positive({ message: "La altura debe ser un número positivo" })
+          .optional(),
         width: z
           .number()
-          .positive({ message: "El ancho debe ser un número positivo" }),
+          .positive({ message: "El ancho debe ser un número positivo" })
+          .optional(),
 
         // Campos opcionales
         support: z.string().optional(), // Soporte

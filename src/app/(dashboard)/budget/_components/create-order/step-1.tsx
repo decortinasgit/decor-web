@@ -14,7 +14,7 @@ import {
   priceCalculation,
 } from "@/lib/curtains";
 import { Costs, Curtains } from "@/db/schema";
-import { Accesory, Chain, Curtain } from "@/types/curtains";
+import { Accesory, Category, Chain, Curtain } from "@/types/curtains";
 import { cn, formatPrice } from "@/lib/utils";
 
 import {
@@ -140,11 +140,11 @@ const Step1 = ({
           form.watch(`curtains.${index}.qty`),
           price,
           selectedCurtainValues[index].category,
-          {
-            width: form.watch(`curtains.${index}.width`),
-            height: form.watch(`curtains.${index}.height`),
-          },
           parseFloat(costs[0].dolarPrice),
+          {
+            width: form.watch(`curtains.${index}.width`) ?? undefined,
+            height: form.watch(`curtains.${index}.height`) ?? undefined,
+          },
           undefined,
           undefined,
           handleGetChain(),
@@ -352,61 +352,67 @@ const Step1 = ({
                   )}
 
                   {/* Otros campos principales y adicionales */}
-                  <FormField
-                    control={form.control}
-                    name={`curtains.${index}.width`}
-                    render={({ field }) => (
-                      <FormItem className="mb-5 md:mb-0">
-                        <FormLabel>
-                          Ancho{" "}
-                          <span className="text-xs text-muted-foreground">
-                            (cm)
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min={0}
-                            disabled={loading}
-                            placeholder="Ingrese el ancho"
-                            value={field.value || ""}
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value) || 0)
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                  {matchingCurtain?.category !== Category.ITEM_G &&
+                    matchingCurtain?.category !== Category.ITEM_C && (
+                      <FormField
+                        control={form.control}
+                        name={`curtains.${index}.width`}
+                        render={({ field }) => (
+                          <FormItem className="mb-5 md:mb-0">
+                            <FormLabel>
+                              Ancho{" "}
+                              <span className="text-xs text-muted-foreground">
+                                (cm)
+                              </span>
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min={0}
+                                disabled={loading}
+                                placeholder="Ingrese el ancho"
+                                value={field.value || ""}
+                                onChange={(e) =>
+                                  field.onChange(Number(e.target.value) || 0)
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     )}
-                  />
 
-                  <FormField
-                    control={form.control}
-                    name={`curtains.${index}.height`}
-                    render={({ field }) => (
-                      <FormItem className="mb-5 md:mb-0">
-                        <FormLabel>
-                          Alto{" "}
-                          <span className="text-xs text-muted-foreground">
-                            (cm)
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min={0}
-                            disabled={loading}
-                            placeholder="Ingrese el alto"
-                            value={field.value || ""}
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value) || 0)
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                  {matchingCurtain?.category !== Category.ITEM_G &&
+                    matchingCurtain?.category !== Category.ITEM_C && (
+                      <FormField
+                        control={form.control}
+                        name={`curtains.${index}.height`}
+                        render={({ field }) => (
+                          <FormItem className="mb-5 md:mb-0">
+                            <FormLabel>
+                              Alto{" "}
+                              <span className="text-xs text-muted-foreground">
+                                (cm)
+                              </span>
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min={0}
+                                disabled={loading}
+                                placeholder="Ingrese el alto"
+                                value={field.value || ""}
+                                onChange={(e) =>
+                                  field.onChange(Number(e.target.value) || 0)
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     )}
-                  />
 
                   {/* Campos adicionales condicionados */}
                   {showField("support") && (

@@ -27,11 +27,11 @@ export const priceCalculation = (
   quantity: number,
   price: number,
   category: string,
-  sizes: {
-    width: number;
-    height: number;
-  },
   dolar: number,
+  sizes?: {
+    width: number | undefined;
+    height: number | undefined;
+  },
   support?: string,
   fall?: string,
   chain?: Chain | undefined,
@@ -44,7 +44,12 @@ export const priceCalculation = (
   console.log(category);
   console.log(accessory);
 
-  if (category === Category.ITEM_B && accessory) {
+  if (
+    category === Category.ITEM_B &&
+    accessory &&
+    sizes?.width &&
+    sizes?.height
+  ) {
     let partA = parseFloat(accessory.price) * dolar * (sizes.width / 100);
     let partB = price * (sizes.width / 100) * (sizes.height / 100 + 0.3);
     let partC = 0;

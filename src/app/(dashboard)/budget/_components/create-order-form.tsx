@@ -1,25 +1,24 @@
 "use client";
 
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
-import { Accessory, Costs, Curtains } from "@/db/schema";
+import { Costs, Curtains } from "@/db/schema";
 import { Accesory, Chain, Curtain } from "@/types/curtains";
-import { cn, getUserEmail } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { profileSchema, type ProfileFormValues } from "./form-schema";
+import { CurtainsTable } from "./curtains-table/curtains-table";
+import { Form } from "@/components/ui/form";
+import { Separator } from "@/components/ui/separator";
+import { priceCalculation, resetCurtain } from "@/lib/curtains";
 
 import Step0 from "./create-order/step-0";
 import Step1 from "./create-order/step-1";
 import CreateOrderFormNavigation from "./create-order/create-order-form-navigation";
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
-import { CurtainsTable } from "./curtains-table/curtains-table";
-import { Form } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
-import axios from "axios";
-import { priceCalculation, resetAccesory, resetCurtain } from "@/lib/curtains";
-import { User } from "@clerk/nextjs/server";
 
 interface FormType {
   curtains: Curtain[];
@@ -31,14 +30,12 @@ interface ProfileFormType {
   curtains: Curtains[];
   costs: Costs[];
   userEmail: string;
-  accessories: Accessory[];
 }
 
 export const CreateOrderForm: React.FC<ProfileFormType> = ({
   curtains,
   costs,
   userEmail,
-  accessories,
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -138,11 +135,11 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
         form.watch(`curtains.${index}.qty`),
         price,
         selectedCurtainValues[index].category,
-        {
-          width: form.watch(`curtains.${index}.width`),
-          height: form.watch(`curtains.${index}.height`),
-        },
         parseFloat(costs[0].dolarPrice),
+        {
+          width: form.watch(`curtains.${index}.width`) ?? undefined,
+          height: form.watch(`curtains.${index}.height`) ?? undefined,
+        },
         undefined,
         undefined,
         handleGetChain(),
@@ -190,8 +187,8 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
 
     form.setValue(`curtains.${index}.type`, "");
     form.setValue(`curtains.${index}.color`, "");
-    form.setValue(`curtains.${index}.height`, 0);
-    form.setValue(`curtains.${index}.width`, 0);
+    form.setValue(`curtains.${index}.height`, undefined);
+    form.setValue(`curtains.${index}.width`, undefined);
     form.setValue(`curtains.${index}.chain`, undefined);
     form.setValue(`curtains.${index}.chainSide`, undefined);
     form.setValue(`curtains.${index}.fall`, undefined);
@@ -244,9 +241,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
           `curtains.${index}.qty`,
           `curtains.${index}.name`,
           `curtains.${index}.type`,
-          `curtains.${index}.color`,
-          `curtains.${index}.width`,
-          `curtains.${index}.height`,
         ])
         .flat(),
     },
@@ -303,7 +297,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
       );
 
       const insertedOrder = orderResponse.data[0];
-      console.log(insertedOrder);
       if (!insertedOrder || !insertedOrder.insertedId) {
         throw new Error("Failed to create order: No ID returned");
       }
@@ -326,11 +319,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
           },
         }
       );
-
-      console.log("Order and items created successfully:", {
-        order: orderResponse.data,
-        orderItems: orderItemsResponse.data,
-      });
 
       router.push(`/budget/${orderId}`);
     } catch (error) {

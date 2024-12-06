@@ -51,12 +51,12 @@ export const getColumns = ({
     {
       accessorKey: "height",
       header: "Largo",
-      cell: ({ row }) => <div>{row.getValue("height")} cm</div>,
+      cell: ({ row }) => <div>{row.getValue("height") ? row.getValue("height") + "cm" : "N/A"}</div>,
     },
     {
       accessorKey: "width",
       header: "Ancho",
-      cell: ({ row }) => <div>{row.getValue("width")} cm</div>,
+      cell: ({ row }) => <div>{row.getValue("width") ? row.getValue("width") + "cm" : "N/A"}</div>,
     },
     {
       accessorKey: "support",
