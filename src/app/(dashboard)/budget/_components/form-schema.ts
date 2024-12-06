@@ -1,4 +1,4 @@
-import * as z from "zod"
+import * as z from "zod";
 
 export const profileSchema = z.object({
   company: z.string().min(1, { message: "La empresa es requerida" }),
@@ -28,10 +28,11 @@ export const profileSchema = z.object({
         pinches: z.string().optional(), // Pellizcos
         panels: z.string().optional(), // Paños
         price: z.string().optional(),
+        accessories: z.string().optional(),
       })
     )
     .min(1, { message: "Se requiere al menos una cortina" }),
-})
+});
 
-export type ProfileFormValues = z.infer<typeof profileSchema>
-export type CurtainsFormValues = z.infer<typeof profileSchema>["curtains"]
+export type ProfileFormValues = z.infer<typeof profileSchema>;
+export type CurtainsFormValues = z.infer<typeof profileSchema>["curtains"];

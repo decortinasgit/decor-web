@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/custom/button";
 import { MoreHorizontal } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 interface GetColumnsOptions {
   hideActions?: boolean;
@@ -50,12 +51,12 @@ export const getColumns = ({
     {
       accessorKey: "height",
       header: "Largo",
-      cell: ({ row }) => <div>{row.getValue("height")} mts</div>,
+      cell: ({ row }) => <div>{row.getValue("height")} cm</div>,
     },
     {
       accessorKey: "width",
       header: "Ancho",
-      cell: ({ row }) => <div>{row.getValue("width")} mts</div>,
+      cell: ({ row }) => <div>{row.getValue("width")} cm</div>,
     },
     {
       accessorKey: "support",
@@ -100,7 +101,7 @@ export const getColumns = ({
       accessorKey: "price",
       header: () => <div className="text-center">Precio</div>,
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue("price")}</div>
+        <div className="text-center">{formatPrice(row.getValue("price"))}</div>
       ),
     },
   ];
@@ -110,7 +111,7 @@ export const getColumns = ({
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const index = row.index;        
+        const index = row.index;
 
         return (
           <DropdownMenu>

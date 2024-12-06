@@ -1,30 +1,32 @@
 export interface Curtain {
-  name: string
-  type: string
-  color: string
-  qty: number
-  height: number
-  width: number
-  category: string
-  support?: string | undefined
-  fall?: string | undefined
-  chain?: string | undefined
-  chainSide?: string | undefined
-  opening?: string | undefined
-  pinches?: string | undefined
-  panels?: string | undefined
-  price?: string | undefined
+  name: string;
+  type: string;
+  color: string;
+  qty: number;
+  height: number;
+  width: number;
+  category: string;
+  accessories?: Accesory[] | undefined;
+  support?: string | undefined;
+  fall?: string | undefined;
+  chains?: Chain[] | undefined;
+  chainSide?: string | undefined;
+  opening?: string | undefined;
+  pinches?: string | undefined;
+  panels?: string | undefined;
+  price?: string | undefined;
 }
 
-export interface CurtainExcel {
-  Codigos: string
-  NOMBRE: string
-  TELA: string
-  Color: string
-  "PRECIO EN USD": string
-  "PRECIO EN $": string
-  UNIDAD: string
-  "TIPO DE ITEM": Category
+export interface ExcelData {
+  Codigos: string;
+  NOMBRE: string;
+  TELA: string;
+  Color: string;
+  "PRECIO EN USD": number;
+  "PRECIO EN $": number;
+  UNIDAD: string;
+  "TIPO DE ITEM": Category;
+  ACLARACIONES: string;
 }
 
 export enum Category {
@@ -35,4 +37,20 @@ export enum Category {
   ITEM_E = "ITEM E",
   ITEM_F = "ITEM F",
   ITEM_G = "ITEM G",
+  ITEM_I = "ITEM I",
+}
+
+export interface Accesory {
+  id: string;
+  type: string;
+  price: string;
+  createdAt: Date;
+  updatedAt: Date | null;
+}
+export interface Chain {
+  id: string;
+  name: string;
+  price: string;
+  createdAt: Date;
+  updatedAt: Date | null;
 }

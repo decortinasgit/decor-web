@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
-import { Costs, Curtains } from "@/db/schema";
-import { Curtain } from "@/types/curtains";
+import { Accessory, Costs, Curtains } from "@/db/schema";
+import { Accesory, Chain, Curtain } from "@/types/curtains";
 import { cn, getUserEmail } from "@/lib/utils";
 import { profileSchema, type ProfileFormValues } from "./form-schema";
 
@@ -18,7 +18,7 @@ import { CurtainsTable } from "./curtains-table/curtains-table";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
-import { priceCalculation, resetCurtain } from "@/lib/curtains";
+import { priceCalculation, resetAccesory, resetCurtain } from "@/lib/curtains";
 import { User } from "@clerk/nextjs/server";
 
 interface FormType {
@@ -31,12 +31,14 @@ interface ProfileFormType {
   curtains: Curtains[];
   costs: Costs[];
   userEmail: string;
+  accessories: Accessory[];
 }
 
 export const CreateOrderForm: React.FC<ProfileFormType> = ({
   curtains,
   costs,
   userEmail,
+  accessories,
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -108,6 +110,30 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
         ? parseFloat(matchingCurtain.price) * parseFloat(costs[0].dolarPrice)
         : 0;
 
+      const handleGetAccessory = (): Accesory | undefined => {
+        const matchingAccessory = matchingCurtain?.accessories?.filter(
+          (data) => data.id === form.watch(`curtains.${index}.accessories`)
+        );
+
+        if (matchingAccessory) {
+          return matchingAccessory![0];
+        } else {
+          return undefined;
+        }
+      };
+
+      const handleGetChain = (): Chain | undefined => {
+        const matchingChain = matchingCurtain?.chains?.filter(
+          (data) => data.id === form.watch(`curtains.${index}.chain`)
+        );
+
+        if (matchingChain) {
+          return matchingChain![0];
+        } else {
+          return undefined;
+        }
+      };
+
       const calculatedPrice = priceCalculation(
         form.watch(`curtains.${index}.qty`),
         price,
@@ -115,13 +141,24 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
         {
           width: form.watch(`curtains.${index}.width`),
           height: form.watch(`curtains.${index}.height`),
-        }
+        },
+        parseFloat(costs[0].dolarPrice),
+        undefined,
+        undefined,
+        handleGetChain(),
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        handleGetAccessory()
       )?.toFixed(2);
 
       return {
         ...curtain,
         price: calculatedPrice?.toString(),
         category: matchingCurtain?.category || "",
+        accessories: matchingCurtain?.accessories || undefined,
+        chains: matchingCurtain?.chains || undefined,
       };
     });
 

@@ -14,7 +14,7 @@ export default function BudgetLayout({
     const isDetailPage = pathname.startsWith("/budget/") && pathname !== "/budget";
 
     return (
-        <PageContainer>
+        <PageContainer scrollable>
             <Layout>
                 {/* ===== Top Heading ===== */}
                 <Layout.Header>
