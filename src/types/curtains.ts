@@ -37,6 +37,7 @@ export enum Category {
   ITEM_E = "ITEM E",
   ITEM_F = "ITEM F",
   ITEM_G = "ITEM G",
+  ITEM_H = "ITEM H",
   ITEM_I = "ITEM I",
 }
 

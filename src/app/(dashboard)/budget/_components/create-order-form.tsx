@@ -140,13 +140,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
           width: form.watch(`curtains.${index}.width`) ?? undefined,
           height: form.watch(`curtains.${index}.height`) ?? undefined,
         },
-        undefined,
-        undefined,
         handleGetChain(),
-        undefined,
-        undefined,
-        undefined,
-        undefined,
         handleGetAccessory()
       )?.toFixed(2);
 

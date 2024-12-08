@@ -32,18 +32,9 @@ export const priceCalculation = (
     width: number | undefined;
     height: number | undefined;
   },
-  support?: string,
-  fall?: string,
   chain?: Chain | undefined,
-  chainSide?: string,
-  opening?: string,
-  pinches?: string,
-  panels?: string,
   accessory?: Accesory | undefined
 ) => {
-  console.log(category);
-  console.log(accessory);
-
   if (
     category === Category.ITEM_B &&
     accessory &&
@@ -59,8 +50,14 @@ export const priceCalculation = (
     }
 
     return (partA + partB + partC) * quantity;
+  } else if (
+    (category === Category.ITEM_D || category === Category.ITEM_H) &&
+    sizes?.width
+  ) {
+    return price * (sizes.width / 100);
+  } else if (category === Category.ITEM_I && sizes?.height) {
+    return price * (sizes.height / 100);
   }
-
   return price * quantity;
 };
 
