@@ -4,10 +4,10 @@ import DetailOrder from "../_components/detail-order";
 import Loader from "@/components/custom/loader";
 
 interface BudgetIDProps {
-  params: { id: string }; // Aquí definimos que esperamos un parámetro `id`
+  params: { id: string };
 }
 
-export default async function BudgetID({ params }: { params: { id: string } }) {
+export default async function BudgetID({ params }: BudgetIDProps) {
   const orderID = params.id;
 
   // Verificar que el ID se reciba correctamente
@@ -20,7 +20,7 @@ export default async function BudgetID({ params }: { params: { id: string } }) {
 
   return (
     <React.Suspense fallback={<Loader />}>
-      <DetailOrder orderId={orderID} curtains={order?.data?.items} />
+      <DetailOrder order={order.data} />
     </React.Suspense>
   );
 }

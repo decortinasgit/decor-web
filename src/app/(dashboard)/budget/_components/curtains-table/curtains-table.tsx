@@ -13,6 +13,7 @@ interface CurtainsTableProps {
   hideActions?: boolean;
   duplicateRow: (index: number) => void;
   deleteRow: (index: number) => void;
+  pdfTable?: boolean;
 }
 
 export function CurtainsTable({
@@ -21,6 +22,7 @@ export function CurtainsTable({
   hideActions,
   duplicateRow,
   deleteRow,
+  pdfTable,
 }: CurtainsTableProps) {
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(
@@ -59,8 +61,8 @@ export function CurtainsTable({
   });
 
   return (
-    <DataTable table={table}>
-      <DataTableToolbar table={table} />
+    <DataTable table={table} pdfTable={pdfTable}>
+      <DataTableToolbar table={table} pdfTable={pdfTable} />
     </DataTable>
   );
 }

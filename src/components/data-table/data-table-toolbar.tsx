@@ -1,20 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import type { DataTableFilterField } from "@/types"
-import { Cross2Icon } from "@radix-ui/react-icons"
-import type { Table } from "@tanstack/react-table"
+import * as React from "react";
+import type { DataTableFilterField } from "@/types";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import type { Table } from "@tanstack/react-table";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter"
-import { DataTableViewOptions } from "@/components/data-table/data-table-view-options"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
+import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 
 interface DataTableToolbarProps<TData>
   extends React.HTMLAttributes<HTMLDivElement> {
-  table: Table<TData>
-  filterFields?: DataTableFilterField<TData>[]
+  table: Table<TData>;
+  filterFields?: DataTableFilterField<TData>[];
+  pdfTable?: boolean;
 }
 
 export function DataTableToolbar<TData>({
@@ -22,17 +23,18 @@ export function DataTableToolbar<TData>({
   filterFields = [],
   children,
   className,
+  pdfTable,
   ...props
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0
+  const isFiltered = table.getState().columnFilters.length > 0;
 
   // Memoize computation of searchableColumns and filterableColumns
   const { searchableColumns, filterableColumns } = React.useMemo(() => {
     return {
       searchableColumns: filterFields.filter((field) => !field.options),
       filterableColumns: filterFields.filter((field) => field.options),
-    }
-  }, [filterFields])
+    };
+  }, [filterFields]);
 
   return (
     <div
@@ -90,10 +92,12 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <div className="flex items-center gap-2">
-        {children}
-        <DataTableViewOptions table={table} />
-      </div>
+      {!pdfTable && (
+        <div className="flex items-center gap-2">
+          {children}
+          <DataTableViewOptions table={table} />
+        </div>
+      )}
     </div>
-  )
+  );
 }
