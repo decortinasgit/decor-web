@@ -65,7 +65,7 @@ export function AddOrderForm({ className, ...props }: AddOrderFormProps) {
     <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
+          <div className="grid gap-3">
             <FormField
               control={form.control}
               name="company"

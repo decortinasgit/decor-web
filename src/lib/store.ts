@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { v4 as uuid } from "uuid";
 import { persist } from "zustand/middleware";
 import { UniqueIdentifier } from "@dnd-kit/core";
-import { Column } from "@/app/(dashboard)/orders/_components/board-column";
 import { OrderWithItems } from "@/types/orders";
+import { Column } from "@/app/(dashboard)/orders/_components/kanban/board-column";
 
 export const defaultStatusCols = [
   { id: "pending", title: "Pendiente" },

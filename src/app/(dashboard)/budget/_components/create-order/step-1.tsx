@@ -101,6 +101,17 @@ const Step1 = ({
         );
 
         const matchingCurtain = getCurtainObject(index);
+        let isNotCategoryHOrD;
+        let isNotCategoryGOrC;
+
+        if (matchingCurtain?.category) {
+          isNotCategoryHOrD = ![Category.ITEM_H, Category.ITEM_D].includes(
+            matchingCurtain?.category
+          );
+          isNotCategoryGOrC = ![Category.ITEM_G, Category.ITEM_C].includes(
+            matchingCurtain?.category
+          );
+        }
 
         const showField = (fieldName: string) =>
           additionalFields(selectedCurtainValues[index].name).includes(
@@ -141,13 +152,15 @@ const Step1 = ({
           price,
           selectedCurtainValues[index].category,
           parseFloat(costs[0].dolarPrice),
+          parseFloat(costs[0].making),
           {
             width: form.watch(`curtains.${index}.width`) ?? undefined,
             height: form.watch(`curtains.${index}.height`) ?? undefined,
           },
           handleGetChain(),
-          handleGetAccessory()
-        )?.toFixed(2);
+          handleGetAccessory(),
+          form.watch(`curtains.${index}.pinches`) ?? undefined
+        );
 
         return (
           <Accordion
@@ -166,7 +179,7 @@ const Step1 = ({
                 {`Cortinas ${index + 1}`}
                 <div className="absolute right-8 flex gap-5 items-center">
                   <span className="font-medium ml-auto">
-                    Precio: {formatPrice(calculatedPrice)}
+                    Precio: {formatPrice(calculatedPrice.price)}
                   </span>
                   {fields.length > 1 && (
                     <Button
@@ -346,8 +359,7 @@ const Step1 = ({
                   )}
 
                   {/* Otros campos principales y adicionales */}
-                  {matchingCurtain?.category !== Category.ITEM_G &&
-                    matchingCurtain?.category !== Category.ITEM_C &&
+                  {isNotCategoryGOrC &&
                     matchingCurtain?.category !== Category.ITEM_I && (
                       <FormField
                         control={form.control}
@@ -378,10 +390,8 @@ const Step1 = ({
                       />
                     )}
 
-                  {matchingCurtain?.category !== Category.ITEM_G &&
-                    matchingCurtain?.category !== Category.ITEM_C &&
-                    matchingCurtain?.category !== Category.ITEM_H &&
-                    matchingCurtain?.category !== Category.ITEM_D && (
+                  {isNotCategoryGOrC &&
+                    isNotCategoryHOrD && (
                       <FormField
                         control={form.control}
                         name={`curtains.${index}.height`}
@@ -412,78 +422,73 @@ const Step1 = ({
                     )}
 
                   {/* Campos adicionales condicionados */}
-                  {showField("support") &&
-                    matchingCurtain?.category !== Category.ITEM_H &&
-                    matchingCurtain?.category !== Category.ITEM_D && (
-                      <FormField
-                        control={form.control}
-                        name={`curtains.${index}.support`}
-                        render={({ field }) => (
-                          <FormItem className="mb-5 md:mb-0">
-                            <FormLabel>Soporte</FormLabel>
-                            <Select
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                              }}
-                              {...field}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccione un soporte" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {supportOptions.map((value) => (
-                                  <SelectItem key={value} value={value ?? "-"}>
-                                    {value}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                  {showField("support") && isNotCategoryHOrD && (
+                    <FormField
+                      control={form.control}
+                      name={`curtains.${index}.support`}
+                      render={({ field }) => (
+                        <FormItem className="mb-5 md:mb-0">
+                          <FormLabel>Soporte</FormLabel>
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                            }}
+                            {...field}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccione un soporte" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {supportOptions.map((value) => (
+                                <SelectItem key={value} value={value ?? "-"}>
+                                  {value}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
-                  {showField("fall") &&
-                    matchingCurtain?.category !== Category.ITEM_H &&
-                    matchingCurtain?.category !== Category.ITEM_D && (
-                      <FormField
-                        control={form.control}
-                        name={`curtains.${index}.fall`}
-                        render={({ field }) => (
-                          <FormItem className="mb-5 md:mb-0">
-                            <FormLabel>Caída</FormLabel>
-                            <Select
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                              }}
-                              {...field}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccione una caída" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {fallOptions.map((value) => (
-                                  <SelectItem key={value} value={value ?? "-"}>
-                                    {value}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                  {showField("fall") && isNotCategoryHOrD && (
+                    <FormField
+                      control={form.control}
+                      name={`curtains.${index}.fall`}
+                      render={({ field }) => (
+                        <FormItem className="mb-5 md:mb-0">
+                          <FormLabel>Caída</FormLabel>
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                            }}
+                            {...field}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccione una caída" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {fallOptions.map((value) => (
+                                <SelectItem key={value} value={value ?? "-"}>
+                                  {value}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
                   {matchingCurtain &&
                     matchingCurtain.chains &&
-                    matchingCurtain?.category !== Category.ITEM_H &&
-                    matchingCurtain?.category !== Category.ITEM_D && (
+                    isNotCategoryHOrD && (
                       <FormField
                         control={form.control}
                         name={`curtains.${index}.chain`}
@@ -493,7 +498,7 @@ const Step1 = ({
                             <Select
                               onValueChange={(value) => {
                                 field.onChange(value);
-                                handleGetAccessory();
+                                handleGetChain();
                               }}
                               {...field}
                             >
@@ -520,141 +525,137 @@ const Step1 = ({
                       />
                     )}
 
-                  {showField("chainSide") &&
-                    matchingCurtain?.category !== Category.ITEM_H &&
-                    matchingCurtain?.category !== Category.ITEM_D && (
-                      <FormField
-                        control={form.control}
-                        name={`curtains.${index}.chainSide`}
-                        render={({ field }) => (
-                          <FormItem className="mb-5 md:mb-0">
-                            <FormLabel>Lado de Cadena</FormLabel>
-                            <Select
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                              }}
-                              {...field}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccione un lado de cadena" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {chainSideOptions.map((value) => (
-                                  <SelectItem key={value} value={value ?? "-"}>
-                                    {value}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                  {showField("chainSide") && isNotCategoryHOrD && (
+                    <FormField
+                      control={form.control}
+                      name={`curtains.${index}.chainSide`}
+                      render={({ field }) => (
+                        <FormItem className="mb-5 md:mb-0">
+                          <FormLabel>Lado de Cadena</FormLabel>
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                            }}
+                            {...field}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccione un lado de cadena" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {chainSideOptions.map((value) => (
+                                <SelectItem key={value} value={value ?? "-"}>
+                                  {value}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
-                  {showField("opening") &&
-                    matchingCurtain?.category !== Category.ITEM_H &&
-                    matchingCurtain?.category !== Category.ITEM_D && (
-                      <FormField
-                        control={form.control}
-                        name={`curtains.${index}.opening`}
-                        render={({ field }) => (
-                          <FormItem className="mb-5 md:mb-0">
-                            <FormLabel>Aperturas</FormLabel>
-                            <Select
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                              }}
-                              {...field}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccione una apertura" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {openingOptions.map((value) => (
-                                  <SelectItem key={value} value={value}>
-                                    {value}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                  {showField("opening") && isNotCategoryHOrD && (
+                    <FormField
+                      control={form.control}
+                      name={`curtains.${index}.opening`}
+                      render={({ field }) => (
+                        <FormItem className="mb-5 md:mb-0">
+                          <FormLabel>Aperturas</FormLabel>
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                            }}
+                            {...field}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccione una apertura" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {openingOptions.map((value) => (
+                                <SelectItem key={value} value={value}>
+                                  {value}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
-                  {showField("pinches") &&
-                    matchingCurtain?.category !== Category.ITEM_H &&
-                    matchingCurtain?.category !== Category.ITEM_D && (
-                      <FormField
-                        control={form.control}
-                        name={`curtains.${index}.pinches`}
-                        render={({ field }) => (
-                          <FormItem className="mb-5 md:mb-0">
-                            <FormLabel>Pellizcos</FormLabel>
-                            <Select
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                              }}
-                              {...field}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccione un pellizco" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {pinchesOptions.map((value) => (
-                                  <SelectItem key={value} value={value}>
-                                    {value} Pellizcos
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                  {showField("pinches") && isNotCategoryHOrD && (
+                    <FormField
+                      control={form.control}
+                      name={`curtains.${index}.pinches`}
+                      render={({ field }) => (
+                        <FormItem className="mb-5 md:mb-0">
+                          <FormLabel>Pellizcos</FormLabel>
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                            }}
+                            {...field}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccione un pellizco" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {pinchesOptions.map((value) => (
+                                <SelectItem key={value} value={value}>
+                                  {value} Pellizcos
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {calculatedPrice.error ? (
+                            <FormMessage>{calculatedPrice.error}</FormMessage>
+                          ) : (
                             <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
-                  {showField("panels") &&
-                    matchingCurtain?.category !== Category.ITEM_H &&
-                    matchingCurtain?.category !== Category.ITEM_D && (
-                      <FormField
-                        control={form.control}
-                        name={`curtains.${index}.panels`}
-                        render={({ field }) => (
-                          <FormItem className="mb-5 md:mb-0">
-                            <FormLabel>Paños</FormLabel>
-                            <Select
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                              }}
-                              {...field}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccione los paños" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {panelsOptions.map((value) => (
-                                  <SelectItem key={value} value={value}>
-                                    {value} Paños
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                  {showField("panels") && isNotCategoryHOrD && (
+                    <FormField
+                      control={form.control}
+                      name={`curtains.${index}.panels`}
+                      render={({ field }) => (
+                        <FormItem className="mb-5 md:mb-0">
+                          <FormLabel>Paños</FormLabel>
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                            }}
+                            {...field}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccione los paños" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {panelsOptions.map((value) => (
+                                <SelectItem key={value} value={value}>
+                                  {value} Paños
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
                 </div>
               </AccordionContent>
             </AccordionItem>

@@ -1,10 +1,7 @@
 import {
   addMultipleCurtains,
-  addMultipleAccessories,
   deleteCurtains,
-  deleteAccessories,
   getCurtains,
-  getAccessories,
 } from "@/lib/actions/curtains";
 import { processExcelData } from "@/lib/filter-excel";
 import { filterCompareArrays } from "@/lib/utils";
@@ -28,7 +25,6 @@ export const PUT = async () => {
 
     // Obtener datos existentes
     const existingCurtains = await getCurtains();
-    const existingAccessories = await getAccessories();
 
     // Cortinas
     const changedOrNewCurtains = filterCompareArrays(
@@ -57,38 +53,8 @@ export const PUT = async () => {
       await addMultipleCurtains(changedOrNewCurtains);
     }
 
-    // Accesorios
-    const changedOrNewAccessories = filterCompareArrays(
-      existingAccessories.data,
-      filteredData.accesories
-    );
-
-    const newAccessoryIds = new Set(
-      filteredData.accesories.map((accessory) => accessory.id)
-    );
-
-    const accessoriesToDelete = existingAccessories.data.filter(
-      (accessory) => !newAccessoryIds.has(accessory.id)
-    );
-
-    console.log("=============== Accesorios =============");
-    console.log("Actualizar:", changedOrNewAccessories.length);
-    console.log("Eliminar:", accessoriesToDelete.length);
-    console.log("========================================");
-
-    if (accessoriesToDelete.length > 0) {
-      await deleteAccessories(
-        accessoriesToDelete.map((accessory) => accessory.id)
-      );
-    }
-
-    if (changedOrNewAccessories.length > 0) {
-      await addMultipleAccessories(changedOrNewAccessories);
-    }
-
     return NextResponse.json({
       updatedCurtains: changedOrNewCurtains,
-      updatedAccessories: changedOrNewAccessories,
     });
   } catch (error) {
     console.error("API request failed:", error);

@@ -136,13 +136,15 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
         price,
         selectedCurtainValues[index].category,
         parseFloat(costs[0].dolarPrice),
+        parseFloat(costs[0].making),
         {
           width: form.watch(`curtains.${index}.width`) ?? undefined,
           height: form.watch(`curtains.${index}.height`) ?? undefined,
         },
         handleGetChain(),
-        handleGetAccessory()
-      )?.toFixed(2);
+        handleGetAccessory(),
+        form.watch(`curtains.${index}.pinches`) ?? undefined
+      ).price?.toFixed(2);
 
       return {
         ...curtain,

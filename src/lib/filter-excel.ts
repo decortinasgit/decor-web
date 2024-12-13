@@ -1,9 +1,9 @@
-import { Accessory, Curtains } from "@/db/schema";
+import { Curtains } from "@/db/schema";
 import { Category, ExcelData } from "@/types/curtains";
 
 export async function processExcelData(
   data: ExcelData[]
-): Promise<{ curtains: Curtains[]; accesories: Accessory[] }> {
+): Promise<{ curtains: Curtains[] }> {
   const now = new Date();
 
   const curtainsData = data.map((item) => ({
@@ -18,14 +18,26 @@ export async function processExcelData(
       item["TIPO DE ITEM"] === Category.ITEM_B
         ? data
             .filter(
-              (accesory) =>
-                accesory["TIPO DE ITEM"] === Category.ITEM_A &&
-                accesory.NOMBRE === item.NOMBRE
+              (accessory) =>
+                accessory["TIPO DE ITEM"] === Category.ITEM_A &&
+                accessory.NOMBRE === item.NOMBRE
             )
-            .map((accesory) => ({
-              id: `${accesory.Codigos}-accessory`,
-              type: accesory.TELA,
-              price: accesory["PRECIO EN USD"].toString(),
+            .map((accessory) => ({
+              id: `${accessory.Codigos}-accessory`,
+              type: accessory.TELA,
+              price: accessory["PRECIO EN USD"].toString(),
+              createdAt: now,
+              updatedAt: null,
+            }))
+        : item["TIPO DE ITEM"] === Category.ITEM_E
+        ? data
+            .filter(
+              (accessory) => accessory["TIPO DE ITEM"] === Category.ITEM_D
+            )
+            .map((accessory) => ({
+              id: `${accessory.Codigos}-accessory`,
+              type: accessory.TELA,
+              price: accessory["PRECIO EN USD"].toString(),
               createdAt: now,
               updatedAt: null,
             }))
@@ -50,20 +62,5 @@ export async function processExcelData(
     updatedAt: null,
   }));
 
-  const accessoriesData = data
-    .filter(
-      (item) =>
-        item["TIPO DE ITEM"] !== "ITEM B" && item["TIPO DE ITEM"] !== "ITEM E"
-    )
-    .map((item) => ({
-      id: `${item.Codigos}-accessory`,
-      name: item.NOMBRE,
-      type: item.TELA || "-",
-      price: item["PRECIO EN USD"].toString(),
-      category: item["TIPO DE ITEM"],
-      createdAt: now,
-      updatedAt: null,
-    }));
-
-  return { curtains: curtainsData, accesories: accessoriesData };
+  return { curtains: curtainsData };
 }

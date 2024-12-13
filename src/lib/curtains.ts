@@ -28,13 +28,17 @@ export const priceCalculation = (
   price: number,
   category: string,
   dolar: number,
+  confection: number,
   sizes?: {
     width: number | undefined;
     height: number | undefined;
   },
   chain?: Chain | undefined,
-  accessory?: Accesory | undefined
+  accessory?: Accesory | undefined,
+  pinches?: string
 ) => {
+  let error;
+
   if (
     category === Category.ITEM_B &&
     accessory &&
@@ -49,16 +53,66 @@ export const priceCalculation = (
       partC = parseFloat(chain.price) * dolar;
     }
 
-    return (partA + partB + partC) * quantity;
+    return { price: (partA + partB + partC) * quantity };
+  } else if (
+    category === Category.ITEM_E &&
+    accessory &&
+    sizes?.width &&
+    sizes?.height &&
+    pinches &&
+    confection
+  ) {
+    // Determinar el factor de pellizco
+    let pinchFactor = 0;
+    let maxWidth = 0;
+
+    switch (pinches) {
+      case "1":
+        pinchFactor = 1.8;
+        maxWidth = 1.5;
+        break;
+      case "2":
+        pinchFactor = 2.2;
+        maxWidth = 1.0;
+        break;
+      case "3":
+        pinchFactor = 2.7;
+        maxWidth = 0.8;
+        break;
+      default:
+        throw new Error("Pinches inválidos");
+    }
+
+    // Validar si el ancho excede el máximo permitido
+    if (sizes.width / 100 > maxWidth) {
+      error = `El ancho (${
+        sizes.width / 100
+      } m) excede el máximo permitido para ${pinches} pellizcos (${maxWidth} m).`;
+    }
+
+    // Cálculo de la cantidad de tela
+    const fabricQuantity = (sizes.width / 100) * pinchFactor;
+
+    // Parte 1: Costo del riel
+    const railLength = Math.max(1.2, Math.ceil(sizes.width / 100 / 0.2) * 0.2);
+    const partA = railLength * price; // Precio del riel por tramo de 20 cm
+
+    // Parte 2: Cantidad de tela x Item E
+    const partB = fabricQuantity * parseFloat(accessory.price) * dolar;
+
+    // Parte 3: Costo de confección
+    const partC = fabricQuantity * confection;
+
+    return { price: (partA + partB + partC) * quantity, error };
   } else if (
     (category === Category.ITEM_D || category === Category.ITEM_H) &&
     sizes?.width
   ) {
-    return price * (sizes.width / 100);
+    return { price: price * (sizes.width / 100) };
   } else if (category === Category.ITEM_I && sizes?.height) {
-    return price * (sizes.height / 100);
+    return { price: price * (sizes.height / 100) };
   }
-  return price * quantity;
+  return { price: price * quantity };
 };
 
 export const resetAccesory = {

@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: React.PropsWithChildren) {
       </div>
       <div className="relative hidden lg:block">
         <Image
-          src="/images/auth-layout.webp"
+          src="/images/auth-layout.jpg"
           alt="A skateboarder dropping into a bowl"
           fill
           className="absolute inset-0 object-cover"
