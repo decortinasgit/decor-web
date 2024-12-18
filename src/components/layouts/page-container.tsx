@@ -16,7 +16,7 @@ export default function PageContainer({
           <div className="h-full pt-4 md:px-8 md:w-full">{children}</div>
         </ScrollArea>
       ) : (
-        <div className="h-full pt-4 md:px-8">{children}</div>
+        <div className="h-[calc(100dvh-52px)] pt-4 md:px-8">{children}</div>
       )}
     </React.Suspense>
   )

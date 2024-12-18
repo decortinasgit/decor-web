@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { OrderWithItems } from "@/types/orders";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -56,9 +57,12 @@ export function OrderCard({ order, isOverlay }: OrderCardProps) {
     <Card
       ref={setNodeRef}
       style={style}
-      className={variants({
-        dragging: isOverlay ? "overlay" : isDragging ? "over" : undefined,
-      })}
+      className={cn(
+        variants({
+          dragging: isOverlay ? "overlay" : isDragging ? "over" : undefined,
+        }),
+        "my-2"
+      )}
     >
       <CardHeader className="space-between relative flex flex-row border-b-2 border-secondary px-3 py-3">
         <Button

@@ -24,6 +24,8 @@ import { BoardColumn, BoardContainer } from "./board-column";
 import { OrderWithItems } from "@/types/orders";
 import { OrderCard } from "./order-card";
 import axios from "axios";
+import { OrderStatus } from "@/db/schema";
+import { toast } from "sonner";
 
 interface KanbanBoardProps {
   data: OrderWithItems[];
@@ -256,8 +258,15 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
 
     // Reordering orders within the same column
     if (isActiveAOrder && isOverAOrder) {
-      const activeOrder = orders.find((order) => order.id === activeId);
-      const overOrder = orders.find((order) => order.id === overId);
+      const activeIndex = orders.findIndex((t) => t.id === activeId);
+      const overIndex = orders.findIndex((t) => t.id === overId);
+      const activeOrder = orders[activeIndex];
+      const overOrder = orders[overIndex];
+
+      if (activeOrder && overOrder && activeOrder.status !== overOrder.status) {
+        activeOrder.status = overOrder.status;
+        setOrders(arrayMove(orders, activeIndex, overIndex - 1));
+      }
 
       if (activeOrder && overOrder && activeOrder.status === overOrder.status) {
         const ordersInColumn = orders.filter(
@@ -278,6 +287,8 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
         ];
         setOrders(updatedOrders);
       }
+
+      setOrders(arrayMove(orders, activeIndex, overIndex));
     }
   }
 
@@ -296,10 +307,11 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
     const activeData = active.data.current;
     const overData = over.data.current;
 
-    // Mover órdenes entre columnas
     if (activeData?.type === "OrderWithItems" && overData?.type === "Column") {
       const updatedOrders = orders.map((order) =>
-        order.id === activeId ? { ...order, status: overId as ColumnId } : order
+        order.id === activeId
+          ? { ...order, status: overId as OrderStatus }
+          : order
       );
 
       // Actualizar estado local
@@ -308,20 +320,47 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
       // Llamar a la API para actualizar la base de datos
       try {
         await updateOrderStatus(activeId as string, overId as string);
+        toast.message("Éxito!", {
+          description: `Tu orden fue actualizada!`,
+        });
         console.log(`Order ${activeId} status updated to ${overId}`);
       } catch (error) {
         console.error(`Failed to update order ${activeId} status:`, error);
+        toast.error("Error!", {
+          description: `Tu orden no pudo ser actualizada, intente nuevamente!`,
+        });
       }
     }
 
-    // Mover columnas
-    if (activeData?.type === "Column" && overData?.type === "Column") {
-      const oldIndex = columns.findIndex((col) => col.id === activeId);
-      const newIndex = columns.findIndex((col) => col.id === overId);
+    if (
+      activeData?.type === "OrderWithItems" &&
+      overData?.type !== "Column" &&
+      over.data.current
+    ) {
+      const overStatus = over.data.current.order.status;
 
-      const reorderedColumns = arrayMove(columns, oldIndex, newIndex);
-      // Actualizar el estado con las columnas reordenadas
-      useOrderStore.setState({ columns: reorderedColumns });
+      const updatedOrders = orders.map((order) =>
+        order.id === activeId
+          ? { ...order, status: overStatus as OrderStatus }
+          : order
+      );
+
+      // Actualizar estado local
+      setOrders(updatedOrders);
+
+      // Llamar a la API para actualizar la base de datos
+      try {
+        await updateOrderStatus(activeId as string, overStatus as string);
+        toast.message("Éxito!", {
+          description: `Tu orden fue actualizada!`,
+        });
+        console.log(`Order ${activeId} status updated to ${overStatus}`);
+      } catch (error) {
+        console.error(`Failed to update order ${activeId} status:`, error);
+        toast.error("Error!", {
+          description: `Tu orden no pudo ser actualizada, intente nuevamente!`,
+        });
+      }
     }
   }
 }
