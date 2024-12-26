@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Esquema de validación para un pedido (order)
 export const orderSchema = z.object({
-  id: z.string().uuid().optional(), // ID opcional porque se puede generar automáticamente
+  id: z.string().uuid(),
   company: z.string().min(1, "Company name is required"),
   client: z.string().min(1, "Client name is required"),
   email: z.string().min(1, "Client email is required"),
@@ -12,7 +12,7 @@ export const orderSchema = z.object({
 
 // Esquema de validación para un elemento de pedido (order item)
 export const orderItemSchema = z.object({
-  id: z.string().uuid().optional(), // ID opcional porque se puede generar automáticamente
+  id: z.string().uuid(),
   orderId: z.string().uuid(), // ID de referencia del pedido, obligatorio
   qty: z.number().int().min(1, "Quantity must be at least 1"),
   name: z.string().min(1, "Item name is required"),

@@ -15,6 +15,7 @@ import { OrderWithItems } from "@/types/orders";
 import { formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { defaultStatusCols } from "@/lib/store";
+import { useRouter } from "next/navigation";
 
 interface GetColumnsOptions {
   hideActions?: boolean;
@@ -23,6 +24,8 @@ interface GetColumnsOptions {
 export const getColumns = ({
   hideActions,
 }: GetColumnsOptions = {}): ColumnDef<OrderWithItems>[] => {
+  const router = useRouter();
+
   const columns: ColumnDef<OrderWithItems>[] = [
     {
       accessorKey: "id",
@@ -99,6 +102,9 @@ export const getColumns = ({
                 onClick={() => navigator.clipboard.writeText(order.id)}
               >
                 Copiar ID
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push(`/budget/${order.id}/edit`)}>
+                Editar pedido
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => {}}>
                 Eliminar pedido

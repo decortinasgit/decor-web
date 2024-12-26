@@ -19,6 +19,7 @@ import Step0 from "./create-order/step-0";
 import Step1 from "./create-order/step-1";
 import CreateOrderFormNavigation from "./create-order/create-order-form-navigation";
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
+import { OrderWithItems } from "@/types/orders";
 
 interface FormType {
   curtains: Curtain[];
@@ -26,36 +27,34 @@ interface FormType {
   client: string;
 }
 
-interface ProfileFormType {
+interface EditOrderFormProps {
   curtains: Curtains[];
   costs: Costs[];
-  userEmail: string;
+  order: OrderWithItems;
+  orderId: string;
 }
 
-export const CreateOrderForm: React.FC<ProfileFormType> = ({
+export const EditOrderForm: React.FC<EditOrderFormProps> = ({
   curtains,
   costs,
-  userEmail,
+  order,
+  orderId,
 }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const companyParam = searchParams.get("company") || "";
-  const clientParam = searchParams.get("client") || "";
 
   const defaultValues = {
-    company: companyParam,
-    client: clientParam,
-    curtains: [
-      {
-        qty: 0,
-        name: "",
-        type: "",
-        color: "",
-        width: 0,
-        height: 0,
-        category: "",
-      },
-    ],
+    company: order.company,
+    client: order.client,
+    curtains: order.items.map((item) => ({
+      name: item.name || "",
+      qty: item.qty || 0,
+      price: item.price?.toString() || "0",
+      width: item.width || 0,
+      height: item.height || 0,
+      color: item.color || "",
+      type: item.type || "",
+      category: "",
+    })),
   };
 
   const form = useForm<ProfileFormValues>({
@@ -83,7 +82,17 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
   const pageCount = Math.ceil(totalItems / itemsPerPage);
 
   const [selectedCurtainValues, setSelectedCurtainValues] = useState<Curtain[]>(
-    curtains.map(() => resetCurtain)
+    order.items.map((item) => ({
+      ...resetCurtain,
+      name: item.name || "",
+      qty: item.qty || 0,
+      price: item.price?.toString() || "0",
+      width: item.width || 0,
+      height: item.height || 0,
+      color: item.color || "",
+      type: item.type || "",
+      category: "",
+    }))
   );
 
   const getCurtainObject = (index: number) => {
@@ -103,6 +112,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
   const processForm: SubmitHandler<ProfileFormValues> = (formData) => {
     const updatedCurtains = formData.curtains.map((curtain, index) => {
       const matchingCurtain = getCurtainObject(index);
+
       const price = matchingCurtain
         ? parseFloat(matchingCurtain.price) * parseFloat(costs[0].dolarPrice)
         : 0;
@@ -155,6 +165,8 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
       };
     });
 
+    console.log("Updated curtains:", updatedCurtains);
+
     setData({
       ...formData,
       curtains: updatedCurtains,
@@ -183,43 +195,34 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
 
     form.setValue(`curtains.${index}.type`, "");
     form.setValue(`curtains.${index}.color`, "");
-    form.setValue(`curtains.${index}.height`, undefined);
-    form.setValue(`curtains.${index}.width`, undefined);
-    form.setValue(`curtains.${index}.chain`, undefined);
-    form.setValue(`curtains.${index}.chainSide`, undefined);
-    form.setValue(`curtains.${index}.fall`, undefined);
-    form.setValue(`curtains.${index}.opening`, undefined);
-    form.setValue(`curtains.${index}.panels`, undefined);
-    form.setValue(`curtains.${index}.pinches`, undefined);
-    form.setValue(`curtains.${index}.support`, undefined);
   };
 
   const handleTypeChange = (index: number, value: string) => {
     const updatedValues = [...selectedCurtainValues];
+    const selectedName = updatedValues[index].name;
 
     const matchingCurtain = curtains.find(
-      (curtain) =>
-        curtain.type === value && curtain.name === updatedValues[index].name
+      (curtain) => curtain.type === value && curtain.name === selectedName
     );
 
     updatedValues[index].type = value;
-    updatedValues[index].color = "";
+    updatedValues[index].color = ""; // Reset color
     updatedValues[index].category = matchingCurtain?.category || "";
 
     setSelectedCurtainValues(updatedValues);
+
+    form.setValue(`curtains.${index}.type`, value);
+    form.setValue(`curtains.${index}.color`, "");
   };
 
   const handleColorChange = (index: number, value: string) => {
     const updatedValues = [...selectedCurtainValues];
     updatedValues[index].color = value;
-    setSelectedCurtainValues(updatedValues);
-  };
 
-  useEffect(() => {
-    if (companyParam && clientParam) {
-      setCurrentStep(1);
-    }
-  }, [companyParam, clientParam]);
+    setSelectedCurtainValues(updatedValues);
+
+    form.setValue(`curtains.${index}.color`, value);
+  };
 
   type FieldName = keyof ProfileFormValues;
 
@@ -242,12 +245,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
     },
     { id: "Paso 3", name: "Resumen" },
   ];
-
-  useEffect(() => {
-    if (companyParam && clientParam) {
-      setCurrentStep(1);
-    }
-  }, [companyParam, clientParam]);
 
   const next = async () => {
     const fields = steps[currentStep].fields;
@@ -272,17 +269,18 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
     }
   };
 
-  const handleConfirm = async () => {
+  const handleUpdate = async () => {
     setLoading(true);
 
     try {
-      // Create the order first
-      const orderResponse = await axios.post(
+      // Actualizar la orden principal
+      await axios.put(
         "/api/order",
         {
+          id: orderId,
           company: data.company,
           client: data.client,
-          email: userEmail,
+          email: "",
           curtains: data.curtains,
         },
         {
@@ -292,34 +290,52 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
         }
       );
 
-      const insertedOrder = orderResponse.data[0];
-      if (!insertedOrder || !insertedOrder.insertedId) {
-        throw new Error("Failed to create order: No ID returned");
+      const existingOrderItems = order.items;
+
+      const orderItems = data.curtains.map((curtain) => {
+        const existingItem = existingOrderItems.find(
+          (item) => item.name === curtain.name && item.type === curtain.type
+        );
+
+        return {
+          id: existingItem?.id || null, // Determinar si es nuevo o existente
+          orderId: orderId,
+          createdAt: existingItem?.createdAt || new Date(),
+          updatedAt: new Date(),
+          ...curtain,
+        };
+      });
+
+      // Separar ítems existentes y nuevos
+      const itemsToUpdate = orderItems.filter((item) => item.id); // Con id, usar PUT
+      const itemsToCreate = orderItems.filter((item) => !item.id); // Sin id, usar POST
+
+      console.log("Items to update:", itemsToUpdate);
+      console.log("Items to create:", itemsToCreate);
+
+      // Actualizar ítems existentes
+      if (itemsToUpdate.length > 0) {
+        await axios.put("/api/order-items", itemsToUpdate, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
       }
 
-      const orderId = insertedOrder.insertedId;
-
-      const orderItems = data.curtains.map((curtain) => ({
-        orderId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        ...curtain,
-      }));
-
-      console.log(orderItems, "orderItems");
-      
-
-      await axios.post("/api/order-items", orderItems, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      // Crear ítems nuevos
+      if (itemsToCreate.length > 0) {
+        await axios.post("/api/order-items", itemsToCreate, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
 
       router.push(`/budget/${orderId}/success`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(
-          "Failed to create order or order items:",
+          "Failed to update order or order items:",
           error.response?.data || error.message
         );
       } else {
@@ -333,8 +349,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
   const duplicateRow = (index: number) => {
     const updatedCurtains = [...form.getValues("curtains")];
     const rowToDuplicate = updatedCurtains[index];
-
-    console.log(rowToDuplicate);
 
     if (rowToDuplicate) {
       const newRow = {
@@ -384,6 +398,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
                 fields={fields}
                 curtains={curtains}
                 selectedCurtainValues={selectedCurtainValues}
+                setSelectedCurtainValues={setSelectedCurtainValues}
                 errors={errors}
                 form={form}
                 append={append}
@@ -422,7 +437,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
         steps={steps}
         currentStep={currentStep}
         loading={loading}
-        confirm={handleConfirm}
+        confirm={handleUpdate}
       />
     </>
   );

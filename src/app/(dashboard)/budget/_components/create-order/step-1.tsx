@@ -12,6 +12,7 @@ import {
   additionalFields,
   getUniqueValues,
   priceCalculation,
+  resetCurtain,
 } from "@/lib/curtains";
 import { Costs, Curtains } from "@/db/schema";
 import { Accesory, Category, Chain, Curtain } from "@/types/curtains";
@@ -54,6 +55,7 @@ type Props = {
   fields: FieldArrayWithId<ProfileFormValues, "curtains", "id">[];
   curtains: Curtains[];
   selectedCurtainValues: Curtain[];
+  setSelectedCurtainValues?: React.Dispatch<React.SetStateAction<Curtain[]>>;
   errors: FieldErrors<ProfileFormValues>;
   form: UseFormReturn<ProfileFormValues, any, undefined>;
   append: UseFieldArrayAppend<ProfileFormValues, "curtains">;
@@ -70,6 +72,7 @@ const Step1 = ({
   fields,
   curtains,
   selectedCurtainValues,
+  setSelectedCurtainValues,
   errors,
   form,
   costs,
@@ -359,67 +362,65 @@ const Step1 = ({
                   )}
 
                   {/* Otros campos principales y adicionales */}
-                  {isNotCategoryGOrC &&
-                    matchingCurtain?.category !== Category.ITEM_I && (
-                      <FormField
-                        control={form.control}
-                        name={`curtains.${index}.width`}
-                        render={({ field }) => (
-                          <FormItem className="mb-5 md:mb-0">
-                            <FormLabel>
-                              Ancho{" "}
-                              <span className="text-xs text-muted-foreground">
-                                (cm)
-                              </span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                type="number"
-                                min={0}
-                                disabled={loading}
-                                placeholder="Ingrese el ancho"
-                                value={field.value || ""}
-                                onChange={(e) =>
-                                  field.onChange(Number(e.target.value) || 0)
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                  {
+                    <FormField
+                      control={form.control}
+                      name={`curtains.${index}.width`}
+                      render={({ field }) => (
+                        <FormItem className="mb-5 md:mb-0">
+                          <FormLabel>
+                            Ancho{" "}
+                            <span className="text-xs text-muted-foreground">
+                              (cm)
+                            </span>
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min={0}
+                              disabled={loading}
+                              placeholder="Ingrese el ancho"
+                              value={field.value || ""}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value) || 0)
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  }
 
-                  {isNotCategoryGOrC &&
-                    isNotCategoryHOrD && (
-                      <FormField
-                        control={form.control}
-                        name={`curtains.${index}.height`}
-                        render={({ field }) => (
-                          <FormItem className="mb-5 md:mb-0">
-                            <FormLabel>
-                              Alto{" "}
-                              <span className="text-xs text-muted-foreground">
-                                (cm)
-                              </span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                type="number"
-                                min={0}
-                                disabled={loading}
-                                placeholder="Ingrese el alto"
-                                value={field.value || ""}
-                                onChange={(e) =>
-                                  field.onChange(Number(e.target.value) || 0)
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                  {
+                    <FormField
+                      control={form.control}
+                      name={`curtains.${index}.height`}
+                      render={({ field }) => (
+                        <FormItem className="mb-5 md:mb-0">
+                          <FormLabel>
+                            Alto{" "}
+                            <span className="text-xs text-muted-foreground">
+                              (cm)
+                            </span>
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min={0}
+                              disabled={loading}
+                              placeholder="Ingrese el alto"
+                              value={field.value || ""}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value) || 0)
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  }
 
                   {/* Campos adicionales condicionados */}
                   {showField("support") && isNotCategoryHOrD && (
@@ -668,7 +669,7 @@ const Step1 = ({
           type="button"
           className="flex justify-center"
           size={"lg"}
-          onClick={() =>
+          onClick={() => {
             append({
               qty: 0,
               name: "",
@@ -678,8 +679,11 @@ const Step1 = ({
               height: 0,
               support: "",
               price: "",
-            })
-          }
+            });
+
+            if (setSelectedCurtainValues)
+              setSelectedCurtainValues((prev) => [...prev, resetCurtain]);
+          }}
         >
           Agregar Más
         </Button>

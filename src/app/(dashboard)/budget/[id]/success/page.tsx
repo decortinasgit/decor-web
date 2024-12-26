@@ -1,6 +1,7 @@
 import React from "react";
 import { getOrderById } from "@/lib/actions/orders";
-import DetailOrder from "../_components/detail-order";
+
+import DetailOrder from "../../_components/detail-order";
 import Loader from "@/components/custom/loader";
 
 interface BudgetIDProps {

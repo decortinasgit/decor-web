@@ -178,6 +178,88 @@ export async function deleteOrders(orderIds: string[]) {
   }
 }
 
+export async function updateOrder(rawInput: z.infer<typeof orderSchema>) {
+  try {
+    const result = await db
+      .update(orders)
+      .set({
+        company: rawInput.company,
+        client: rawInput.client,
+        email: rawInput.email,
+        updatedAt: new Date(),
+      })
+      .where(eq(orders.id, rawInput.id));
+
+    return {
+      data: result,
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error updating order:", err);
+    return {
+      data: null,
+      error: err,
+    };
+  }
+}
+
+export async function updateOrderItems(
+  rawItems: z.infer<typeof orderItemSchema>[]
+) {
+  try {
+    // Primero elimina ítems que no estén en el nuevo listado
+    const itemIds = rawItems.map((item) => item.id).filter(Boolean);
+    await db
+      .delete(orderItems)
+      .where(sql`${orderItems.id} NOT IN (${sql.join(itemIds)})`);
+
+    // Luego inserta o actualiza ítems existentes
+    for (const item of rawItems) {
+      if (item.id) {
+        // Actualiza ítem existente
+        await db
+          .update(orderItems)
+          .set({
+            qty: item.qty,
+            name: item.name,
+            type: item.type,
+            color: item.color,
+            height: item.height,
+            width: item.width,
+            support: item.support,
+            fall: item.fall,
+            chain: item.chain,
+            chainSide: item.chainSide,
+            opening: item.opening,
+            pinches: item.pinches,
+            panels: item.panels,
+            price: item.price,
+            updatedAt: new Date(),
+          })
+          .where(eq(orderItems.id, item.id));
+      } else {
+        // Inserta nuevo ítem
+        await db.insert(orderItems).values({
+          ...item,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+    }
+
+    return {
+      data: "Items updated successfully",
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error updating order items:", err);
+    return {
+      data: null,
+      error: err,
+    };
+  }
+}
+
 export async function getOrderById(orderId: string) {
   try {
     const order = await db

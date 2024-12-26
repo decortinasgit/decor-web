@@ -81,7 +81,7 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
 
   async function updateOrderStatus(orderId: string, status: string) {
     try {
-      const response = await axios.put("/api/order", {
+      const response = await axios.put("/api/order-status", {
         orderId,
         status,
       });
