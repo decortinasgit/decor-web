@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { unstable_noStore as noStore } from "next/cache";
 import { db } from "@/db";
 import { orders, orderItems, OrderItem, OrderStatus } from "@/db/schema";
 import { eq, inArray, sql } from "drizzle-orm";
@@ -83,6 +84,8 @@ export async function getOrders({
   page?: number;
   limit?: number;
 } = {}) {
+  noStore();
+
   try {
     const transaction = await db.transaction(async (tx) => {
       // Obtener las órdenes junto con sus ítems

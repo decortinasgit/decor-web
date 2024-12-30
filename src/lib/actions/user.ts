@@ -1,10 +1,11 @@
-import { z } from "zod"
-import { and, asc, desc, eq, sql } from "drizzle-orm"
+import { z } from "zod";
+import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { unstable_noStore as noStore } from "next/cache";
 
-import { db } from "@/db"
-import { roles, User, users } from "@/db/schema"
-import { getUsersSchema, signUpSchema } from "../validations/auth"
-import { SearchParams } from "@/types"
+import { db } from "@/db";
+import { roles, User, users } from "@/db/schema";
+import { getUsersSchema, signUpSchema } from "../validations/auth";
+import { SearchParams } from "@/types";
 
 export async function addUser(rawInput: z.infer<typeof signUpSchema>) {
   try {
@@ -28,34 +29,36 @@ export async function addUser(rawInput: z.infer<typeof signUpSchema>) {
         createdAt: new Date(),
         updatedAt: new Date(),
       })
-      .returning({ insertedId: users.id })
+      .returning({ insertedId: users.id });
 
     return {
       data: user,
       error: null,
-    }
+    };
   } catch (err) {
-    console.log("====================================")
-    console.log(err)
-    console.log("====================================")
+    console.log("====================================");
+    console.log(err);
+    console.log("====================================");
     return {
       data: null,
       error: err,
-    }
+    };
   }
 }
 
 export async function getUsers(input: SearchParams) {
-  try {
-    const search = getUsersSchema.parse(input)
+  noStore();
 
-    const limit = search.per_page
-    const offset = ((search.page ?? 1) - 1) * (limit ?? 10)
+  try {
+    const search = getUsersSchema.parse(input);
+
+    const limit = search.per_page;
+    const offset = ((search.page ?? 1) - 1) * (limit ?? 10);
 
     const [column, order] = (search.sort?.split(".") as [
       keyof User | undefined,
       "asc" | "desc" | undefined
-    ]) ?? ["createdAt", "asc"]
+    ]) ?? ["createdAt", "asc"];
 
     const filters = and(
       search.name
@@ -65,7 +68,7 @@ export async function getUsers(input: SearchParams) {
         ? sql`LOWER(${users.email}) LIKE LOWER(${`%${search.email}%`})`
         : undefined,
       search.roleId ? eq(users.roleId, search.roleId) : undefined
-    )
+    );
 
     const transaction = await db.transaction(async (tx) => {
       const data = await tx
@@ -96,7 +99,7 @@ export async function getUsers(input: SearchParams) {
               ? asc(users[column])
               : desc(users[column])
             : asc(users.createdAt)
-        )
+        );
 
       const total = await tx
         .select({
@@ -105,46 +108,48 @@ export async function getUsers(input: SearchParams) {
         .from(users)
         .where(filters)
         .execute()
-        .then((res) => res[0]?.count ?? 0)
+        .then((res) => res[0]?.count ?? 0);
 
-      const pageCount = Math.ceil((total as number) / limit)
+      const pageCount = Math.ceil((total as number) / limit);
 
       return {
         data,
         pageCount,
         total,
-      }
-    })
+      };
+    });
 
-    return transaction
+    return transaction;
   } catch (err) {
-    console.error("Error fetching users:", err)
+    console.error("Error fetching users:", err);
     return {
       data: [],
       pageCount: 0,
       total: 0,
       error: err,
-    }
+    };
   }
 }
 
 export async function getRoles() {
+  noStore();
+
   try {
     const transaction = await db.transaction(async (tx) => {
-      const data = await tx.select().from(roles)
+      const data = await tx.select().from(roles);
 
       return {
         data,
-      }
-    })
+      };
+    });
 
-    return transaction
+    return transaction;
   } catch (err) {
     return {
       data: [],
       pageCount: 0,
       error: err,
-    }
+    };
   }
 }
 
@@ -157,17 +162,17 @@ export async function updateEmailVerifiedStatus(
       .update(users)
       .set({ emailVerified: status })
       .where(eq(users.email, userId))
-      .returning({ updatedId: users.email })
+      .returning({ updatedId: users.email });
 
     return {
       data: result,
       error: null,
-    }
+    };
   } catch (err) {
     return {
       data: null,
       error: err,
-    }
+    };
   }
 }
 
@@ -177,16 +182,16 @@ export async function updateUserRole(userId: string, roleId: string) {
       .update(users)
       .set({ roleId: roleId })
       .where(eq(users.email, userId))
-      .returning({ updatedId: users.email })
+      .returning({ updatedId: users.email });
 
     return {
       data: result,
       error: null,
-    }
+    };
   } catch (err) {
     return {
       data: null,
       error: err,
-    }
+    };
   }
 }

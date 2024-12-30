@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { eq, inArray, sql } from "drizzle-orm";
+import { unstable_noStore as noStore } from "next/cache";
 
 import { db } from "@/db";
 import { curtains } from "@/db/schema";
@@ -116,6 +117,8 @@ export async function addMultipleCurtains(
 }
 
 export async function getCurtains() {
+  noStore();
+
   try {
     const transaction = await db.transaction(async (tx) => {
       const data = await tx.select().from(curtains);
