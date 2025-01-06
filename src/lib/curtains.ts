@@ -39,6 +39,9 @@ export const priceCalculation = (
 ) => {
   let error;
 
+  console.log(category, 'cate');
+  
+
   if (
     category === Category.ITEM_B &&
     accessory &&

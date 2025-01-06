@@ -20,6 +20,7 @@ import Step1 from "./create-order/step-1";
 import CreateOrderFormNavigation from "./create-order/create-order-form-navigation";
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
 import { OrderWithItems } from "@/types/orders";
+import { toast } from "sonner";
 
 interface FormType {
   curtains: Curtain[];
@@ -42,20 +43,34 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 }) => {
   const router = useRouter();
 
+  console.log(order, "order");
+
   const defaultValues = {
     company: order.company,
     client: order.client,
     curtains: order.items.map((item) => ({
-      name: item.name || "",
-      qty: item.qty || 0,
-      price: item.price?.toString() || "0",
-      width: item.width || 0,
-      height: item.height || 0,
+      accessories: item.accessories ? item.accessories[0].id : "",
+      category: item.category,
+      chain: item.chain || "",
+      chainSide: item.chainSide || "",
       color: item.color || "",
+      fall: item.fall || "",
+      height: item.height || 0,
+      id: item.id || "",
+      name: item.name || "",
+      opening: item.opening || "",
+      orderId: item.orderId || "",
+      panels: item.panels || "",
+      pinches: item.pinches || "",
+      price: item.price?.toString() || "0",
+      qty: item.qty || 0,
+      support: item.support || "",
       type: item.type || "",
-      category: "",
+      width: item.width || 0,
     })),
   };
+
+  console.log(defaultValues, "default");
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -83,7 +98,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 
   const [selectedCurtainValues, setSelectedCurtainValues] = useState<Curtain[]>(
     order.items.map((item) => ({
-      ...resetCurtain,
+      ...defaultValues,
       name: item.name || "",
       qty: item.qty || 0,
       price: item.price?.toString() || "0",
@@ -91,7 +106,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       height: item.height || 0,
       color: item.color || "",
       type: item.type || "",
-      category: "",
+      category: item.category,
     }))
   );
 
@@ -310,9 +325,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       const itemsToUpdate = orderItems.filter((item) => item.id); // Con id, usar PUT
       const itemsToCreate = orderItems.filter((item) => !item.id); // Sin id, usar POST
 
-      console.log("Items to update:", itemsToUpdate);
-      console.log("Items to create:", itemsToCreate);
-
       // Actualizar ítems existentes
       if (itemsToUpdate.length > 0) {
         await axios.put("/api/order-items", itemsToUpdate, {
@@ -331,7 +343,11 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
         });
       }
 
-      router.push(`/budget/${orderId}/success`);
+      toast.message("Éxito!", {
+        description: `Tu orden fue actualizada!`,
+      });
+
+      router.push(`/orders`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(
@@ -347,22 +363,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
   };
 
   const duplicateRow = (index: number) => {
-    const updatedCurtains = [...form.getValues("curtains")];
-    const rowToDuplicate = updatedCurtains[index];
-
-    if (rowToDuplicate) {
-      const newRow = {
-        ...rowToDuplicate,
-        id: Date.now().toString(),
-      };
-      updatedCurtains.splice(index + 1, 0, newRow);
-
-      form.setValue("curtains", updatedCurtains);
-      setData((prev) => ({
-        ...prev,
-        curtains: updatedCurtains as Curtain[],
-      }));
-    }
+    console.log(index);
   };
 
   const deleteRow = (index: number) => {

@@ -46,17 +46,34 @@ export const getColumns = ({
     {
       accessorKey: "color",
       header: "Color",
-      cell: ({ row }) => <div>{row.getValue("color")}</div>,
+      cell: ({ row }) => <div className="truncate">{row.getValue("color")}</div>,
     },
     {
       accessorKey: "height",
       header: "Largo",
-      cell: ({ row }) => <div>{row.getValue("height") ? row.getValue("height") + "cm" : "N/A"}</div>,
+      cell: ({ row }) => (
+        <div>
+          {row.getValue("height") ? row.getValue("height") + "cm" : "N/A"}
+        </div>
+      ),
     },
     {
       accessorKey: "width",
       header: "Ancho",
-      cell: ({ row }) => <div>{row.getValue("width") ? row.getValue("width") + "cm" : "N/A"}</div>,
+      cell: ({ row }) => (
+        <div>
+          {row.getValue("width") ? row.getValue("width") + "cm" : "N/A"}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Accesorio",
+      header: "Soporte",
+      cell: ({ row }) => (
+        <div className="truncate">
+          {row.original.accessories ? row.original.accessories[0].type : "N/A"}
+        </div>
+      ),
     },
     {
       accessorKey: "support",
@@ -71,7 +88,7 @@ export const getColumns = ({
     {
       accessorKey: "chain",
       header: "Cadena",
-      cell: ({ row }) => <div>{row.getValue("chain") || "N/A"}</div>,
+      cell: ({ row }) => <div className="truncate">{row.getValue("chain") || "N/A"}</div>,
     },
     {
       accessorKey: "chainSide",

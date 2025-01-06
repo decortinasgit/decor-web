@@ -44,6 +44,8 @@ export async function addOrderItems(
   try {
     const insertedItems = await db.insert(orderItems).values(
       rawItems.map((item) => ({
+        accessories: item.accessories,
+        category: item.category,
         orderId: item.orderId,
         qty: item.qty,
         name: item.name,
@@ -188,7 +190,6 @@ export async function updateOrder(rawInput: z.infer<typeof orderSchema>) {
       .set({
         company: rawInput.company,
         client: rawInput.client,
-        email: rawInput.email,
         updatedAt: new Date(),
       })
       .where(eq(orders.id, rawInput.id));
@@ -223,6 +224,9 @@ export async function updateOrderItems(
         await db
           .update(orderItems)
           .set({
+            accessories: item.accessories,
+            category: item.category,
+            orderId: item.orderId,
             qty: item.qty,
             name: item.name,
             type: item.type,

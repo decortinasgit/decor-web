@@ -307,7 +307,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
       }));
 
       console.log(orderItems, "orderItems");
-      
 
       await axios.post("/api/order-items", orderItems, {
         headers: {
@@ -331,24 +330,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
   };
 
   const duplicateRow = (index: number) => {
-    const updatedCurtains = [...form.getValues("curtains")];
-    const rowToDuplicate = updatedCurtains[index];
-
-    console.log(rowToDuplicate);
-
-    if (rowToDuplicate) {
-      const newRow = {
-        ...rowToDuplicate,
-        id: Date.now().toString(),
-      };
-      updatedCurtains.splice(index + 1, 0, newRow);
-
-      form.setValue("curtains", updatedCurtains);
-      setData((prev) => ({
-        ...prev,
-        curtains: updatedCurtains as Curtain[],
-      }));
-    }
+    console.log(index);
   };
 
   const deleteRow = (index: number) => {

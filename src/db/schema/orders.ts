@@ -1,5 +1,13 @@
-import { pgTable, text, integer, uuid, pgEnum } from "drizzle-orm/pg-core"
-import { lifecycleDates } from "./utils"
+import {
+  pgTable,
+  text,
+  integer,
+  uuid,
+  pgEnum,
+  json,
+} from "drizzle-orm/pg-core";
+import { lifecycleDates } from "./utils";
+import { Accesory } from "@/types/curtains";
 
 export const orderStatus = pgEnum("order_status", [
   "pending",
@@ -8,7 +16,7 @@ export const orderStatus = pgEnum("order_status", [
   "shipped",
   "delivered",
   "completed",
-])
+]);
 
 export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -17,10 +25,12 @@ export const orders = pgTable("orders", {
   email: text("email").notNull(),
   status: orderStatus("status").default("pending").notNull(), // Nueva columna de estado
   ...lifecycleDates,
-})
+});
 
 export const orderItems = pgTable("order_items", {
   id: uuid("id").defaultRandom().primaryKey(),
+  accessories: json("accessories").$type<Accesory[]>(),
+  category: text("category").notNull(),
   orderId: uuid("order_id")
     .references(() => orders.id)
     .notNull(),
@@ -39,10 +49,10 @@ export const orderItems = pgTable("order_items", {
   panels: text("panels"),
   price: text("price"),
   ...lifecycleDates,
-})
+});
 
-export type Order = typeof orders.$inferSelect
-export type NewOrder = typeof orders.$inferInsert
-export type OrderItem = typeof orderItems.$inferSelect
-export type NewOrderItem = typeof orderItems.$inferInsert
+export type Order = typeof orders.$inferSelect;
+export type NewOrder = typeof orders.$inferInsert;
+export type OrderItem = typeof orderItems.$inferSelect;
+export type NewOrderItem = typeof orderItems.$inferInsert;
 export type OrderStatus = (typeof orderStatus)["enumValues"][number];
