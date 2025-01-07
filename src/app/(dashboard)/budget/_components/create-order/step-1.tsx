@@ -616,11 +616,6 @@ const Step1 = ({
                               ))}
                             </SelectContent>
                           </Select>
-                          {calculatedPrice.error ? (
-                            <FormMessage>{calculatedPrice.error}</FormMessage>
-                          ) : (
-                            <FormMessage />
-                          )}
                         </FormItem>
                       )}
                     />

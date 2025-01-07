@@ -16,6 +16,7 @@ import { formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { defaultStatusCols } from "@/lib/store";
 import { useRouter } from "next/navigation";
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 interface GetColumnsOptions {
   hideActions?: boolean;
@@ -72,11 +73,26 @@ export const getColumns = ({
       },
     },
     {
-      accessorKey: "items",
+      id: "items",
       header: "Artículos",
-      cell: ({ row }) => (
-        <div>{row.getValue("items")?.length || 0} artículo(s)</div>
-      ),
+      cell: ({ row }) => {
+        return (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" className="relative">
+                Ver Artículos
+                <Badge
+                  variant="secondary"
+                  className="absolute -right-2 -top-2 size-6 justify-center rounded-full p-2.5"
+                >
+                  {row.original.items?.length}
+                </Badge>
+              </Button>
+            </AlertDialogTrigger>
+            {/* <ProductsDialog orderProduct={row.original} /> */}
+          </AlertDialog>
+        );
+      },
     },
   ];
 
@@ -103,7 +119,9 @@ export const getColumns = ({
               >
                 Copiar ID
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push(`/budget/${order.id}/edit`)}>
+              <DropdownMenuItem
+                onClick={() => router.push(`/budget/${order.id}/edit`)}
+              >
                 Editar pedido
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => {}}>

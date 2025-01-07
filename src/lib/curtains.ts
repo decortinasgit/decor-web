@@ -23,6 +23,30 @@ export const getUniqueValues = <T, K extends keyof T>(
   return Array.from(new Set(items.map((item) => item[key]))).sort() as T[K][];
 };
 
+const fabricQuantity = (
+  sizes: {
+    width: number;
+    height: number;
+  },
+  pinchFactor: number,
+  maxWidth: number
+) => {
+  let cantidadTela;
+
+  if (sizes.height / 100 <= 2.4) {
+    // Caso 1: Altura <= 2.4 m
+    cantidadTela = (sizes.width / 100) * pinchFactor + 0.4;
+  } else if (sizes.height > 2.4 && sizes.width / 100 > maxWidth) {
+    // Caso 2: Altura > 2.4 m y Ancho > Ancho máximo
+    cantidadTela = (sizes.width / 100 / maxWidth) * (sizes.height / 100 + 0.4);
+  } else if (sizes.height > 2.4 && sizes.width / 100 <= maxWidth) {
+    // Caso 3: Altura > 2.4 m y Ancho <= Ancho máximo
+    cantidadTela = sizes.height / 100 + 0.4;
+  }
+
+  return cantidadTela;
+};
+
 export const priceCalculation = (
   quantity: number,
   price: number,
@@ -39,9 +63,6 @@ export const priceCalculation = (
 ) => {
   let error;
 
-  console.log(category, 'cate');
-  
-
   if (
     category === Category.ITEM_B &&
     accessory &&
@@ -49,12 +70,16 @@ export const priceCalculation = (
     sizes?.height
   ) {
     let partA = parseFloat(accessory.price) * dolar * (sizes.width / 100);
+    // console.log(partA, 'partA');
+
     let partB = price * (sizes.width / 100) * (sizes.height / 100 + 0.3);
+    // console.log(partB, 'partB');
     let partC = 0;
 
     if (chain) {
       partC = parseFloat(chain.price) * dolar;
     }
+    // console.log(partC, 'partC');
 
     return { price: (partA + partB + partC) * quantity };
   } else if (
@@ -86,27 +111,27 @@ export const priceCalculation = (
         throw new Error("Pinches inválidos");
     }
 
-    // Validar si el ancho excede el máximo permitido
-    if (sizes.width / 100 > maxWidth) {
-      error = `El ancho (${
-        sizes.width / 100
-      } m) excede el máximo permitido para ${pinches} pellizcos (${maxWidth} m).`;
-    }
+    // // Validar si el ancho excede el máximo permitido
+    // if (sizes.width / 100 > maxWidth) {
+    //   error = `El ancho (${
+    //     sizes.width / 100
+    //   } m) excede el máximo permitido para ${pinches} pellizcos (${maxWidth} m).`;
+    // }
 
     // Cálculo de la cantidad de tela
-    const fabricQuantity = (sizes.width / 100) * pinchFactor;
+    const cantidadTela = fabricQuantity(sizes, pinchFactor, maxWidth);
 
     // Parte 1: Costo del riel
     const railLength = Math.max(1.2, Math.ceil(sizes.width / 100 / 0.2) * 0.2);
-    const partA = railLength * price; // Precio del riel por tramo de 20 cm
+    const partA = railLength * (parseFloat(accessory.price) * dolar); // Precio del riel por tramo de 20 cm
 
     // Parte 2: Cantidad de tela x Item E
-    const partB = fabricQuantity * parseFloat(accessory.price) * dolar;
+    const partB = cantidadTela * price;
 
     // Parte 3: Costo de confección
-    const partC = fabricQuantity * confection;
+    const partC = (cantidadTela / 1.5) * confection;
 
-    return { price: (partA + partB + partC) * quantity, error };
+    return { price: (partA + partB + partC) * quantity, error: null };
   } else if (
     (category === Category.ITEM_D || category === Category.ITEM_H) &&
     sizes?.width
