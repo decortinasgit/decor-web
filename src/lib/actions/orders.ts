@@ -164,44 +164,6 @@ export async function getOrders({
   }
 }
 
-
-export async function deleteOrders(orderIds: string[]) {
-  try {
-    if (orderIds.length === 0) {
-      console.log("No orders to delete.");
-      return {
-        data: null,
-        error: null,
-        deletedCount: 0,
-      };
-    }
-
-    console.log("Attempting to delete the following order IDs:", orderIds);
-
-    await db.transaction(async (trx) => {
-      const result = await trx
-        .delete(orders)
-        .where(inArray(orders.id, orderIds));
-      console.log(`${result.count} orders were deleted from the database.`);
-    });
-
-    revalidatePath(`/dashboard/orders`);
-
-    return {
-      data: null,
-      error: null,
-      deletedCount: orderIds.length,
-    };
-  } catch (err) {
-    console.error("Error deleting orders:", err);
-    return {
-      data: null,
-      error: err,
-      deletedCount: 0,
-    };
-  }
-}
-
 export async function updateOrder(rawInput: z.infer<typeof orderSchema>) {
   try {
     const result = await db
@@ -357,6 +319,32 @@ export async function updateOrderStatus(
     return {
       data: null,
       error: err instanceof z.ZodError ? err.errors : err.message,
+    };
+  }
+}
+
+export async function deleteOrder(orderId: string) {
+  try {
+    await db.delete(orderItems).where(eq(orderItems.orderId, orderId));
+
+    const result = await db.delete(orders).where(eq(orders.id, orderId));
+
+    if (!result) {
+      return {
+        data: null,
+        error: `Order with ID ${orderId} not found.`,
+      };
+    }
+
+    return {
+      data: `Order with ID ${orderId} deleted successfully`,
+      error: null,
+    };
+  } catch (err) {
+    console.error(`Error deleting order with ID ${orderId}:`, err);
+    return {
+      data: null,
+      error: err,
     };
   }
 }

@@ -12,15 +12,20 @@ interface OrdersTableProps {
   data: OrderWithItems[];
   pageCount: number;
   hideActions?: boolean;
+  handleFetchOrders?: () => Promise<void>;
 }
 
 export function OrdersTable({
   data,
   pageCount,
   hideActions,
+  handleFetchOrders,
 }: OrdersTableProps) {
   // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo(() => getColumns({ hideActions }), []);
+  const columns = React.useMemo(
+    () => getColumns({ hideActions, handleFetchOrders }),
+    []
+  );
 
   /**
    * This component can render either a faceted filter or a search filter based on the `options` prop.

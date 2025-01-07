@@ -18,13 +18,17 @@ import { defaultStatusCols } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { ProductsDialog } from "../products-dialog";
+import { toast } from "sonner";
+import axios from "axios";
 
 interface GetColumnsOptions {
   hideActions?: boolean;
+  handleFetchOrders?: () => Promise<void>;
 }
 
 export const getColumns = ({
   hideActions,
+  handleFetchOrders,
 }: GetColumnsOptions = {}): ColumnDef<OrderWithItems>[] => {
   const router = useRouter();
 
@@ -104,6 +108,25 @@ export const getColumns = ({
       cell: ({ row }) => {
         const order = row.original;
 
+        const handleDelete = async () => {
+          try {
+            await axios.delete(`/api/order?id=${order.id}`);
+
+            toast.message("Éxito!", {
+              description: `Tu orden fue eliminada!`,
+            });
+          } catch (error) {
+            toast.error("Lo siento!", {
+              description: `No pudimos eliminar tu orden!`,
+            });
+            console.error("Error fetching orders:", error);
+          } finally {
+            if (handleFetchOrders) {
+              await handleFetchOrders();
+            }
+          }
+        };
+
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -125,7 +148,7 @@ export const getColumns = ({
               >
                 Editar pedido
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {}}>
+              <DropdownMenuItem onClick={handleDelete}>
                 Eliminar pedido
               </DropdownMenuItem>
             </DropdownMenuContent>

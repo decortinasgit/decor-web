@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { addOrder, getOrders, updateOrder } from "@/lib/actions/orders";
+import {
+  addOrder,
+  deleteOrder,
+  getOrders,
+  updateOrder,
+} from "@/lib/actions/orders";
 import { NextResponse } from "next/server";
 import { getUserWithAttributes } from "@/lib/queries/user";
 
@@ -86,5 +91,36 @@ export async function GET(req: Request) {
       JSON.stringify({ message: "Something went wrong" }),
       { status: 500 }
     );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const url = new URL(req.url);
+    const id = url.searchParams.get("id");
+
+    if (!id) {
+      return new Response("ID es requerido", { status: 400 });
+    }
+
+    const result = await deleteOrder(id);
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    return new Response(JSON.stringify(result.data), { status: 200 });
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof z.ZodError) {
+      return new Response(error.message, { status: 422 });
+    }
+
+    if (error instanceof Error) {
+      return new Response(error.message, { status: 500 });
+    }
+
+    return new Response("Something went wrong", { status: 500 });
   }
 }
