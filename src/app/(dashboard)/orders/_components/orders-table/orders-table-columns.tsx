@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { defaultStatusCols } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { ProductsDialog } from "../products-dialog";
 
 interface GetColumnsOptions {
   hideActions?: boolean;
@@ -89,7 +90,7 @@ export const getColumns = ({
                 </Badge>
               </Button>
             </AlertDialogTrigger>
-            {/* <ProductsDialog orderProduct={row.original} /> */}
+            <ProductsDialog orderProduct={row.original} />
           </AlertDialog>
         );
       },
