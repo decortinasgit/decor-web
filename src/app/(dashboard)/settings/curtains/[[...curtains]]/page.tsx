@@ -1,30 +1,50 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import axios from "axios"
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-import ExcelForm from "../_components/excel-form"
-import { Button } from "@/components/custom/button"
-import { toast } from "sonner"
-import { LoadingDialog } from "@/components/loading-dialog"
+import ExcelForm from "../_components/excel-form";
+import { Button } from "@/components/custom/button";
+import { toast } from "sonner";
+import { LoadingDialog } from "@/components/loading-dialog";
+import { User } from "@/db/schema";
+import AdminAlert from "@/components/admin-alert";
 
 const CurtainsPage = () => {
-  const [loading, setLoading] = React.useState(false)
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User>();
 
   const handleUpdate = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const response = await axios.put("/api/excel-update")
+      const response = await axios.put("/api/excel-update");
 
-      const resData = response.data
+      const resData = response.data;
 
-      return resData
+      return resData;
     } catch (error) {
-      console.error(error)
-      toast.error("Error al subir el archivo.")
+      console.error(error);
+      toast.error("Error al subir el archivo.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
+  };
+
+  const handleGetUser = async () => {
+    try {
+      const response = await axios.get(`/api/users`);
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetUser();
+  }, []);
+
+  if (user?.roleId !== "0") {
+    return <AdminAlert />;
   }
 
   return (
@@ -41,7 +61,7 @@ const CurtainsPage = () => {
       </Button>
       <LoadingDialog open={loading} />
     </div>
-  )
-}
+  );
+};
 
-export default CurtainsPage
+export default CurtainsPage;
