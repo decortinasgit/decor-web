@@ -82,16 +82,18 @@ export async function addOrderItems(
 export async function getOrders({
   page = 1,
   limit = 10,
+  email,
 }: {
   page?: number;
   limit?: number;
+  email?: string; // Nuevo parámetro para filtrar por email
 } = {}) {
   noStore();
 
   try {
     const transaction = await db.transaction(async (tx) => {
-      // Obtener las órdenes junto con sus ítems
-      const ordersWithItems = await tx
+      // Crear consulta base con filtro por email (si aplica)
+      let baseQuery = tx
         .select({
           orderId: orders.id,
           company: orders.company,
@@ -103,16 +105,32 @@ export async function getOrders({
           items: sql`JSON_AGG(${orderItems})`.as("items"),
         })
         .from(orders)
-        .leftJoin(orderItems, eq(orders.id, orderItems.orderId))
+        .leftJoin(orderItems, eq(orders.id, orderItems.orderId));
+
+      // Aplicar filtro por email antes del groupBy
+      if (email) {
+        // @ts-ignore
+        baseQuery = baseQuery.where(eq(orders.email, email));
+      }
+
+      // Aplicar agrupación, límite y desplazamiento
+      const ordersWithItems = await baseQuery
         .groupBy(orders.id)
         .limit(limit)
         .offset((page - 1) * limit);
 
-      const total = await tx
+      const totalQuery = tx
         .select({
           count: sql`COUNT(${orders.id})`,
         })
-        .from(orders)
+        .from(orders);
+
+      // Aplicar filtro por email al total también
+      if (email) {
+        totalQuery.where(eq(orders.email, email));
+      }
+
+      const total = await totalQuery
         .execute()
         .then((res) => Number(res[0]?.count ?? 0));
 
@@ -145,6 +163,7 @@ export async function getOrders({
     };
   }
 }
+
 
 export async function deleteOrders(orderIds: string[]) {
   try {

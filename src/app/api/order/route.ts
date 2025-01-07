@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { addOrder, getOrders, updateOrder } from "@/lib/actions/orders";
 import { NextResponse } from "next/server";
+import { getUserWithAttributes } from "@/lib/queries/user";
 
 export async function POST(req: Request) {
   try {
@@ -54,11 +55,22 @@ export async function PUT(req: Request) {
 
 export async function GET(req: Request) {
   try {
+    const user = await getUserWithAttributes();
+    if (!user) {
+      return new NextResponse(JSON.stringify({ message: "Unauthorized" }), {
+        status: 401,
+      });
+    }
+
     const url = new URL(req.url);
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-    const result = await getOrders({ page, limit });
+    const result = await getOrders({
+      page,
+      limit,
+      email: user.roleId === "0" ? undefined : user.email,
+    });
 
     return new NextResponse(JSON.stringify(result), { status: 200 });
   } catch (error) {

@@ -6,10 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { KanbanBoard } from "./_components/kanban/kanban-board";
 import { OrdersTable } from "./_components/orders-table/orders-table";
 import { OrderWithItems } from "@/types/orders";
-import Loader from "@/components/custom/loader";
 import { useSearchParams } from "next/navigation";
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
 import { KanbanBoardSkeleton } from "./_components/kanban/kanban-board-skeleton";
+import { User } from "@/db/schema";
 
 export default function OrdersPage() {
   const searchParams = useSearchParams();
@@ -23,10 +23,10 @@ export default function OrdersPage() {
     total: 0,
     pageCount: 0,
   });
+  const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(false);
 
   const handleFetchOrders = async () => {
-    setLoading(true);
     try {
       const response = await axios.get(`/api/order?${searchParams}}`);
       setOrders(response.data);
@@ -37,9 +37,39 @@ export default function OrdersPage() {
     }
   };
 
+  const handleGetUser = async () => {
+    try {
+      const response = await axios.get(`/api/users`);
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
   useEffect(() => {
+    setLoading(true);
+
+    handleGetUser();
     handleFetchOrders();
   }, [searchParams]);
+
+  if (user?.roleId !== "0") {
+    return (
+      <>
+        {loading ? (
+          <DataTableSkeleton
+            columnCount={5}
+            searchableColumnCount={1}
+            filterableColumnCount={2}
+            cellWidths={["10rem", "40rem", "12rem", "12rem", "8rem"]}
+            shrinkZero
+          />
+        ) : (
+          <OrdersTable data={orders.data} pageCount={orders.pageCount} />
+        )}
+      </>
+    );
+  }
 
   return (
     <Tabs
