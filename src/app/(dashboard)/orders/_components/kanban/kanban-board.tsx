@@ -1,10 +1,9 @@
 "use client";
 
+import axios from "axios";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-
-import { ColumnId, useOrderStore } from "@/lib/store";
-import { hasDraggableData } from "@/lib/utils";
+import { toast } from "sonner";
 import {
   Announcements,
   DndContext,
@@ -19,13 +18,15 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+
+import { ColumnId, useOrderStore } from "@/lib/store";
+import { hasDraggableData } from "@/lib/utils";
+import { OrderWithItems } from "@/types/orders";
+import { OrderStatus } from "@/db/schema";
+
 import type { Column } from "./board-column";
 import { BoardColumn, BoardContainer } from "./board-column";
-import { OrderWithItems } from "@/types/orders";
 import { OrderCard } from "./order-card";
-import axios from "axios";
-import { OrderStatus } from "@/db/schema";
-import { toast } from "sonner";
 
 interface KanbanBoardProps {
   data: OrderWithItems[];
@@ -226,16 +227,24 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
   );
 
   function onDragStart(event: DragStartEvent) {
-    console.log("hey");
-
     if (!hasDraggableData(event.active)) return;
-    console.log("hoy");
 
     const data = event.active.data.current;
-    if (data?.type === "Column") {
+
+    if (data?.type === "OrderWithItems") {
+      const activeOrder = data.order;
+
+      if (activeOrder.status === "pending") {
+        toast.error("No puedes mover órdenes con estado 'Pendiente'.", {
+          description: "Solo puedes actualizar dando de alta el presupuesto.",
+        });
+        return;
+      }
+
+      // Si no es "requested", permitimos el arrastre
+      setActiveOrder(activeOrder);
+    } else if (data?.type === "Column") {
       setActiveColumn(data.column);
-    } else if (data?.type === "OrderWithItems") {
-      setActiveOrder(data.order);
     }
   }
 
@@ -308,6 +317,15 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
     const overData = over.data.current;
 
     if (activeData?.type === "OrderWithItems" && overData?.type === "Column") {
+      const activeOrder = activeData.order;
+
+      console.log(activeOrder, "activeorder");
+
+      // Verificar si la orden tiene estado "pending"
+      if (activeOrder.status === "pending") {
+        return; // Detenemos el cambio de estado
+      }
+
       const updatedOrders = orders.map((order) =>
         order.id === activeId
           ? { ...order, status: overId as OrderStatus }
@@ -338,6 +356,11 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
       over.data.current
     ) {
       const overStatus = over.data.current.order.status;
+
+      // Verificar si la orden tiene estado "pending"
+      if (overStatus === "pending") {
+        return; // Detenemos el cambio de estado
+      }
 
       const updatedOrders = orders.map((order) =>
         order.id === activeId

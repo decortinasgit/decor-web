@@ -46,8 +46,9 @@ export const orderItemSchema = z.object({
 
 export const orderStatusSchema = z.enum([
   "pending",
-  "processing",
-  "production",
+  "budgeted",
+  "confirmed",
+  "fabric",
   "shipped",
   "delivered",
   "completed",

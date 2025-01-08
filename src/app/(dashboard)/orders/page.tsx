@@ -95,7 +95,11 @@ export default function OrdersPage() {
             shrinkZero
           />
         ) : (
-          <OrdersTable data={orders.data} pageCount={orders.pageCount} />
+          <OrdersTable
+            data={orders.data}
+            pageCount={orders.pageCount}
+            handleFetchOrders={handleFetchOrders}
+          />
         )}
       </TabsContent>
       <TabsContent value="status" className="space-y-4">

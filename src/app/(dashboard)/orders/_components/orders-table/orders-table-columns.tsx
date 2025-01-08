@@ -110,7 +110,7 @@ export const getColumns = ({
       cell: ({ row }) => {
         const order = row.original;
 
-        const handleDelete = async () => {
+        async function handleDelete() {
           try {
             await axios.delete(`/api/order?id=${order.id}`);
 
@@ -127,7 +127,29 @@ export const getColumns = ({
               await handleFetchOrders();
             }
           }
-        };
+        }
+
+        async function updateOrderStatus(orderId: string, status: string) {
+          try {
+            const response = await axios.put("/api/order-status", {
+              orderId,
+              status,
+            });
+
+            toast.message("Éxito!", {
+              description: `Tu orden fue actualizada!`,
+            });
+
+            return response.data;
+          } catch (error) {
+            console.error("Error updating order status:", error);
+            throw new Error("Failed to update order status");
+          } finally {
+            if (handleFetchOrders) {
+              await handleFetchOrders();
+            }
+          }
+        }
 
         return (
           <DropdownMenu>
@@ -146,7 +168,9 @@ export const getColumns = ({
                 Copiar ID
               </DropdownMenuItem>
               {row.original.status === "pending" && (
-                <DropdownMenuItem onClick={() => {}}>
+                <DropdownMenuItem
+                  onClick={() => updateOrderStatus(row.original.id, "budgeted")}
+                >
                   Dar de alta
                 </DropdownMenuItem>
               )}
