@@ -21,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { ProductsDialog } from "../products-dialog";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { generateEmailContent } from "@/lib/html";
 
 interface GetColumnsOptions {
   router: AppRouterInstance;
@@ -138,6 +139,17 @@ export const getColumns = ({
             toast.message("Éxito!", {
               description: `Tu orden fue actualizada!`,
             });
+
+            const emailContent = generateEmailContent(row.original);
+
+            const emailResponse = await axios.post("/api/contact", {
+              to: "distribuidoresdecortinas@gmail.com",
+              subject: `Nueva alta de pedido: #${row.original.id}`,
+              text: `Detalles del pedido:\n${row.original}`,
+              html: emailContent,
+            });
+
+            console.log(emailResponse, "emailResponse");
 
             return response.data;
           } catch (error) {

@@ -23,7 +23,7 @@ export async function addOrder(rawInput: z.infer<typeof orderSchema>) {
         createdAt: new Date(),
         updatedAt: new Date(),
       })
-      .returning({ insertedId: orders.id });
+      .returning({ id: orders.id, email: orders.email });
 
     return {
       data: order,

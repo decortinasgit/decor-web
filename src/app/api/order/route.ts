@@ -7,14 +7,26 @@ import {
 } from "@/lib/actions/orders";
 import { NextResponse } from "next/server";
 import { getUserWithAttributes } from "@/lib/queries/user";
+import { sendEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
   try {
     const ordersData = await req.json();
     const result = await addOrder(ordersData);
 
-    if (result.error) {
+    if (result.error || !result.data) {
       throw result.error;
+    }
+
+    const emailResponse = await sendEmail({
+      to: result.data[0].email,
+      subject: "Orden confirmada!",
+      text: `Gracias por tu orden! ID: ${result.data[0].id}`,
+      html: `<p>Gracias por tu orden! ID: <strong>${result.data[0].id}</strong></p>`,
+    });
+
+    if (!emailResponse.success) {
+      console.error("Failed to send confirmation email:", emailResponse.error);
     }
 
     return new Response(JSON.stringify(result.data), { status: 201 });
