@@ -122,7 +122,7 @@ export function OrderCard({ order, isOverlay }: OrderCardProps) {
           </div>
           <div className="flex items-center text-muted-foreground">
             <Calendar className="mr-2 h-4 w-4" />
-            <span>Created: {new Date(order.createdAt).toLocaleString()}</span>
+            <span>Creado: {new Date(order.createdAt).toLocaleString()}</span>
           </div>
         </div>
       </CardContent>
