@@ -27,7 +27,7 @@ export function OrdersTable({
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(
     () => getColumns({ router, hideActions, handleFetchOrders }),
-    []
+    [router, hideActions, handleFetchOrders]
   );
 
   /**

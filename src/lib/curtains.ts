@@ -119,17 +119,21 @@ export const priceCalculation = (
     // }
 
     // Cálculo de la cantidad de tela
-    const cantidadTela = fabricQuantity(sizes, pinchFactor, maxWidth);
+    const cantidadTela = fabricQuantity(
+      { width: sizes.width, height: sizes.height },
+      pinchFactor,
+      maxWidth
+    );
 
     // Parte 1: Costo del riel
     const railLength = Math.max(1.2, Math.ceil(sizes.width / 100 / 0.2) * 0.2);
     const partA = railLength * (parseFloat(accessory.price) * dolar); // Precio del riel por tramo de 20 cm
 
     // Parte 2: Cantidad de tela x Item E
-    const partB = cantidadTela * price;
+    const partB = cantidadTela! * price;
 
     // Parte 3: Costo de confección
-    const partC = (cantidadTela / 1.5) * confection;
+    const partC = (cantidadTela! / 1.5) * confection;
 
     return { price: (partA + partB + partC) * quantity, error: null };
   } else if (

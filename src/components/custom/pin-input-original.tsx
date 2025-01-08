@@ -192,6 +192,7 @@ const PinInputField = React.forwardRef<HTMLInputElement, InputProps>(
   }
 )
 
+PinInputField.displayName = 'PinInputField';
 /* ========== usePinInput custom hook ========== */
 
 interface UsePinInputProps {

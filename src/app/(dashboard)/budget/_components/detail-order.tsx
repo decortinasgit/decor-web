@@ -25,14 +25,6 @@ interface OrderSuccessProps {
 }
 
 export default function DetailOrder({ order }: OrderSuccessProps) {
-  if (!order) {
-    return (
-      <div id="pdf-content" className="p-4 bg-white">
-        <h3>No puedes enviar un presupuesto vacío</h3>
-      </div>
-    );
-  }
-
   const router = useRouter();
   const hiddenContainerRef = useRef<HTMLDivElement>(null);
 
@@ -65,6 +57,14 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
     hiddenContainer.style.display = "none";
   }
 
+  if (!order) {
+    return (
+      <div id="pdf-content" className="p-4 bg-white">
+        <h3>No puedes enviar un presupuesto vacío</h3>
+      </div>
+    );
+  }
+
   return (
     <>
       <Card className="w-full mx-auto" id="order-summary">
@@ -93,7 +93,13 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
               <div className="shrink-0 bg-border h-[1px] w-full" />
               <div>
                 {/* Render the visible curtains table */}
-                <CurtainsTable data={order.items} pageCount={1} hideActions />
+                <CurtainsTable
+                  data={order.items}
+                  pageCount={1}
+                  hideActions
+                  deleteRow={() => {}}
+                  duplicateRow={() => {}}
+                />
               </div>
               <div className="shrink-0 bg-border h-[1px] w-full" />
               <div className="text-right">

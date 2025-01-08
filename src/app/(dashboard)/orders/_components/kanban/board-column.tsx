@@ -7,7 +7,6 @@ import { OrderCard } from "./order-card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Order } from "@/db/schema";
 import { OrderWithItems } from "@/types/orders";
 
 export interface Column {
@@ -33,14 +32,7 @@ export function BoardColumn({ column, orders, isOverlay }: BoardColumnProps) {
     return orders.map((order) => order.id);
   }, [orders]);
 
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
+  const { setNodeRef, transform, transition, isDragging } = useSortable({
     id: column.id,
     data: {
       type: "Column",

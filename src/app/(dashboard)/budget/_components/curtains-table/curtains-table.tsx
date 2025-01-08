@@ -5,14 +5,15 @@ import { DataTable } from "@/components/data-table/data-table";
 import { useDataTable } from "@/hooks/use-data-table";
 import { getColumns } from "./curtains-table-columns";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
+import { OrderItem } from "@/db/schema";
 import { Curtain } from "@/types/curtains";
 
 interface CurtainsTableProps {
-  data: Curtain[];
+  data: Curtain[] | OrderItem[];
   pageCount: number;
-  hideActions?: boolean;
   duplicateRow: (index: number) => void;
   deleteRow: (index: number) => void;
+  hideActions?: boolean;
   pdfTable?: boolean;
 }
 
@@ -32,7 +33,7 @@ export function CurtainsTable({
         duplicateRow: (index: number) => duplicateRow(index), // Asegura que duplicateRow pase el index
         deleteRow: (index: number) => deleteRow(index),
       }),
-    []
+    [hideActions, duplicateRow, deleteRow]
   );
 
   /**

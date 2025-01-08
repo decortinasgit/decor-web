@@ -13,19 +13,20 @@ import {
 import { Button } from "@/components/custom/button";
 import { MoreHorizontal } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { OrderItem } from "@/db/schema";
 
 interface GetColumnsOptions {
-  hideActions?: boolean;
   duplicateRow: (index: number) => void;
   deleteRow: (index: number) => void;
+  hideActions?: boolean;
 }
 
 export const getColumns = ({
-  hideActions,
   duplicateRow,
   deleteRow,
-}: GetColumnsOptions): ColumnDef<Curtain>[] => {
-  const columns: ColumnDef<Curtain>[] = [
+  hideActions,
+}: GetColumnsOptions): ColumnDef<OrderItem | Curtain>[] => {
+  const columns: ColumnDef<OrderItem | Curtain>[] = [
     {
       accessorKey: "qty",
       header: () => <div className="text-center">Cantidad</div>,
@@ -46,7 +47,9 @@ export const getColumns = ({
     {
       accessorKey: "color",
       header: "Color",
-      cell: ({ row }) => <div className="truncate">{row.getValue("color")}</div>,
+      cell: ({ row }) => (
+        <div className="truncate">{row.getValue("color")}</div>
+      ),
     },
     {
       accessorKey: "height",
@@ -88,7 +91,9 @@ export const getColumns = ({
     {
       accessorKey: "chain",
       header: "Cadena",
-      cell: ({ row }) => <div className="truncate">{row.getValue("chain") || "N/A"}</div>,
+      cell: ({ row }) => (
+        <div className="truncate">{row.getValue("chain") || "N/A"}</div>
+      ),
     },
     {
       accessorKey: "chainSide",

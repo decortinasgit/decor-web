@@ -54,7 +54,14 @@ export function PDFContent({
       {/* Curtains Table */}
       <Card className="mb-6">
         <CardContent>
-          <CurtainsTable data={curtains} pageCount={1} hideActions pdfTable />
+          <CurtainsTable
+            data={curtains}
+            pageCount={1}
+            hideActions
+            pdfTable
+            deleteRow={() => {}}
+            duplicateRow={() => {}}
+          />
         </CardContent>
         <CardFooter className="flex justify-end">
           <h4 className="font-semibold">Total: ${totalAmount(curtains)}</h4>

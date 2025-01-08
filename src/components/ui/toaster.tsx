@@ -1,13 +1,12 @@
-"use client"
+"use client";
 
-import { Toaster as Sonner } from "sonner"
+import { Toaster as Sonner } from "sonner";
 
-type ToasterProps = React.ComponentProps<typeof Sonner>
+type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 function Toaster({ ...props }: ToasterProps) {
   return (
     <Sonner
-      // eslint-disable-next-line tailwindcss/no-custom-classname
       className="toaster group"
       toastOptions={{
         classNames: {
@@ -22,7 +21,7 @@ function Toaster({ ...props }: ToasterProps) {
       }}
       {...props}
     />
-  )
+  );
 }
 
-export { Toaster }
+export { Toaster };
