@@ -15,7 +15,7 @@ const links = {
 export const siteConfig = {
   name: "Decortinas",
   description:
-    "An open source e-commerce decortinas build with everything new in Next.js.",
+    "Sitio web para distribuidores de Decortinas.",
   url: "https://decortinas.com.ar",
   ogImage: "https://decortinas.com",
   links,
