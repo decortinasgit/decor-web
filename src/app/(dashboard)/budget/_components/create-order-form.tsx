@@ -19,6 +19,7 @@ import Step0 from "./create-order/step-0";
 import Step1 from "./create-order/step-1";
 import CreateOrderFormNavigation from "./create-order/create-order-form-navigation";
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
+import { toast } from "sonner";
 
 interface FormType {
   curtains: Curtain[];
@@ -275,6 +276,15 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
   const handleConfirm = async () => {
     setLoading(true);
 
+    if (data.curtains.length < 1) {
+      toast.error("Lo siento", {
+        description:
+          "No puedes crear una orden sin cortinas/accesorios. Vuelva a intentarlo.",
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       // Create the order first
       const orderResponse = await axios.post(
@@ -293,11 +303,11 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
       );
 
       const insertedOrder = orderResponse.data[0];
-      if (!insertedOrder || !insertedOrder.insertedId) {
+      const orderId = insertedOrder?.id;
+
+      if (!orderId) {
         throw new Error("Failed to create order: No ID returned");
       }
-
-      const orderId = insertedOrder.insertedId;
 
       const orderItems = data.curtains.map((curtain) => ({
         orderId,
@@ -305,8 +315,6 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
         updatedAt: new Date(),
         ...curtain,
       }));
-
-      console.log(orderItems, "orderItems");
 
       await axios.post("/api/order-items", orderItems, {
         headers: {
@@ -317,6 +325,10 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
       router.push(`/budget/${orderId}/success`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        toast.error("Lo siento", {
+          description:
+            "No pudimos crear tu pedido en este momento. Vuelva a intentarlo.",
+        });
         console.error(
           "Failed to create order or order items:",
           error.response?.data || error.message
