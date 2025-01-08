@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { useSignUp } from "@clerk/nextjs"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import type { z } from "zod"
-import bcrypt from "bcryptjs"
+import { useRouter } from "next/navigation";
+import { useSignUp } from "@clerk/nextjs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
+import bcrypt from "bcryptjs";
 
-import provinces from "@/assets/data/provinces.json"
-import states from "@/assets/data/states.json"
+import provinces from "@/assets/data/provinces.json";
+import states from "@/assets/data/states.json";
 
-import { getErrorMessage, showErrorToast } from "@/lib/handle-error"
-import { SignUpFormValues, signUpSchema } from "@/lib/validations/auth"
-import { Button } from "@/components/custom/button"
+import { getErrorMessage, showErrorToast } from "@/lib/handle-error";
+import { SignUpFormValues, signUpSchema } from "@/lib/validations/auth";
+import { Button } from "@/components/custom/button";
 import {
   Form,
   FormControl,
@@ -21,30 +21,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { PasswordInput } from "@/components/password-input"
-import { cn } from "@/lib/utils"
-import { useEffect, useState } from "react"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/password-input";
+import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
-type Inputs = z.infer<typeof signUpSchema>
-type FieldName = keyof SignUpFormValues
+type Inputs = z.infer<typeof signUpSchema>;
+type FieldName = keyof SignUpFormValues;
 
 export function SignUpForm() {
-  const router = useRouter()
-  const { isLoaded, signUp } = useSignUp()
+  const router = useRouter();
+  const { isLoaded, signUp } = useSignUp();
 
-  const [currentStep, setCurrentStep] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [filteredStates, setFilteredStates] = useState<State[]>([])
-  const [errors, setErrors] = useState("")
+  const [currentStep, setCurrentStep] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [filteredStates, setFilteredStates] = useState<State[]>([]);
+  const [errors, setErrors] = useState("");
 
   const defaultValues = {
     email: "",
@@ -61,7 +61,7 @@ export function SignUpForm() {
       address: "",
     },
     preferredTransport: "",
-  }
+  };
 
   const steps = [
     {
@@ -86,27 +86,27 @@ export function SignUpForm() {
     {
       id: "Paso 4",
     },
-  ]
+  ];
 
   const form = useForm<Inputs>({
     resolver: zodResolver(signUpSchema),
     defaultValues,
     mode: "onChange",
-  })
+  });
 
   async function onSubmit(data: Inputs) {
-    if (!isLoaded) return
+    if (!isLoaded) return;
 
-    setLoading(true)
+    setLoading(true);
 
     try {
       const user = await signUp.create({
         emailAddress: data.email,
         password: data.password,
-      })
+      });
 
       if (user.id) {
-        const hashedPassword = await bcrypt.hash(data.password, 10)
+        const hashedPassword = await bcrypt.hash(data.password, 10);
 
         const response = await fetch("/api/users", {
           method: "POST",
@@ -115,70 +115,70 @@ export function SignUpForm() {
             ...data,
             password: hashedPassword,
           }),
-        })
+        });
 
         if (response.ok) {
           await signUp.prepareEmailAddressVerification({
             strategy: "email_code",
-          })
+          });
 
-          router.push("/signup/verify-email")
+          router.push("/signup/verify-email");
           toast.message("Chequéa tu mail", {
             description: "Enviamos un código de verificación de 6 dígitos.",
-          })
+          });
         } else {
-          throw new Error("Failed to add user")
+          throw new Error("Failed to add user");
         }
       }
     } catch (err) {
-      showErrorToast(err)
-      const errorMessage = getErrorMessage(err)
-      setErrors(errorMessage)
+      showErrorToast(err);
+      const errorMessage = getErrorMessage(err);
+      setErrors(errorMessage);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   const next = async () => {
-    const fields = steps[currentStep].fields
+    const fields = steps[currentStep].fields;
 
     const output = await form.trigger(fields as FieldName[], {
       shouldFocus: true,
-    })
+    });
 
-    if (!output) return
+    if (!output) return;
 
     if (currentStep < steps.length - 1) {
       if (currentStep === steps.length - 1) {
-        await form.handleSubmit(onSubmit)()
+        await form.handleSubmit(onSubmit)();
       }
-      setCurrentStep((step) => step + 1)
+      setCurrentStep((step) => step + 1);
     }
-  }
+  };
 
   const prev = () => {
     if (currentStep > 0) {
-      setCurrentStep((step) => step - 1)
+      setCurrentStep((step) => step - 1);
     }
-  }
+  };
 
   const transports = [
     { id: "1", name: "Andreani" },
     { id: "2", name: "La Sevillanita" },
-  ]
+  ];
 
   useEffect(() => {
-    const selectedProvince = form.watch("shippingAddress.province")
+    const selectedProvince = form.watch("shippingAddress.province");
 
     if (selectedProvince) {
       const newStates = states.filter(
         (state) => state.provincia.id === selectedProvince
-      )
-      setFilteredStates(newStates)
+      );
+      setFilteredStates(newStates);
     } else {
-      setFilteredStates([])
+      setFilteredStates([]);
     }
-  }, [form.watch("shippingAddress.province")])
+  }, [form.watch("shippingAddress.province")]);
 
   return (
     <>
@@ -370,11 +370,16 @@ export function SignUpForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {provinces.map((province) => (
-                              <SelectItem key={province.id} value={province.id}>
-                                {province.nombre}
-                              </SelectItem>
-                            ))}
+                            {provinces
+                              .sort((a, b) => a.nombre.localeCompare(b.nombre))
+                              .map((province) => (
+                                <SelectItem
+                                  key={province.id}
+                                  value={province.id}
+                                >
+                                  {province.nombre}
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -405,11 +410,13 @@ export function SignUpForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {filteredStates.map((state) => (
-                              <SelectItem key={state.id} value={state.id}>
-                                {state.nombre}
-                              </SelectItem>
-                            ))}
+                            {filteredStates
+                              .sort((a, b) => a.nombre.localeCompare(b.nombre))
+                              .map((state) => (
+                                <SelectItem key={state.id} value={state.id}>
+                                  {state.nombre}
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -517,5 +524,5 @@ export function SignUpForm() {
         </Form>
       </div>
     </>
-  )
+  );
 }

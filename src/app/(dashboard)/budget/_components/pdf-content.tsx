@@ -10,14 +10,12 @@ import {
 import { Icons } from "@/components/icons";
 
 interface PDFContentProps {
-  orderId: string;
   curtains: Array<OrderItem> | undefined;
   clientName: string;
   quoteDate: string;
 }
 
 export function PDFContent({
-  orderId,
   curtains,
   clientName,
   quoteDate,
@@ -106,7 +104,7 @@ export function PDFContent({
               <strong>¿Aceptan Dólares?</strong>
               <p>
                 Sí, aceptamos dólares. Referencia de valor: Precio de venta
-                según "El cronista" al momento del pago.
+                según &ldquo;El cronista&ldquo; al momento del pago.
               </p>
             </div>
             <div>

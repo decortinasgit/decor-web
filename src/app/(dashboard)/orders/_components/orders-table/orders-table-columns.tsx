@@ -22,18 +22,19 @@ import { Button } from "@/components/custom/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { ProductsDialog } from "../products-dialog";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface GetColumnsOptions {
+  router: AppRouterInstance;
   hideActions?: boolean;
   handleFetchOrders?: () => Promise<void>;
 }
 
 export const getColumns = ({
+  router,
   hideActions,
   handleFetchOrders,
-}: GetColumnsOptions = {}): ColumnDef<OrderWithItems>[] => {
-  const router = useRouter();
-
+}: GetColumnsOptions): ColumnDef<OrderWithItems>[] => {
   const columns: ColumnDef<OrderWithItems>[] = [
     {
       accessorKey: "id",

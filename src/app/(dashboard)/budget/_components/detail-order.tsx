@@ -18,7 +18,7 @@ import { CurtainsTable } from "./curtains-table/curtains-table";
 import { totalAmount } from "@/lib/curtains";
 import { PDFContent } from "./pdf-content";
 import { OrderWithItems } from "@/types/orders";
-import { formatDate } from "@/lib/utils";
+import { calculateOrderTotals, formatDate, formatPrice } from "@/lib/utils";
 
 interface OrderSuccessProps {
   order: OrderWithItems | null;
@@ -69,7 +69,7 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
     <>
       <Card className="w-full mx-auto" id="order-summary">
         <CardHeader>
-          <CardTitle className="text-2xl flex items-center gap-2 bg-muted p-2 rounded-sm">
+          <CardTitle className="text-2xl flex items-center gap-2 border p-2 rounded-sm">
             <CheckCircle className="text-green-500" />
             Presupuesto cargado con éxito
           </CardTitle>
@@ -80,6 +80,15 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
               <div>
                 <h2 className="text-xl font-semibold">Resumen del pedido</h2>
                 <p className="text-gray-600">ID: {order.id}</p>
+                <p className="text-gray-600">
+                  {" "}
+                  Cantidad total:{" "}
+                  {calculateOrderTotals(order.items).totalQuantity}
+                </p>
+                <p className="text-gray-600">
+                  Precio total:{" "}
+                  {formatPrice(calculateOrderTotals(order.items).totalAmount)}
+                </p>
               </div>
               <div className="shrink-0 bg-border h-[1px] w-full" />
               <div>
@@ -115,7 +124,6 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
         style={{ display: "none", position: "absolute", zIndex: -1 }}
       >
         <PDFContent
-          orderId={order.id}
           curtains={order.items}
           clientName={order.client}
           quoteDate={formatDate(order.createdAt)}

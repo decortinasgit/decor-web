@@ -7,6 +7,7 @@ import { getColumns } from "./orders-table-columns";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
 import { OrderWithItems } from "@/types/orders";
 import { useOrderStore } from "@/lib/store";
+import { useRouter } from "next/navigation";
 
 interface OrdersTableProps {
   data: OrderWithItems[];
@@ -21,9 +22,11 @@ export function OrdersTable({
   hideActions,
   handleFetchOrders,
 }: OrdersTableProps) {
+  const router = useRouter();
+
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(
-    () => getColumns({ hideActions, handleFetchOrders }),
+    () => getColumns({ router, hideActions, handleFetchOrders }),
     []
   );
 
