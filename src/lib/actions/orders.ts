@@ -2,13 +2,13 @@ import { z } from "zod";
 import { unstable_noStore as noStore } from "next/cache";
 import { db } from "@/db";
 import { orders, orderItems, OrderItem, OrderStatus } from "@/db/schema";
-import { eq, inArray, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { eq, sql } from "drizzle-orm";
 import {
   orderItemSchema,
   orderSchema,
   orderStatusSchema,
 } from "../validations/orders";
+import { OrderStats } from "@/types/orders";
 
 export async function addOrder(rawInput: z.infer<typeof orderSchema>) {
   try {
@@ -342,6 +342,72 @@ export async function deleteOrder(orderId: string) {
     };
   } catch (err) {
     console.error(`Error deleting order with ID ${orderId}:`, err);
+    return {
+      data: null,
+      error: err,
+    };
+  }
+}
+
+export async function getOrderStatistics(): Promise<{
+  data: OrderStats | null;
+  error: any;
+}> {
+  try {
+    const stats = await db.transaction(async (tx) => {
+      // Cantidad de órdenes en status "completed"
+      const completedOrdersCount = await tx
+        .select({
+          count: sql`COUNT(${orders.id})`.as("count"),
+        })
+        .from(orders)
+        .where(eq(orders.status, "completed"))
+        .then((res) => Number(res[0]?.count ?? 0));
+
+      // Cantidad total de órdenes
+      const totalOrdersCount = await tx
+        .select({
+          count: sql`COUNT(${orders.id})`.as("count"),
+        })
+        .from(orders)
+        .then((res) => Number(res[0]?.count ?? 0));
+
+      // Suma total de price de los items en las órdenes "completed"
+      const totalPriceCompletedOrders = await tx
+        .select({
+          totalPrice:
+            sql`COALESCE(SUM(CAST(${orderItems.price} AS numeric) * ${orderItems.qty}), 0)`.as(
+              "totalPrice"
+            ),
+        })
+        .from(orderItems)
+        .leftJoin(orders, eq(orderItems.orderId, orders.id))
+        .where(eq(orders.status, "completed"))
+        .then((res) => Number(res[0]?.totalPrice ?? 0));
+
+      // Cantidad de órdenes en status "pending"
+      const pendingOrdersCount = await tx
+        .select({
+          count: sql`COUNT(${orders.id})`.as("count"),
+        })
+        .from(orders)
+        .where(eq(orders.status, "pending"))
+        .then((res) => Number(res[0]?.count ?? 0));
+
+      return {
+        completedOrdersCount,
+        totalOrdersCount,
+        totalPriceCompletedOrders,
+        pendingOrdersCount,
+      };
+    });
+
+    return {
+      data: stats,
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error fetching order statistics:", err);
     return {
       data: null,
       error: err,
