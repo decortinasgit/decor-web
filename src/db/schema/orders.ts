@@ -11,8 +11,9 @@ import { Accesory } from "@/types/curtains";
 
 export const orderStatus = pgEnum("order_status", [
   "pending",
-  "processing",
-  "production",
+  "budgeted",
+  "confirmed",
+  "fabric",
   "shipped",
   "delivered",
   "completed",

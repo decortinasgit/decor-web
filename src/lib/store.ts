@@ -7,9 +7,10 @@ import { Column } from "@/app/(dashboard)/orders/_components/kanban/board-column
 
 export const defaultStatusCols = [
   { id: "pending", title: "Pendiente" },
-  { id: "processing", title: "Procesando" },
-  { id: "production", title: "En producción" },
-  { id: "shipped", title: "Enviado" },
+  { id: "budgeted", title: "Presupuestado" },
+  { id: "confirmed", title: "Orden confirmada" },
+  { id: "fabric", title: "Enviado a fabrica" },
+  { id: "shipped", title: "Pendiente de envío" },
   { id: "delivered", title: "Entregado" },
   { id: "completed", title: "Completado" },
 ] satisfies Column[];

@@ -69,9 +69,9 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
     <>
       <Card className="w-full mx-auto" id="order-summary">
         <CardHeader>
-          <CardTitle className="text-2xl flex items-center gap-2">
+          <CardTitle className="text-2xl flex items-center gap-2 bg-muted p-2 rounded-sm">
             <CheckCircle className="text-green-500" />
-            Pedido exítoso
+            Presupuesto cargado con éxito
           </CardTitle>
         </CardHeader>
         <CardContent>

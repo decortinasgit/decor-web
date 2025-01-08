@@ -1,5 +1,14 @@
 import * as React from "react";
+import axios from "axios";
 import { type ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { MoreHorizontal } from "lucide-react";
+
+import { OrderStatus } from "@/db/schema";
+import { formatDate } from "@/lib/utils";
+import { OrderWithItems } from "@/types/orders";
+import { defaultStatusCols } from "@/lib/store";
 
 import {
   DropdownMenu,
@@ -10,16 +19,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/custom/button";
-import { MoreHorizontal } from "lucide-react";
-import { OrderWithItems } from "@/types/orders";
-import { formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { defaultStatusCols } from "@/lib/store";
-import { useRouter } from "next/navigation";
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { ProductsDialog } from "../products-dialog";
-import { toast } from "sonner";
-import axios from "axios";
 
 interface GetColumnsOptions {
   hideActions?: boolean;
@@ -143,6 +145,12 @@ export const getColumns = ({
               >
                 Copiar ID
               </DropdownMenuItem>
+              {row.original.status === "pending" && (
+                <DropdownMenuItem onClick={() => {}}>
+                  Dar de alta
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => router.push(`/budget/${order.id}/edit`)}
               >

@@ -126,7 +126,7 @@ export const navItems: NavItem[] = [
   {
     title: "Pedidos",
     href: "/orders",
-    icon: "employee",
+    icon: "orders",
     label: "orders",
   },
   {

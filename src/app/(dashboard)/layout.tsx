@@ -1,31 +1,34 @@
-import Sidebar from "@/components/layouts/sidebar"
-import Header from "@/components/layouts/header"
-import { getUserWithAttributes } from "@/lib/queries/user"
-import { redirect } from "next/navigation"
+import Sidebar from "@/components/layouts/sidebar";
+import Header from "@/components/layouts/header";
+import { getUserWithAttributes } from "@/lib/queries/user";
+import { redirect } from "next/navigation";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 interface DashboardLayoutProps
   extends React.PropsWithChildren<{
-    modal: React.ReactNode
+    modal: React.ReactNode;
   }> {}
 
 export default async function DashboardLayout({
   children,
   modal,
 }: DashboardLayoutProps) {
-  const user = await getUserWithAttributes()
+  const user = await getUserWithAttributes();
 
   if (!user?.emailVerified) {
-    redirect("/signup/verify-account")
+    redirect("/signup/verify-account");
   }
 
   return (
     <div className="flex">
       <Sidebar />
-      <main className="w-full flex-1 overflow-hidden">
-        <Header />
-        {children}
-        {modal}
-      </main>
+      <TooltipProvider>
+        <main className="w-full flex-1 overflow-hidden">
+          <Header />
+          {children}
+          {modal}
+        </main>
+      </TooltipProvider>
     </div>
-  )
+  );
 }

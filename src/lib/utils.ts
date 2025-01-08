@@ -7,6 +7,7 @@ import { env } from "@/env.js";
 import { User } from "@clerk/nextjs/server";
 import { ColumnDragData } from "@/app/(dashboard)/orders/_components/kanban/board-column";
 import { OrderDragData } from "@/app/(dashboard)/orders/_components/kanban/order-card";
+import { OrderItem } from "@/db/schema";
 
 type DraggableData = ColumnDragData | OrderDragData;
 
@@ -122,4 +123,15 @@ export function formatPrice(
   const number = typeof price === "string" ? parseFloat(price) : price;
 
   return new Intl.NumberFormat("es-AR", formatOptions).format(number);
+}
+
+export function calculateOrderTotals(items: OrderItem[]) {
+  return items.reduce(
+    (totals, item) => {
+      totals.totalQuantity += item.qty;
+      totals.totalAmount += parseFloat(item.price ?? "0") * item.qty;
+      return totals;
+    },
+    { totalQuantity: 0, totalAmount: 0 }
+  );
 }
