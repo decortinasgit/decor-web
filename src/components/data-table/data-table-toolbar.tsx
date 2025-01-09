@@ -26,8 +26,6 @@ export function DataTableToolbar<TData>({
   pdfTable,
   ...props
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0;
-
   const { searchableColumns, filterableColumns } = React.useMemo(() => {
     return {
       searchableColumns: filterFields.filter((field) => !field.options),
@@ -101,7 +99,7 @@ export function DataTableToolbar<TData>({
           )}
         <Button
           aria-label="Apply filters"
-          variant="default"
+          variant="outline"
           className="h-8 px-2 lg:px-3"
           onClick={handleSearch}
         >
@@ -110,7 +108,7 @@ export function DataTableToolbar<TData>({
         {hasSearchValues && (
           <Button
             aria-label="Reset filters"
-            variant="outline"
+            variant="destructive"
             className="h-8 px-2 lg:px-3"
             onClick={handleReset}
           >

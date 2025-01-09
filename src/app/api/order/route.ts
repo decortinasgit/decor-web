@@ -93,12 +93,20 @@ export async function GET(req: Request) {
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
     const id = url.searchParams.get("id") || undefined;
+    const fromDate = url.searchParams.get("fromDate")
+      ? new Date(url.searchParams.get("fromDate")!)
+      : undefined;
+    const toDate = url.searchParams.get("toDate")
+      ? new Date(url.searchParams.get("toDate")!)
+      : undefined;
 
     const result = await getOrders({
       page,
       limit,
       email: user.roleId === "0" ? undefined : user.email,
       id,
+      fromDate,
+      toDate,
     });
 
     return new NextResponse(JSON.stringify(result), { status: 200 });

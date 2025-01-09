@@ -2,7 +2,7 @@ import { z } from "zod";
 import { unstable_noStore as noStore } from "next/cache";
 import { db } from "@/db";
 import { orders, orderItems, OrderItem, OrderStatus } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq, gte, lte, sql } from "drizzle-orm";
 import {
   orderItemSchema,
   orderSchema,
@@ -152,11 +152,15 @@ export async function getOrders({
   limit = 10,
   email,
   id,
+  fromDate,
+  toDate,
 }: {
   page?: number;
   limit?: number;
   email?: string;
   id?: string;
+  fromDate?: Date;
+  toDate?: Date;
 } = {}) {
   noStore();
 
@@ -188,6 +192,16 @@ export async function getOrders({
         baseQuery = baseQuery.where(eq(orders.id, id));
       }
 
+      // Filtro por rango de fechas
+      if (fromDate) {
+        //@ts-ignore
+        baseQuery = baseQuery.where(gte(orders.createdAt, fromDate));
+      }
+      if (toDate) {
+        //@ts-ignore
+        baseQuery = baseQuery.where(lte(orders.createdAt, toDate));
+      }
+
       // Aplicar agrupación, límite y desplazamiento
       const ordersWithItems = await baseQuery
         .groupBy(orders.id)
@@ -203,6 +217,14 @@ export async function getOrders({
       // Filtro por id en la consulta total
       if (id) {
         totalQuery.where(eq(orders.id, id));
+      }
+
+      // Filtro por rango de fechas en la consulta total
+      if (fromDate) {
+        totalQuery.where(gte(orders.createdAt, fromDate));
+      }
+      if (toDate) {
+        totalQuery.where(lte(orders.createdAt, toDate));
       }
 
       const total = await totalQuery
