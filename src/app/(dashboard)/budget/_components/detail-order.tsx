@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { Download, CheckCircle, Store } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/custom/button";
 import {
@@ -12,13 +12,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Download, CheckCircle, Store } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { CurtainsTable } from "./curtains-table/curtains-table";
 import { totalAmount } from "@/lib/curtains";
 import { PDFContent } from "./pdf-content";
 import { OrderWithItems } from "@/types/orders";
 import { calculateOrderTotals, formatDate, formatPrice } from "@/lib/utils";
+import { downloadPDFFromHTML } from "@/lib/pdf";
+import { HiddenPDFContainer } from "@/components/hidden-pdf-container";
 
 interface OrderSuccessProps {
   order: OrderWithItems | null;
@@ -27,35 +27,6 @@ interface OrderSuccessProps {
 export default function DetailOrder({ order }: OrderSuccessProps) {
   const router = useRouter();
   const hiddenContainerRef = useRef<HTMLDivElement>(null);
-
-  async function downloadPDFFromHTML() {
-    const hiddenContainer = hiddenContainerRef.current;
-
-    if (!hiddenContainer) {
-      console.error(
-        "No se encontró el contenedor oculto para renderizar el contenido del PDF"
-      );
-      return;
-    }
-
-    // Render the PDFContent component into the hidden container
-    hiddenContainer.style.display = "block";
-
-    // Generate the canvas from the hidden container
-    const canvas = await html2canvas(hiddenContainer, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
-
-    // Create the PDF
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("detalle_pedido.pdf");
-
-    // Hide the container again after generating the PDF
-    hiddenContainer.style.display = "none";
-  }
 
   if (!order) {
     return (
@@ -118,23 +89,22 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
           >
             <Store className="mr-2 h-4 w-4" /> Ver Pedidos
           </Button>
-          <Button onClick={downloadPDFFromHTML} className="w-full">
+          <Button
+            onClick={() => downloadPDFFromHTML(hiddenContainerRef)}
+            className="w-full"
+          >
             <Download className="mr-2 h-4 w-4" /> Descargar PDF
           </Button>
         </CardFooter>
       </Card>
 
-      {/* Hidden container for rendering the PDF content */}
-      <div
-        ref={hiddenContainerRef}
-        style={{ display: "none", position: "absolute", zIndex: -1 }}
-      >
+      <HiddenPDFContainer ref={hiddenContainerRef}>
         <PDFContent
           curtains={order.items}
           clientName={order.client}
           quoteDate={formatDate(order.createdAt)}
         />
-      </div>
+      </HiddenPDFContainer>
     </>
   );
 }

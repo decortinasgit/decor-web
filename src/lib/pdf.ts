@@ -1,3 +1,7 @@
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { RefObject } from "react";
+
 export const generateHtml = () => {
   return `
 <!DOCTYPE html>
@@ -188,3 +192,32 @@ export const generateHtml = () => {
 </html>
  `;
 };
+
+export async function downloadPDFFromHTML(ref: RefObject<HTMLDivElement>) {
+    const hiddenContainer = ref.current;
+
+    if (!hiddenContainer) {
+      console.error(
+        "No se encontró el contenedor oculto para renderizar el contenido del PDF"
+      );
+      return;
+    }
+
+    // Render the PDFContent component into the hidden container
+    hiddenContainer.style.display = "block";
+
+    // Generate the canvas from the hidden container
+    const canvas = await html2canvas(hiddenContainer, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+
+    // Create the PDF
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("detalle_pedido.pdf");
+
+    // Hide the container again after generating the PDF
+    hiddenContainer.style.display = "none";
+  }

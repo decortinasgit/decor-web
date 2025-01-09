@@ -22,6 +22,9 @@ import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { ProductsDialog } from "../products-dialog";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { generateEmailContent } from "@/lib/html";
+import { HiddenPDFContainer } from "@/components/hidden-pdf-container";
+import { PDFContent } from "@/app/(dashboard)/budget/_components/pdf-content";
+import { downloadPDFFromHTML } from "@/lib/pdf";
 
 interface GetColumnsOptions {
   router: AppRouterInstance;
@@ -110,6 +113,7 @@ export const getColumns = ({
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
+        const hiddenContainerRef = React.useRef<HTMLDivElement>(null);
         const order = row.original;
 
         async function handleDelete() {
@@ -165,39 +169,57 @@ export const getColumns = ({
         }
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Abrir menú</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(order.id)}
-              >
-                Copiar ID
-              </DropdownMenuItem>
-              {row.original.status === "pending" && (
+          <>
+            <HiddenPDFContainer ref={hiddenContainerRef}>
+              <PDFContent
+                curtains={order.items}
+                clientName={order.client}
+                quoteDate={formatDate(order.createdAt)}
+              />
+            </HiddenPDFContainer>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Abrir menú</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={() => updateOrderStatus(row.original.id, "budgeted")}
+                  onClick={() => navigator.clipboard.writeText(order.id)}
                 >
-                  Dar de alta
+                  Copiar ID
                 </DropdownMenuItem>
-              )}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => router.push(`/budget/${order.id}/edit`)}
-              >
-                Editar pedido
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete}>
-                Eliminar pedido
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuSeparator />
+                {row.original.status === "pending" && (
+                  <DropdownMenuItem
+                    onClick={() =>
+                      updateOrderStatus(row.original.id, "budgeted")
+                    }
+                  >
+                    Dar de alta
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  onClick={() => downloadPDFFromHTML(hiddenContainerRef)}
+                >
+                  Descargar PDF
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => router.push(`/budget/${order.id}/edit`)}
+                >
+                  Editar pedido
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDelete}>
+                  Eliminar pedido
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
         );
       },
     });
