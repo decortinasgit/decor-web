@@ -1,6 +1,6 @@
 import { z } from "zod";
 import {
-  addOrder,
+  addOrderWithItems,
   deleteOrder,
   getOrders,
   updateOrder,
@@ -8,21 +8,29 @@ import {
 import { NextResponse } from "next/server";
 import { getUserWithAttributes } from "@/lib/queries/user";
 import { sendEmail } from "@/lib/email";
+import { orderItemSchema, orderSchema } from "@/lib/validations/orders";
 
 export async function POST(req: Request) {
   try {
-    const ordersData = await req.json();
+    const { orderData, orderItemsData } = await req.json();
 
-    const result = await addOrder(ordersData);
+    console.log(orderData, "orderData");
+    console.log(orderItemsData, "orderItemsData");
 
-    if (result.error || !result.data) {
-      throw result.error;
+    // Validar datos de entrada
+    const parsedOrder = orderSchema.parse(orderData);
+    const parsedItems = z.array(orderItemSchema).parse(orderItemsData);
+
+    const result = await addOrderWithItems(parsedOrder, parsedItems);
+
+    if (!result.data) {
+      throw new Error("Failed to create order with items");
     } else {
       const emailResponse = await sendEmail({
-        to: result.data[0].email,
+        to: parsedOrder.email,
         subject: "Orden confirmada!",
-        text: `Gracias por tu orden! ID: ${result.data[0].id}`,
-        html: `<p>Gracias por tu orden! ID: <strong>${result.data[0].id}</strong></p>`,
+        text: `Gracias por tu orden! ID: ${parsedOrder.id}`,
+        html: `<p>Gracias por tu orden! ID: <strong>${parsedOrder.id}</strong></p>`,
       });
 
       if (!emailResponse.success) {
@@ -35,17 +43,15 @@ export async function POST(req: Request) {
 
     return new Response(JSON.stringify(result.data), { status: 201 });
   } catch (error) {
-    console.error(error);
+    console.error("Error in /api/order:", error);
 
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 422 });
     }
 
-    if (error instanceof Error) {
-      return new Response(error.message, { status: 500 });
-    }
-
-    return new Response("Something went wrong", { status: 500 });
+    return new Response("Internal Server Error", {
+      status: 500,
+    });
   }
 }
 

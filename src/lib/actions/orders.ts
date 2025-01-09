@@ -79,6 +79,74 @@ export async function addOrderItems(
   }
 }
 
+export async function addOrderWithItems(
+  rawOrderInput: z.infer<typeof orderSchema>,
+  rawItemsInput: z.infer<typeof orderItemSchema>[]
+) {
+  try {
+    const result = await db.transaction(async (trx) => {
+      // Crear la orden
+      const [order] = await trx
+        .insert(orders)
+        .values({
+          id: rawOrderInput.id,
+          company: rawOrderInput.company,
+          client: rawOrderInput.client,
+          email: rawOrderInput.email,
+          status: "pending",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning({ id: orders.id });
+
+      if (!order || !order.id) {
+        throw new Error("Failed to create order: No ID returned");
+      }
+
+      // Crear los ítems de la orden
+      const insertedItems = await trx.insert(orderItems).values(
+        rawItemsInput.map((item) => ({
+          accessories: item.accessories,
+          category: item.category,
+          orderId: order.id, // Asociar con la ID de la orden creada
+          qty: item.qty,
+          name: item.name,
+          type: item.type,
+          color: item.color,
+          height: item.height,
+          width: item.width,
+          support: item.support,
+          fall: item.fall,
+          chain: item.chain,
+          chainSide: item.chainSide,
+          opening: item.opening,
+          pinches: item.pinches,
+          panels: item.panels,
+          price: item.price,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }))
+      );
+
+      return {
+        order,
+        insertedItems,
+      };
+    });
+
+    return {
+      data: result,
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error adding order with items:", err);
+    return {
+      data: null,
+      error: err,
+    };
+  }
+}
+
 export async function getOrders({
   page = 1,
   limit = 10,

@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 import { Costs, Curtains } from "@/db/schema";
 import { Accesory, Chain, Curtain } from "@/types/curtains";
@@ -19,7 +21,6 @@ import Step0 from "./create-order/step-0";
 import Step1 from "./create-order/step-1";
 import CreateOrderFormNavigation from "./create-order/create-order-form-navigation";
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
-import { toast } from "sonner";
 
 interface FormType {
   curtains: Curtain[];
@@ -286,61 +287,37 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
     }
 
     try {
-      // Create the order first
-      const orderResponse = await axios.post(
-        "/api/order",
-        {
-          company: data.company,
-          client: data.client,
-          email: userEmail,
-          curtains: data.curtains,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const orderId = uuidv4();
 
-      const insertedOrder = orderResponse.data[0];
-      const orderId = insertedOrder?.id;
-
-      if (!orderId) {
-        throw new Error("Failed to create order: No ID returned");
-      }
-
-      const orderItems = data.curtains.map((curtain) => ({
+      const orderItemsData = data.curtains.map((curtain) => ({
+        id: uuidv4(),
         orderId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
         ...curtain,
       }));
 
-      await axios.post("/api/order-items", orderItems, {
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post("/api/order", {
+        orderData: {
+          id: orderId,
+          company: data.company,
+          client: data.client,
+          email: userEmail,
         },
+        orderItemsData,
       });
 
-      router.push(`/budget/${orderId}/success`);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error("Lo siento", {
-          description:
-            "No pudimos crear tu pedido en este momento. Vuelva a intentarlo.",
-        });
-        console.error(
-          "Failed to create order or order items:",
-          error.response?.data || error.message
-        );
-      } else {
-        console.error("An unexpected error occurred:", error);
+      if (response.status === 201) {
+        router.push(`/budget/${response.data.order.id}/success`);
       }
+    } catch (error) {
+      console.error("Error al crear la orden:", error);
+      toast.error("Lo siento", {
+        description:
+          "No pudimos crear tu pedido en este momento. Vuelva a intentarlo.",
+      });
     } finally {
       setLoading(false);
     }
   };
-
   const duplicateRow = (index: number) => {
     console.log(index);
   };
