@@ -92,11 +92,13 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+    const id = url.searchParams.get("id") || undefined;
 
     const result = await getOrders({
       page,
       limit,
       email: user.roleId === "0" ? undefined : user.email,
+      id,
     });
 
     return new NextResponse(JSON.stringify(result), { status: 200 });

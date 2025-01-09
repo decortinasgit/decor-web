@@ -23,12 +23,13 @@ export default function OrdersPage() {
     total: 0,
     pageCount: 0,
   });
+
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(false);
 
   const handleFetchOrders = async () => {
     try {
-      const response = await axios.get(`/api/order?${searchParams}}`);
+      const response = await axios.get(`/api/order?${searchParams}`);
       setOrders(response.data);
     } catch (error) {
       console.error("Error fetching orders:", error);

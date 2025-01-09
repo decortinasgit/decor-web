@@ -8,6 +8,7 @@ import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
 import { OrderWithItems } from "@/types/orders";
 import { useOrderStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
+import { DataTableFilterField } from "@/types";
 
 interface OrdersTableProps {
   data: OrderWithItems[];
@@ -42,10 +43,19 @@ export function OrdersTable({
    * @prop {boolean} [withCount] - An optional boolean to display the count of the filter option.
    */
 
+  const filterFields: DataTableFilterField<OrderWithItems>[] = [
+    {
+      label: "ID",
+      value: "id",
+      placeholder: "Buscar por ID...",
+    },
+  ];
+
   const { table } = useDataTable({
     data,
     columns,
     pageCount,
+    filterFields,
     initialState: {
       sorting: [{ id: "createdAt", desc: true }],
       columnPinning: { right: ["actions"] },
@@ -57,7 +67,7 @@ export function OrdersTable({
 
   return (
     <DataTable table={table}>
-      <DataTableToolbar table={table} />
+      <DataTableToolbar table={table} filterFields={filterFields} />
     </DataTable>
   );
 }

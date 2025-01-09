@@ -151,16 +151,17 @@ export async function getOrders({
   page = 1,
   limit = 10,
   email,
+  id,
 }: {
   page?: number;
   limit?: number;
-  email?: string; // Nuevo parámetro para filtrar por email
+  email?: string;
+  id?: string;
 } = {}) {
   noStore();
 
   try {
     const transaction = await db.transaction(async (tx) => {
-      // Crear consulta base con filtro por email (si aplica)
       let baseQuery = tx
         .select({
           orderId: orders.id,
@@ -175,10 +176,16 @@ export async function getOrders({
         .from(orders)
         .leftJoin(orderItems, eq(orders.id, orderItems.orderId));
 
-      // Aplicar filtro por email antes del groupBy
+      // Filtro por email
       if (email) {
         // @ts-ignore
         baseQuery = baseQuery.where(eq(orders.email, email));
+      }
+
+      // Filtro por id
+      if (id) {
+        // @ts-ignore
+        baseQuery = baseQuery.where(eq(orders.id, id));
       }
 
       // Aplicar agrupación, límite y desplazamiento
@@ -193,9 +200,9 @@ export async function getOrders({
         })
         .from(orders);
 
-      // Aplicar filtro por email al total también
-      if (email) {
-        totalQuery.where(eq(orders.email, email));
+      // Filtro por id en la consulta total
+      if (id) {
+        totalQuery.where(eq(orders.id, id));
       }
 
       const total = await totalQuery

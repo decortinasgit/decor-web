@@ -16,8 +16,6 @@ interface ProductsDialogProps {
 }
 
 export function ProductsDialog({ orderProduct }: ProductsDialogProps) {
-  console.log(orderProduct.items, "items");
-
   return (
     <AlertDialogContent className="max-w-screen-md max-h-[70vh] overflow-hidden">
       <AlertDialogHeader>
