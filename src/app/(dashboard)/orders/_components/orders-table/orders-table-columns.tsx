@@ -96,7 +96,9 @@ export const getColumns = ({
                 </Badge>
               </Button>
             </AlertDialogTrigger>
-            <ProductsDialog orderProduct={row.original} />
+            {row.original.items && (
+              <ProductsDialog orderProduct={row.original} />
+            )}
           </AlertDialog>
         );
       },

@@ -6,7 +6,7 @@ import {
   UseFieldArrayRemove,
   UseFormReturn,
 } from "react-hook-form";
-import { AlertTriangleIcon, Trash2Icon } from "lucide-react";
+import { AlertTriangleIcon, Copy, Trash2Icon } from "lucide-react";
 
 import {
   additionalFields,
@@ -58,7 +58,6 @@ type Props = {
   setSelectedCurtainValues?: React.Dispatch<React.SetStateAction<Curtain[]>>;
   errors: FieldErrors<ProfileFormValues>;
   form: UseFormReturn<ProfileFormValues, any, undefined>;
-  append: UseFieldArrayAppend<ProfileFormValues, "curtains">;
   costs: Costs[];
   loading: boolean;
   getCurtainObject: (index: number) => Curtains | null;
@@ -66,6 +65,8 @@ type Props = {
   handleNameChange: (index: number, value: string) => void;
   handleTypeChange: (index: number, value: string) => void;
   handleColorChange: (index: number, value: string) => void;
+  duplicateRow: (index: number) => void;
+  append: UseFieldArrayAppend<ProfileFormValues, "curtains">;
 };
 
 const Step1 = ({
@@ -82,6 +83,7 @@ const Step1 = ({
   handleNameChange,
   handleTypeChange,
   handleColorChange,
+  duplicateRow,
   append,
 }: Props) => {
   return (
@@ -193,6 +195,13 @@ const Step1 = ({
                       <Trash2Icon className="h-4 w-4 " />
                     </Button>
                   )}
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => duplicateRow(index)}
+                  >
+                    <Copy className="h-4 w-4 " />
+                  </Button>
                 </div>
                 {errors?.curtains?.[index] && (
                   <span className="alert absolute right-8">

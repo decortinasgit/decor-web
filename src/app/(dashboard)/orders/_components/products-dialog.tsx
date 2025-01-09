@@ -16,6 +16,8 @@ interface ProductsDialogProps {
 }
 
 export function ProductsDialog({ orderProduct }: ProductsDialogProps) {
+  console.log(orderProduct.items, "items");
+
   return (
     <AlertDialogContent className="max-w-screen-md max-h-[70vh] overflow-hidden">
       <AlertDialogHeader>
@@ -25,19 +27,21 @@ export function ProductsDialog({ orderProduct }: ProductsDialogProps) {
           {orderProduct.client}
         </AlertDialogTitle>
         <AlertDialogDescription className="flex flex-col gap-2 overflow-y-auto max-h-[calc(50vh-6rem)]">
-          {orderProduct.items.length > 0 &&
-            orderProduct.items?.map((item, index) => {
-              return (
-                <div key={index} className="capitalize border rounded-md p-2">
-                  <div className="flex items-center gap-2">
-                    ({item.qty}) <strong className="mr-1">{item.name}</strong>
-                    <span className="truncate">
-                      {item.price ? formatPrice(item.price) : ""}
-                    </span>
+          {orderProduct.items?.length > 0 &&
+            orderProduct.items
+              .filter((item) => item !== null)
+              .map((item, index) => {
+                return (
+                  <div key={index} className="capitalize border rounded-md p-2">
+                    <div className="flex items-center gap-2">
+                      ({item.qty}) <strong className="mr-1">{item.name}</strong>
+                      <span className="truncate">
+                        {item.price ? formatPrice(item.price) : ""}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>

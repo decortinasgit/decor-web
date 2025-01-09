@@ -1,8 +1,8 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
@@ -42,8 +42,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
   orderId,
 }) => {
   const router = useRouter();
-
-  console.log(order, "order");
 
   const defaultValues = {
     company: order.company,
@@ -410,6 +408,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
                 handleNameChange={handleNameChange}
                 handleTypeChange={handleTypeChange}
                 handleColorChange={handleColorChange}
+                duplicateRow={duplicateRow}
               />
             )}
           </div>

@@ -388,6 +388,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
                 handleNameChange={handleNameChange}
                 handleTypeChange={handleTypeChange}
                 handleColorChange={handleColorChange}
+                duplicateRow={duplicateRow}
               />
             )}
           </div>
