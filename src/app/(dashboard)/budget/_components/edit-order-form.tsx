@@ -68,8 +68,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
     })),
   };
 
-  console.log(defaultValues, "default");
-
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues,
@@ -283,9 +281,14 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
   };
 
   const handleUpdate = async () => {
+    let userMail = order.email;
     setLoading(true);
 
     try {
+      if (!userMail) {
+        const response = await axios.get("/api/users");
+        userMail = response.data.email;
+      }
       // Actualizar la orden principal
       await axios.put(
         "/api/order",
@@ -293,7 +296,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
           id: orderId,
           company: data.company,
           client: data.client,
-          email: "",
+          email: userMail,
           curtains: data.curtains,
         },
         {

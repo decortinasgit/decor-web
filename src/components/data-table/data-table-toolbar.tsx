@@ -72,15 +72,28 @@ export function DataTableToolbar<TData>({
           searchableColumns.map(
             (column) =>
               table.getColumn(column.value ? String(column.value) : "") && (
-                <Input
-                  key={String(column.value)}
-                  placeholder={column.placeholder}
-                  value={searchValues[String(column.value) ?? ""] ?? ""}
-                  onChange={(event) =>
-                    handleInputChange(String(column.value), event.target.value)
-                  }
-                  className="h-8 w-40 lg:w-64"
-                />
+                <>
+                  <Input
+                    key={String(column.value)}
+                    placeholder={column.placeholder}
+                    value={searchValues[String(column.value) ?? ""] ?? ""}
+                    onChange={(event) =>
+                      handleInputChange(
+                        String(column.value),
+                        event.target.value
+                      )
+                    }
+                    className="h-8 w-40 lg:w-64"
+                  />
+                  <Button
+                    aria-label="Apply filters"
+                    variant="outline"
+                    className="h-8 px-2 lg:px-3"
+                    onClick={handleSearch}
+                  >
+                    Buscar
+                  </Button>
+                </>
               )
           )}
         {filterableColumns.length > 0 &&
@@ -97,14 +110,6 @@ export function DataTableToolbar<TData>({
                 />
               )
           )}
-        <Button
-          aria-label="Apply filters"
-          variant="outline"
-          className="h-8 px-2 lg:px-3"
-          onClick={handleSearch}
-        >
-          Buscar
-        </Button>
         {hasSearchValues && (
           <Button
             aria-label="Reset filters"

@@ -37,12 +37,12 @@ export const getColumns = ({
     {
       accessorKey: "name",
       header: "Nombre",
-      cell: ({ row }) => <div>{row.getValue("name")}</div>,
+      cell: ({ row }) => <div className="truncate">{row.getValue("name")}</div>,
     },
     {
       accessorKey: "type",
       header: "Tipo",
-      cell: ({ row }) => <div>{row.getValue("type")}</div>,
+      cell: ({ row }) => <div className="truncate">{row.getValue("type")}</div>,
     },
     {
       accessorKey: "color",

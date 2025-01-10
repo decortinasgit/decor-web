@@ -195,13 +195,6 @@ const Step1 = ({
                       <Trash2Icon className="h-4 w-4 " />
                     </Button>
                   )}
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => duplicateRow(index)}
-                  >
-                    <Copy className="h-4 w-4 " />
-                  </Button>
                 </div>
                 {errors?.curtains?.[index] && (
                   <span className="alert absolute right-8">
