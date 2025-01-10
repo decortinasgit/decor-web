@@ -14,9 +14,6 @@ export async function POST(req: Request) {
   try {
     const { orderData, orderItemsData } = await req.json();
 
-    console.log(orderData, "orderData");
-    console.log(orderItemsData, "orderItemsData");
-
     // Validar datos de entrada
     const parsedOrder = orderSchema.parse(orderData);
     const parsedItems = z.array(orderItemSchema).parse(orderItemsData);

@@ -44,8 +44,6 @@ export default function OrdersPage() {
         params.set("toDate", dateRange.to.toISOString());
       }
 
-      console.log(`/api/order?${params.toString()}`, "params");
-
       const response = await axios.get(`/api/order?${params.toString()}`);
       setOrders(response.data);
     } catch (error) {

@@ -364,18 +364,63 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
   };
 
   const duplicateRow = (index: number) => {
-    console.log(index);
-  };
+    // Step 1: Get the current curtain to duplicate
+    const currentCurtain = data.curtains[index];
 
-  const deleteRow = (index: number) => {
-    const updatedCurtains = [...form.getValues("curtains")];
-    updatedCurtains.splice(index, 1);
+    // Step 2: Create a new curtain object (duplicate)
+    const newCurtain = {
+      ...currentCurtain,
+    };
 
-    form.setValue("curtains", updatedCurtains);
+    // Step 3: Update the `data.curtains` array
+    const updatedCurtains = [...data.curtains, newCurtain];
     setData((prev) => ({
       ...prev,
       curtains: updatedCurtains as Curtain[],
     }));
+
+    // Step 4: Update selectedCurtainValues
+    const updatedSelectedCurtainValues = selectedCurtainValues.toSpliced(
+      index + 1,
+      1,
+      selectedCurtainValues[index]
+    );
+
+    setSelectedCurtainValues(updatedSelectedCurtainValues);
+
+    // Step 5: Update form fields with the new curtain
+    const currentCurtains = form.getValues("curtains");
+    const updatedFields = [
+      ...currentCurtains,
+      {
+        ...newCurtain,
+        accessories: form.getValues("curtains")[index].accessories,
+        chains: form.getValues("curtains")[index].chain,
+      },
+    ];
+    form.setValue("curtains", updatedFields);
+
+    toast.success("Cortina duplicada exitosamente");
+  };
+
+  const deleteRow = (index: number) => {
+    // Step 1: Eliminar la cortina de los valores del formulario
+    const updatedCurtains = [...form.getValues("curtains")];
+    updatedCurtains.splice(index, 1);
+    form.setValue("curtains", updatedCurtains);
+
+    // Step 2: Eliminar la cortina de selectedCurtainValues
+    const updatedSelectedCurtainValues = [...selectedCurtainValues];
+    updatedSelectedCurtainValues.splice(index, 1);
+    setSelectedCurtainValues(updatedSelectedCurtainValues);
+
+    // Step 3: Actualizar el estado de data.curtains
+    setData((prev) => ({
+      ...prev,
+      curtains: updatedCurtains as Curtain[],
+    }));
+
+    toast.success("Cortina eliminada exitosamente");
   };
 
   return (

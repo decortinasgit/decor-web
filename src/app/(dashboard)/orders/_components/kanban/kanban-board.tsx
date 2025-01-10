@@ -319,8 +319,6 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
     if (activeData?.type === "OrderWithItems" && overData?.type === "Column") {
       const activeOrder = activeData.order;
 
-      console.log(activeOrder, "activeorder");
-
       // Verificar si la orden tiene estado "pending"
       if (activeOrder.status === "pending") {
         return; // Detenemos el cambio de estado

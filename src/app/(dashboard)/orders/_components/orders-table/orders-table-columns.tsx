@@ -148,14 +148,12 @@ export const getColumns = ({
 
             const emailContent = generateEmailContent(row.original);
 
-            const emailResponse = await axios.post("/api/contact", {
+            await axios.post("/api/contact", {
               to: "distribuidoresdecortinas@gmail.com",
               subject: `Nueva alta de pedido: #${row.original.id}`,
               text: `Detalles del pedido:\n${row.original}`,
               html: emailContent,
             });
-
-            console.log(emailResponse, "emailResponse");
 
             return response.data;
           } catch (error) {
