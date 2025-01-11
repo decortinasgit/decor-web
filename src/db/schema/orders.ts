@@ -1,13 +1,5 @@
-import {
-  pgTable,
-  text,
-  integer,
-  uuid,
-  pgEnum,
-  json,
-} from "drizzle-orm/pg-core";
+import { pgTable, text, integer, uuid, pgEnum } from "drizzle-orm/pg-core";
 import { lifecycleDates } from "./utils";
-import { Accesory } from "@/types/curtains";
 
 export const orderStatus = pgEnum("order_status", [
   "pending",
@@ -24,13 +16,13 @@ export const orders = pgTable("orders", {
   company: text("company").notNull(),
   client: text("client").notNull(),
   email: text("email").notNull(),
-  status: orderStatus("status").default("pending").notNull(), // Nueva columna de estado
+  status: orderStatus("status").default("pending").notNull(),
   ...lifecycleDates,
 });
 
 export const orderItems = pgTable("order_items", {
   id: uuid("id").defaultRandom().primaryKey(),
-  accessories: json("accessories").$type<Accesory[]>(),
+  accessory: text("accessory"),
   category: text("category").notNull(),
   orderId: uuid("order_id")
     .references(() => orders.id)

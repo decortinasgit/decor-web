@@ -28,6 +28,7 @@ export const profileSchema = z.object({
         support: z.string().optional(), // Soporte
         fall: z.string().optional(), // Caída
         chain: z.string().optional(), // Cadena
+        accessory: z.string().optional(), // Cadena
         chainSide: z.string().optional(), // Lado de cadena
         opening: z.string().optional(), // Apertura
         pinches: z.string().optional(), // Pellizcos

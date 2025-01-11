@@ -43,11 +43,14 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 }) => {
   const router = useRouter();
 
+  console.log(order, 'order');
+  
+
   const defaultValues = {
     company: order.company,
     client: order.client,
     curtains: order.items.map((item) => ({
-      accessories: item.accessories ? item.accessories[0].id : "",
+      accessory: item.accessory || "",
       category: item.category,
       chain: item.chain || "",
       chainSide: item.chainSide || "",
@@ -87,6 +90,8 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [data, setData] = useState<FormType>({} as FormType);
+
+  console.log(data, "data");
 
   const itemsPerPage = 10;
   const totalItems = data.curtains ? data.curtains.length : 0;
@@ -289,15 +294,26 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
         const response = await axios.get("/api/users");
         userMail = response.data.email;
       }
-      // Actualizar la orden principal
+
+      const orderItemsData = data.curtains.map((curtain) => ({
+        ...curtain,
+        orderId: orderId,
+      }));
+
+      // Usar el nuevo endpoint PUT para actualizar la orden y los ítems
       await axios.put(
         "/api/order",
         {
-          id: orderId,
-          company: data.company,
-          client: data.client,
-          email: userMail,
-          curtains: data.curtains,
+          orderId: orderId,
+          orderData: {
+            id: orderId,
+            company: data.company,
+            client: data.client,
+            email: userMail,
+            // @ts-ignore
+            status: data.status,
+          },
+          orderItemsData,
         },
         {
           headers: {
@@ -305,44 +321,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
           },
         }
       );
-
-      const existingOrderItems = order.items;
-
-      const orderItems = data.curtains.map((curtain) => {
-        const existingItem = existingOrderItems.find(
-          (item) => item.name === curtain.name && item.type === curtain.type
-        );
-
-        return {
-          id: existingItem?.id || null, // Determinar si es nuevo o existente
-          orderId: orderId,
-          createdAt: existingItem?.createdAt || new Date(),
-          updatedAt: new Date(),
-          ...curtain,
-        };
-      });
-
-      // Separar ítems existentes y nuevos
-      const itemsToUpdate = orderItems.filter((item) => item.id); // Con id, usar PUT
-      const itemsToCreate = orderItems.filter((item) => !item.id); // Sin id, usar POST
-
-      // Actualizar ítems existentes
-      if (itemsToUpdate.length > 0) {
-        await axios.put("/api/order-items", itemsToUpdate, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      }
-
-      // Crear ítems nuevos
-      if (itemsToCreate.length > 0) {
-        await axios.post("/api/order-items", itemsToCreate, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      }
 
       toast.message("Éxito!", {
         description: `Tu orden fue actualizada!`,

@@ -48,17 +48,17 @@ export const getColumns = ({
     {
       accessorKey: "company",
       header: "Compañía",
-      cell: ({ row }) => <div>{row.getValue("company")}</div>,
+      cell: ({ row }) => <div className="truncate">{row.getValue("company")}</div>,
     },
     {
       accessorKey: "client",
       header: "Cliente",
-      cell: ({ row }) => <div>{row.getValue("client")}</div>,
+      cell: ({ row }) => <div className="truncate">{row.getValue("client")}</div>,
     },
     {
       accessorKey: "email",
       header: "Correo",
-      cell: ({ row }) => <div>{row.getValue("email")}</div>,
+      cell: ({ row }) => <div className="truncate">{row.getValue("email")}</div>,
     },
     {
       accessorKey: "createdAt",

@@ -130,7 +130,7 @@ const Step1 = ({
 
         const handleGetAccessory = (): Accesory | undefined => {
           const matchingAccessory = matchingCurtain?.accessories?.filter(
-            (data) => data.id === form.watch(`curtains.${index}.accessories`)
+            (data) => data.id === form.watch(`curtains.${index}.accessory`)
           );
 
           if (matchingAccessory) {
@@ -329,7 +329,7 @@ const Step1 = ({
                   {matchingCurtain && matchingCurtain.accessories && (
                     <FormField
                       control={form.control}
-                      name={`curtains.${index}.accessories`}
+                      name={`curtains.${index}.accessory`}
                       render={({ field }) => (
                         <FormItem className="mb-5 md:mb-0">
                           <FormLabel>Accesorios</FormLabel>

@@ -111,7 +111,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
 
       const handleGetAccessory = (): Accesory | undefined => {
         const matchingAccessory = matchingCurtain?.accessories?.filter(
-          (data) => data.id === form.watch(`curtains.${index}.accessories`)
+          (data) => data.id === form.watch(`curtains.${index}.accessory`)
         );
 
         if (matchingAccessory) {
@@ -188,6 +188,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
     form.setValue(`curtains.${index}.height`, undefined);
     form.setValue(`curtains.${index}.width`, undefined);
     form.setValue(`curtains.${index}.chain`, undefined);
+    form.setValue(`curtains.${index}.accessory`, undefined);
     form.setValue(`curtains.${index}.chainSide`, undefined);
     form.setValue(`curtains.${index}.fall`, undefined);
     form.setValue(`curtains.${index}.opening`, undefined);

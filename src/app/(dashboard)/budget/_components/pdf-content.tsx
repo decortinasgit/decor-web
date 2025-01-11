@@ -8,6 +8,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
+import { CurtainsTablePDF } from "./curtains-table/curtains-table-pdf";
 
 interface PDFContentProps {
   curtains: Array<OrderItem> | undefined;
@@ -52,24 +53,11 @@ export function PDFContent({
       </Card>
 
       {/* Curtains Table */}
-      <Card className="mb-6">
-        <CardContent>
-          <CurtainsTable
-            data={curtains}
-            pageCount={1}
-            hideActions
-            pdfTable
-            deleteRow={() => {}}
-            duplicateRow={() => {}}
-          />
-        </CardContent>
-        <CardFooter className="flex justify-end">
-          <h4 className="font-semibold">Total: ${totalAmount(curtains)}</h4>
-        </CardFooter>
-      </Card>
+
+      <CurtainsTablePDF curtains={curtains} />
 
       {/* Static FAQ Section */}
-      <Card className="mb-6">
+      <Card className="my-6">
         <CardHeader>
           <h3>PREGUNTAS FRECUENTES:</h3>
         </CardHeader>
@@ -127,7 +115,7 @@ export function PDFContent({
 
       {/* Footer */}
       <Card>
-        <CardContent className="bg-primary text-center py-4">
+        <CardContent className="bg-primary flex items-center justify-center text-center py-4">
           <p className="text-foreground font-semibold">
             SOMOS DECORTINAS S.A.S - CUIT: 30-71765031-6
           </p>

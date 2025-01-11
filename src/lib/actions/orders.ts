@@ -44,7 +44,7 @@ export async function addOrderItems(
   try {
     const insertedItems = await db.insert(orderItems).values(
       rawItems.map((item) => ({
-        accessories: item.accessories,
+        accessory: item.accessory,
         category: item.category,
         orderId: item.orderId,
         qty: item.qty,
@@ -106,7 +106,7 @@ export async function addOrderWithItems(
       // Crear los ítems de la orden
       const insertedItems = await trx.insert(orderItems).values(
         rawItemsInput.map((item) => ({
-          accessories: item.accessories,
+          accessory: item.accessory,
           category: item.category,
           orderId: order.id, // Asociar con la ID de la orden creada
           qty: item.qty,
@@ -285,6 +285,85 @@ export async function updateOrder(rawInput: z.infer<typeof orderSchema>) {
   }
 }
 
+export async function updateOrderWithItems(
+  orderId: string,
+  rawOrderInput: z.infer<typeof orderSchema>,
+  rawItemsInput: z.infer<typeof orderItemSchema>[]
+) {
+  try {
+    const result = await db.transaction(async (trx) => {
+      // Verificar si la orden existe
+      const existingOrder = await trx
+        .select()
+        .from(orders)
+        .where(eq(orders.id, orderId));
+
+      if (!existingOrder.length) {
+        throw new Error(`Order with ID ${orderId} not found`);
+      }
+
+      // Actualizar la información de la orden
+      await trx
+        .update(orders)
+        .set({
+          company: rawOrderInput.company,
+          client: rawOrderInput.client,
+          email: rawOrderInput.email,
+          status: rawOrderInput.status as OrderStatus,
+          updatedAt: new Date(),
+        })
+        .where(eq(orders.id, orderId));
+
+      // Eliminar los ítems existentes asociados a la orden
+      await trx.delete(orderItems).where(eq(orderItems.orderId, orderId));
+
+      // Insertar los nuevos ítems
+      const insertedItems = await trx.insert(orderItems).values(
+        rawItemsInput.map((item) => ({
+          accessory: item.accessory,
+          category: item.category,
+          orderId: orderId, // Asociar con la ID de la orden
+          qty: item.qty,
+          name: item.name,
+          type: item.type,
+          color: item.color,
+          height: item.height,
+          width: item.width,
+          support: item.support,
+          fall: item.fall,
+          chain: item.chain,
+          chainSide: item.chainSide,
+          opening: item.opening,
+          pinches: item.pinches,
+          panels: item.panels,
+          price: item.price,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }))
+      );
+
+      return {
+        order: {
+          ...rawOrderInput,
+          id: orderId,
+        },
+        insertedItems,
+      };
+    });
+
+    return {
+      data: result,
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error updating order with items:", err);
+    return {
+      data: null,
+      error: err,
+    };
+  }
+}
+
 export async function updateOrderItems(
   rawItems: z.infer<typeof orderItemSchema>[]
 ) {
@@ -302,7 +381,7 @@ export async function updateOrderItems(
         await db
           .update(orderItems)
           .set({
-            accessories: item.accessories,
+            accessory: item.accessory,
             category: item.category,
             orderId: item.orderId,
             qty: item.qty,

@@ -3,7 +3,7 @@ import {
   addOrderWithItems,
   deleteOrder,
   getOrders,
-  updateOrder,
+  updateOrderWithItems,
 } from "@/lib/actions/orders";
 import { NextResponse } from "next/server";
 import { getUserWithAttributes } from "@/lib/queries/user";
@@ -54,26 +54,29 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    const orderData = await req.json();
-    const result = await updateOrder(orderData);
+    const { orderId, orderData, orderItemsData } = await req.json();
 
-    if (result.error) {
-      throw result.error;
+    const result = await updateOrderWithItems(
+      orderId,
+      orderData,
+      orderItemsData
+    );
+
+    if (!result.data) {
+      throw new Error("Failed to update order with items");
     }
 
     return new Response(JSON.stringify(result.data), { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("Error in PUT /api/order:", error);
 
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 422 });
     }
 
-    if (error instanceof Error) {
-      return new Response(error.message, { status: 500 });
-    }
-
-    return new Response("Something went wrong", { status: 500 });
+    return new Response("Internal Server Error", {
+      status: 500,
+    });
   }
 }
 
