@@ -102,6 +102,7 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
         <PDFContent
           curtains={order.items}
           clientName={order.client}
+          total={formatPrice(calculateOrderTotals(order.items).totalAmount)}
           quoteDate={formatDate(order.createdAt)}
         />
       </HiddenPDFContainer>

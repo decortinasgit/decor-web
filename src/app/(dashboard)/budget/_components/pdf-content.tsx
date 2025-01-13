@@ -14,12 +14,14 @@ interface PDFContentProps {
   curtains: Array<OrderItem> | undefined;
   clientName: string;
   quoteDate: string;
+  total: string;
 }
 
 export function PDFContent({
   curtains,
   clientName,
   quoteDate,
+  total,
 }: PDFContentProps) {
   if (!curtains) {
     return (
@@ -54,7 +56,7 @@ export function PDFContent({
 
       {/* Curtains Table */}
 
-      <CurtainsTablePDF curtains={curtains} />
+      <CurtainsTablePDF curtains={curtains} total={total} />
 
       {/* Static FAQ Section */}
       <Card className="my-6">

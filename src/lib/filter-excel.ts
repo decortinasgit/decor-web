@@ -32,7 +32,9 @@ export async function processExcelData(
         : item["TIPO DE ITEM"] === Category.ITEM_E
         ? data
             .filter(
-              (accessory) => accessory["TIPO DE ITEM"] === Category.ITEM_D
+              (accessory) =>
+                accessory["TIPO DE ITEM"] === Category.ITEM_D &&
+                accessory.NOMBRE === item.NOMBRE
             )
             .map((accessory) => ({
               id: `${accessory.Codigos}-accessory`,
@@ -48,7 +50,8 @@ export async function processExcelData(
             .filter(
               (chain) =>
                 chain["TIPO DE ITEM"] === Category.ITEM_I ||
-                chain["TIPO DE ITEM"] === Category.ITEM_C
+                (chain["TIPO DE ITEM"] === Category.ITEM_C &&
+                  chain.NOMBRE === item.NOMBRE)
             )
             .map((chain) => ({
               id: `${chain.Codigos}-accessory`,
