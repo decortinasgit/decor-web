@@ -71,10 +71,10 @@ export const getColumns = ({
     },
     {
       accessorKey: "Accesorio",
-      header: "Soporte",
+      header: "Accesorio",
       cell: ({ row }) => (
         <div className="truncate">
-          {row.original.accessories ? row.original.accessories[0].type : "N/A"}
+          {row.original.accessory ?? "N/A"}
         </div>
       ),
     },

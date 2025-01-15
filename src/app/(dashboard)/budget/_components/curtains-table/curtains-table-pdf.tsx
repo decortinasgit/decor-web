@@ -20,6 +20,10 @@ export function CurtainsTablePDF({ curtains, total }: CurtainsTableProps) {
           <th className="border px-2 py-2">Soporte</th>
           <th className="border px-2 py-2">Caída</th>
           <th className="border px-2 py-2">Cadena</th>
+          <th className="border px-2 py-2">Lado Cadena</th>
+          <th className="border px-2 py-2">Apertura</th>
+          <th className="border px-2 py-2">Pinzas</th>
+          <th className="border px-2 py-2">Paneles</th>
           <th className="border px-2 py-2">Accesorios</th>
           <th className="border px-2 py-2">Precio</th>
         </tr>
@@ -37,6 +41,10 @@ export function CurtainsTablePDF({ curtains, total }: CurtainsTableProps) {
             <td className="border px-2 py-2">{item.support || "-"}</td>
             <td className="border px-2 py-2">{item.fall || "-"}</td>
             <td className="border px-2 py-2">{item.chain || "-"}</td>
+            <td className="border px-2 py-2">{item.chainSide || "-"}</td>
+            <td className="border px-2 py-2">{item.opening || "-"}</td>
+            <td className="border px-2 py-2">{item.pinches || "-"}</td>
+            <td className="border px-2 py-2">{item.panels || "-"}</td>
             <td className="border px-2 py-2">{item.accessory || "-"}</td>
             <td className="border px-2 py-2">{formatPrice(item.price || 0)}</td>
           </tr>
@@ -44,7 +52,7 @@ export function CurtainsTablePDF({ curtains, total }: CurtainsTableProps) {
       </tbody>
       <tfoot>
         <tr className="bg-gray-100 font-bold">
-          <td className="border px-2 py-2 text-right" colSpan={9}>
+          <td className="border px-2 py-2 text-right" colSpan={13}>
             Total:
           </td>
           <td className="border px-2 py-2 text-center">{total}</td>

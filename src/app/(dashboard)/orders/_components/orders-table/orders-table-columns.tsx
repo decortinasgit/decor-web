@@ -4,7 +4,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { toast } from "sonner";
 import { MoreHorizontal } from "lucide-react";
 
-import { formatDate } from "@/lib/utils";
+import { calculateOrderTotals, formatDate, formatPrice } from "@/lib/utils";
 import { OrderWithItems } from "@/types/orders";
 import { defaultStatusCols } from "@/lib/store";
 
@@ -48,17 +48,23 @@ export const getColumns = ({
     {
       accessorKey: "company",
       header: "Compañía",
-      cell: ({ row }) => <div className="truncate">{row.getValue("company")}</div>,
+      cell: ({ row }) => (
+        <div className="truncate">{row.getValue("company")}</div>
+      ),
     },
     {
       accessorKey: "client",
       header: "Cliente",
-      cell: ({ row }) => <div className="truncate">{row.getValue("client")}</div>,
+      cell: ({ row }) => (
+        <div className="truncate">{row.getValue("client")}</div>
+      ),
     },
     {
       accessorKey: "email",
       header: "Correo",
-      cell: ({ row }) => <div className="truncate">{row.getValue("email")}</div>,
+      cell: ({ row }) => (
+        <div className="truncate">{row.getValue("email")}</div>
+      ),
     },
     {
       accessorKey: "createdAt",
@@ -173,6 +179,9 @@ export const getColumns = ({
                 curtains={order.items}
                 clientName={order.client}
                 quoteDate={formatDate(order.createdAt)}
+                total={formatPrice(
+                  calculateOrderTotals(order.items).totalAmount
+                )}
               />
             </HiddenPDFContainer>
 

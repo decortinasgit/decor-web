@@ -6,7 +6,6 @@ import { useDataTable } from "@/hooks/use-data-table";
 import { getColumns } from "./orders-table-columns";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
 import { OrderWithItems } from "@/types/orders";
-import { useOrderStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { DataTableFilterField } from "@/types";
 
