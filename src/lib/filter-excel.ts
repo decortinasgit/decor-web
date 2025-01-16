@@ -49,13 +49,12 @@ export async function processExcelData(
         ? data
             .filter(
               (chain) =>
-                chain["TIPO DE ITEM"] === Category.ITEM_I ||
-                (chain["TIPO DE ITEM"] === Category.ITEM_C &&
-                  chain.NOMBRE === item.NOMBRE)
+                chain["TIPO DE ITEM"] === Category.ITEM_C &&
+                chain.NOMBRE === item.NOMBRE
             )
             .map((chain) => ({
-              id: `${chain.Codigos}-accessory`,
-              name: chain.NOMBRE,
+              id: `${chain.Codigos}-chain`,
+              name: chain.TELA,
               price: chain["PRECIO EN USD"].toString(),
               createdAt: now,
               updatedAt: null,

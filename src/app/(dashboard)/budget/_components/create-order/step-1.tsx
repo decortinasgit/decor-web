@@ -491,6 +491,7 @@ const Step1 = ({
 
                   {matchingCurtain &&
                     matchingCurtain.chains &&
+                    matchingCurtain.chains.length > 0 &&
                     isNotCategoryHOrD && (
                       <FormField
                         control={form.control}

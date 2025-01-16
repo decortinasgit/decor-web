@@ -14,6 +14,7 @@ import SidebarNav from "./_components/sidebar-nav";
 import { useEffect, useState } from "react";
 import { User } from "@/db/schema";
 import axios from "axios";
+import Loader from "@/components/custom/loader";
 
 export default function SettingsLayout({
   children,
@@ -21,6 +22,7 @@ export default function SettingsLayout({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<User>();
+  const [loading, setLoading] = useState(true);
 
   const handleGetUser = async () => {
     try {
@@ -28,12 +30,19 @@ export default function SettingsLayout({
       setUser(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     handleGetUser();
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <PageContainer scrollable={true}>
       <Layout>
