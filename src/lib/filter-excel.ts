@@ -6,63 +6,81 @@ export async function processExcelData(
 ): Promise<{ curtains: Curtains[] }> {
   const now = new Date();
 
-  const curtainsData = data.map((item) => ({
-    id: item.Codigos,
-    name: item.NOMBRE,
-    type: item.TELA || "-",
-    color: item.Color || "-",
-    price: item["PRECIO EN USD"].toString(),
-    unity: item.UNIDAD,
-    category: item["TIPO DE ITEM"],
-    accessories:
-      item["TIPO DE ITEM"] === Category.ITEM_B
-        ? data
-            .filter(
-              (accessory) =>
-                accessory["TIPO DE ITEM"] === Category.ITEM_A &&
-                accessory.NOMBRE === item.NOMBRE
-            )
-            .map((accessory) => ({
-              id: `${accessory.Codigos}-accessory`,
-              type: accessory.TELA,
-              price: accessory["PRECIO EN USD"].toString(),
-              createdAt: now,
-              updatedAt: null,
-            }))
-        : item["TIPO DE ITEM"] === Category.ITEM_E
-        ? data
-            .filter(
-              (accessory) =>
-                accessory["TIPO DE ITEM"] === Category.ITEM_D &&
-                accessory.NOMBRE === item.NOMBRE
-            )
-            .map((accessory) => ({
-              id: `${accessory.Codigos}-accessory`,
-              type: accessory.TELA,
-              price: accessory["PRECIO EN USD"].toString(),
-              createdAt: now,
-              updatedAt: null,
-            }))
-        : null,
-    chains:
-      item["TIPO DE ITEM"] === Category.ITEM_B
-        ? data
-            .filter(
-              (chain) =>
-                chain["TIPO DE ITEM"] === Category.ITEM_C &&
-                chain.NOMBRE === item.NOMBRE
-            )
-            .map((chain) => ({
-              id: `${chain.Codigos}-chain`,
-              name: chain.TELA,
-              price: chain["PRECIO EN USD"].toString(),
-              createdAt: now,
-              updatedAt: null,
-            }))
-        : null,
-    createdAt: now,
-    updatedAt: null,
-  }));
+  const curtainsData = data
+    .filter((item) => item["TIPO DE ITEM"] !== Category.ITEM_AA)
+    .map((item) => ({
+      id: item.Codigos,
+      name: item.NOMBRE,
+      type: item.TELA || "-",
+      color: item.Color || "-",
+      price: item["PRECIO EN USD"].toString(),
+      unity: item.UNIDAD,
+      category: item["TIPO DE ITEM"],
+      accessories:
+        item["TIPO DE ITEM"] === Category.ITEM_B
+          ? data
+              .filter(
+                (accessory) =>
+                  accessory["TIPO DE ITEM"] === Category.ITEM_A &&
+                  accessory.NOMBRE === item.NOMBRE
+              )
+              .map((accessory) => ({
+                id: `${accessory.Codigos}-accessory`,
+                type: accessory.TELA,
+                price: accessory["PRECIO EN USD"].toString(),
+                createdAt: now,
+                updatedAt: null,
+              }))
+          : item["TIPO DE ITEM"] === Category.ITEM_E
+          ? data
+              .filter(
+                (accessory) =>
+                  accessory["TIPO DE ITEM"] === Category.ITEM_D &&
+                  accessory.NOMBRE === item.NOMBRE
+              )
+              .map((accessory) => ({
+                id: `${accessory.Codigos}-accessory`,
+                type: accessory.TELA,
+                price: accessory["PRECIO EN USD"].toString(),
+                createdAt: now,
+                updatedAt: null,
+              }))
+          : null,
+      chains:
+        item["TIPO DE ITEM"] === Category.ITEM_B
+          ? data
+              .filter(
+                (chain) =>
+                  chain["TIPO DE ITEM"] === Category.ITEM_C &&
+                  chain.NOMBRE === item.NOMBRE
+              )
+              .map((chain) => ({
+                id: `${chain.Codigos}-chain`,
+                name: chain.TELA,
+                price: chain["PRECIO EN USD"].toString(),
+                createdAt: now,
+                updatedAt: null,
+              }))
+          : null,
+      createdAt: now,
+      updatedAt: null,
+    }));
 
-  return { curtains: curtainsData };
+  const accessoriesData = data
+    .filter((item) => item["TIPO DE ITEM"] === Category.ITEM_AA)
+    .map((item) => ({
+      id: item.Codigos,
+      name: item.NOMBRE,
+      type: item.TELA || "-",
+      color: item.Color || "-",
+      price: item["PRECIO EN USD"].toString(),
+      unity: item.UNIDAD,
+      accessories: null,
+      chains: null,
+      category: item["TIPO DE ITEM"],
+      createdAt: now,
+      updatedAt: null,
+    }));
+
+  return { curtains: [...curtainsData, ...accessoriesData] };
 }

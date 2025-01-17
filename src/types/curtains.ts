@@ -31,6 +31,7 @@ export interface ExcelData {
 
 export enum Category {
   ITEM_A = "ITEM A",
+  ITEM_AA = "ITEM AA",
   ITEM_B = "ITEM B",
   ITEM_C = "ITEM C",
   ITEM_D = "ITEM D",
