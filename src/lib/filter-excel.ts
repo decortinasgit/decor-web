@@ -7,7 +7,7 @@ export async function processExcelData(
   const now = new Date();
 
   const curtainsData = data
-    .filter((item) => item["TIPO DE ITEM"] !== Category.ITEM_AA)
+    .filter((item) => item["TIPO DE ITEM"] !== Category.ITEM_A)
     .map((item) => ({
       id: item.Codigos,
       name: item.NOMBRE,
@@ -66,21 +66,5 @@ export async function processExcelData(
       updatedAt: null,
     }));
 
-  const accessoriesData = data
-    .filter((item) => item["TIPO DE ITEM"] === Category.ITEM_AA)
-    .map((item) => ({
-      id: item.Codigos,
-      name: item.NOMBRE,
-      type: item.TELA || "-",
-      color: item.Color || "-",
-      price: item["PRECIO EN USD"].toString(),
-      unity: item.UNIDAD,
-      accessories: null,
-      chains: null,
-      category: item["TIPO DE ITEM"],
-      createdAt: now,
-      updatedAt: null,
-    }));
-
-  return { curtains: [...curtainsData, ...accessoriesData] };
+  return { curtains: curtainsData };
 }

@@ -4,7 +4,7 @@ import { Accesory, Category, Chain } from "@/types/curtains";
 export const additionalFields = (curtainName: string) => {
   if (curtainName.toLowerCase().trim() === "roller") {
     return ["support", "fall", "chain", "chainSide"];
-  } else if (curtainName.toLowerCase().trim() === "bandas") {
+  } else if (curtainName.toLowerCase().trim() === "bandas verticales") {
     return ["support", "chain", "chainSide", "opening"];
   } else if (
     curtainName.trim().toLowerCase() === "riel europeo" ||

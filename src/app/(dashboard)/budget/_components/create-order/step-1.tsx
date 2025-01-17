@@ -364,7 +364,7 @@ const Step1 = ({
                   )}
 
                   {/* Otros campos principales y adicionales */}
-                  {
+                  {isNotCategoryGOrC && (
                     <FormField
                       control={form.control}
                       name={`curtains.${index}.width`}
@@ -392,9 +392,9 @@ const Step1 = ({
                         </FormItem>
                       )}
                     />
-                  }
+                  )}
 
-                  {
+                  {isNotCategoryGOrC && (
                     <FormField
                       control={form.control}
                       name={`curtains.${index}.height`}
@@ -422,7 +422,7 @@ const Step1 = ({
                         </FormItem>
                       )}
                     />
-                  }
+                  )}
 
                   {/* Campos adicionales condicionados */}
                   {showField("support") && isNotCategoryHOrD && (
