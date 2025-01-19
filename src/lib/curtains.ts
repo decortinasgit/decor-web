@@ -1,7 +1,7 @@
 import { OrderItem } from "@/db/schema";
 import { Accesory, Category, Chain } from "@/types/curtains";
 
-export const additionalFields = (curtainName: string) => {
+export const additionalFields = (curtainName: string) => {  
   if (curtainName.toLowerCase().trim() === "roller") {
     return ["support", "fall", "chain", "chainSide"];
   } else if (curtainName.toLowerCase().trim() === "bandas verticales") {

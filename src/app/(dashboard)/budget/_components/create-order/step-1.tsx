@@ -106,10 +106,14 @@ const Step1 = ({
         );
 
         const matchingCurtain = getCurtainObject(index);
+        let isNotCategoryH;
         let isNotCategoryHOrD;
         let isNotCategoryGOrC;
 
         if (matchingCurtain?.category) {
+          isNotCategoryH = ![Category.ITEM_H].includes(
+            matchingCurtain?.category
+          );
           isNotCategoryHOrD = ![Category.ITEM_H, Category.ITEM_D].includes(
             matchingCurtain?.category
           );
@@ -425,7 +429,7 @@ const Step1 = ({
                   )}
 
                   {/* Campos adicionales condicionados */}
-                  {showField("support") && isNotCategoryHOrD && (
+                  {showField("support") && isNotCategoryH && (
                     <FormField
                       control={form.control}
                       name={`curtains.${index}.support`}
