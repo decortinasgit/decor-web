@@ -6,7 +6,7 @@ import {
   UseFieldArrayRemove,
   UseFormReturn,
 } from "react-hook-form";
-import { AlertTriangleIcon, Copy, Trash2Icon } from "lucide-react";
+import { AlertCircle, AlertTriangleIcon, Trash2Icon } from "lucide-react";
 
 import {
   additionalFields,
@@ -24,6 +24,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/custom/button";
 import {
   FormControl,
@@ -41,7 +42,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  chainOptions,
   chainSideOptions,
   fallOptions,
   openingOptions,
@@ -50,6 +50,11 @@ import {
   supportOptions,
 } from "@/constants/curtains";
 import { ProfileFormValues } from "../form-schema";
+import {
+  validateFabricLimits,
+  validateRollerSystem,
+  validateVerticalBands,
+} from "@/lib/validations/curtains";
 
 type Props = {
   fields: FieldArrayWithId<ProfileFormValues, "curtains", "id">[];
@@ -65,7 +70,6 @@ type Props = {
   handleNameChange: (index: number, value: string) => void;
   handleTypeChange: (index: number, value: string) => void;
   handleColorChange: (index: number, value: string) => void;
-  duplicateRow: (index: number) => void;
   append: UseFieldArrayAppend<ProfileFormValues, "curtains">;
 };
 
@@ -83,12 +87,15 @@ const Step1 = ({
   handleNameChange,
   handleTypeChange,
   handleColorChange,
-  duplicateRow,
   append,
 }: Props) => {
   return (
     <>
       {fields.map((field, index) => {
+        let rollerValidation;
+        let fabricValidation;
+        let verticalBandValidation;
+
         const nameOptions = getUniqueValues(curtains, "name");
         const typeOptions = getUniqueValues(
           curtains.filter(
@@ -106,6 +113,29 @@ const Step1 = ({
         );
 
         const matchingCurtain = getCurtainObject(index);
+
+        const width = form.watch(`curtains.${index}.width`);
+        const height = form.watch(`curtains.${index}.height`);
+        const accessory = form.watch(`curtains.${index}.accessory`);
+        const name = form.watch(`curtains.${index}.name`);
+        const type = form.watch(`curtains.${index}.type`);
+
+        if (width) {
+          if (accessory) {
+            rollerValidation =
+              name === "Roller"
+                ? validateRollerSystem(width, accessory)
+                : undefined;
+          }
+          if (height) {
+            fabricValidation = validateFabricLimits(type, height, width);
+          }
+          verticalBandValidation =
+            name === "Bandas Verticales"
+              ? validateVerticalBands(width)
+              : undefined;
+        }
+
         let isNotCategoryH;
         let isNotCategoryHOrD;
         let isNotCategoryGOrC;
@@ -207,6 +237,29 @@ const Step1 = ({
                 )}
               </AccordionTrigger>
               <AccordionContent>
+                {rollerValidation && (
+                  <Alert variant="destructive" className="mb-2">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Cuidado</AlertTitle>
+                    <AlertDescription>{rollerValidation}</AlertDescription>
+                  </Alert>
+                )}
+                {verticalBandValidation && (
+                  <Alert variant="destructive" className="mb-2">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Cuidado</AlertTitle>
+                    <AlertDescription>
+                      {verticalBandValidation}
+                    </AlertDescription>
+                  </Alert>
+                )}
+                {fabricValidation && (
+                  <Alert variant="destructive" className="mb-2">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Cuidado</AlertTitle>
+                    <AlertDescription>{fabricValidation}</AlertDescription>
+                  </Alert>
+                )}
                 <div
                   className={cn(
                     "relative mb-4 gap-8 rounded-md border p-4 md:grid md:grid-cols-3"

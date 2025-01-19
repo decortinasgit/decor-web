@@ -434,7 +434,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
                 handleNameChange={handleNameChange}
                 handleTypeChange={handleTypeChange}
                 handleColorChange={handleColorChange}
-                duplicateRow={duplicateRow}
               />
             )}
           </div>
