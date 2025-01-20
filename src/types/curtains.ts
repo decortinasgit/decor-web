@@ -7,6 +7,7 @@ export interface Curtain {
   width?: number | undefined;
   category: string;
   accessories?: Accesory[] | undefined;
+  accessory?: string | undefined;
   support?: string | undefined;
   fall?: string | undefined;
   chains?: Chain[] | undefined;

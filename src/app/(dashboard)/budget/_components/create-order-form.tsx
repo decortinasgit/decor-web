@@ -357,7 +357,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
       ...currentCurtains,
       {
         ...newCurtain,
-        accessories: form.getValues("curtains")[index].accessories,
+        accessories: form.getValues("curtains")[index].accessory,
         chains: form.getValues("curtains")[index].chain,
       },
     ];
