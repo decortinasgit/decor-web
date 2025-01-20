@@ -15,12 +15,14 @@ export const curtainSchema = z.object({
 
 export type CurtainSchema = z.infer<typeof curtainSchema>;
 
-
 export const validateRollerSystem = (width: number, accessory: string) => {
   if (width <= 180 && accessory !== "SQ3838-accessory")
     return "Se recomienda Sistema Quantum 38mm con caño de 38mm.";
-  if (width > 180 && width <= 240 && accessory !== "SQ4545-accessory")
+  if (width > 180 && width < 240 && accessory !== "SQ4545-accessory")
     return "Se recomienda Sistema Quantum 45mm con caño de 45mm.";
+  if (width >= 240 && accessory !== "SQ4558-accessory") {
+    return "Se recomienda Sistema Quantum 45mm con caño de 58mm.";
+  }
   return undefined;
 };
 
@@ -37,6 +39,7 @@ export const validateFabricLimits = (
 };
 
 export const validateVerticalBands = (width: number) => {
-  if (width > 400) return "El riel no puede superar los 4 metros. Cotizar en dos rieles.";
+  if (width > 400)
+    return "El riel no puede superar los 4 metros. Cotizar en dos rieles.";
   return undefined;
 };
