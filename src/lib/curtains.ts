@@ -1,7 +1,7 @@
 import { OrderItem } from "@/db/schema";
 import { Accesory, Category, Chain } from "@/types/curtains";
 
-export const additionalFields = (curtainName: string) => {  
+export const additionalFields = (curtainName: string) => {
   if (curtainName.toLowerCase().trim() === "roller") {
     return ["support", "fall", "chain", "chainSide"];
   } else if (curtainName.toLowerCase().trim() === "bandas verticales") {
@@ -21,6 +21,33 @@ export const getUniqueValues = <T, K extends keyof T>(
   key: K
 ): T[K][] => {
   return Array.from(new Set(items.map((item) => item[key]))).sort() as T[K][];
+};
+
+export const getGroupedOptions = <T, K extends keyof T>(
+  items: T[],
+  key: K,
+  groupKey: keyof T
+): { group: string; types: T[K][] }[] => {
+  const grouped = items.reduce((acc, item) => {
+    const group = item[groupKey] as string | undefined;
+    if (!group) return acc; // Ignorar si el grupo no existe
+
+    if (!acc[group]) {
+      acc[group] = new Set<T[K]>();
+    }
+
+    const type = item[key];
+    if (type) {
+      acc[group].add(type);
+    }
+
+    return acc;
+  }, {} as Record<string, Set<T[K]>>);
+
+  return Object.entries(grouped).map(([group, types]) => ({
+    group,
+    types: Array.from(types),
+  }));
 };
 
 const fabricQuantity = (

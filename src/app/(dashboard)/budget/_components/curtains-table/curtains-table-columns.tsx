@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/custom/button";
 import { MoreHorizontal } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, getNameWithoutPrefix } from "@/lib/utils";
 import { OrderItem } from "@/db/schema";
 
 interface GetColumnsOptions {
@@ -37,7 +37,11 @@ export const getColumns = ({
     {
       accessorKey: "name",
       header: "Nombre",
-      cell: ({ row }) => <div className="truncate">{row.getValue("name")}</div>,
+      cell: ({ row }) => (
+        <div className="truncate">
+          {getNameWithoutPrefix(row.getValue("name"))}
+        </div>
+      ),
     },
     {
       accessorKey: "type",
@@ -73,9 +77,7 @@ export const getColumns = ({
       accessorKey: "Accesorio",
       header: "Accesorio",
       cell: ({ row }) => (
-        <div className="truncate">
-          {row.original.accessory ?? "N/A"}
-        </div>
+        <div className="truncate">{row.original.accessory ?? "N/A"}</div>
       ),
     },
     {

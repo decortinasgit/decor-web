@@ -10,13 +10,14 @@ import { AlertCircle, AlertTriangleIcon, Trash2Icon } from "lucide-react";
 
 import {
   additionalFields,
+  getGroupedOptions,
   getUniqueValues,
   priceCalculation,
   resetCurtain,
 } from "@/lib/curtains";
 import { Costs, Curtains } from "@/db/schema";
 import { Accesory, Category, Chain, Curtain } from "@/types/curtains";
-import { cn, formatPrice } from "@/lib/utils";
+import { cn, formatPrice, getNameWithoutPrefix } from "@/lib/utils";
 
 import {
   Accordion,
@@ -37,7 +38,9 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -96,11 +99,12 @@ const Step1 = ({
         let fabricValidation;
         let verticalBandValidation;
 
-        const nameOptions = getUniqueValues(curtains, "name");
+        const groupedNameOptions = getGroupedOptions(curtains, "name", "group");
+
         const typeOptions = getUniqueValues(
-          curtains.filter(
-            (curtain) => curtain.name === selectedCurtainValues[index].name
-          ),
+          curtains.filter((curtain) => {
+            return curtain.name === selectedCurtainValues[index].name;
+          }),
           "type"
         );
         const colorOptions = getUniqueValues(
@@ -153,9 +157,9 @@ const Step1 = ({
         }
 
         const showField = (fieldName: string) =>
-          additionalFields(selectedCurtainValues[index].name).includes(
-            fieldName
-          );
+          additionalFields(
+            getNameWithoutPrefix(selectedCurtainValues[index].name)
+          ).includes(fieldName);
 
         const price = getCurtainObject(index)
           ? parseFloat(getCurtainObject(index)?.price!) *
@@ -297,7 +301,7 @@ const Step1 = ({
                         <Select
                           onValueChange={(value) => {
                             field.onChange(value);
-                            handleNameChange(index, value);
+                            handleNameChange(index, getNameWithoutPrefix(value));
                           }}
                           {...field}
                         >
@@ -307,11 +311,21 @@ const Step1 = ({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {nameOptions.map((name) => (
-                              <SelectItem key={name} value={name}>
-                                {name}
-                              </SelectItem>
-                            ))}
+                            {groupedNameOptions.map(
+                              ({ group, types: names }, index) => (
+                                <SelectGroup key={index}>
+                                  <SelectLabel>{group}</SelectLabel>
+                                  {names.map((name, index) => (
+                                    <SelectItem
+                                      key={index}
+                                      value={group + "_" + name}
+                                    >
+                                      {name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              )
+                            )}
                           </SelectContent>
                         </Select>
                         <FormMessage />

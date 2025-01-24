@@ -135,3 +135,9 @@ export function calculateOrderTotals(items: OrderItem[]) {
     { totalQuantity: 0, totalAmount: 0 }
   );
 }
+
+export function getNameWithoutPrefix(fullName: string) {
+  console.log(fullName);
+  
+  return fullName.split("_").slice(1).join("_"); // Elimina el prefijo antes del guion bajo
+}

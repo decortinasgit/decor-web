@@ -7,6 +7,7 @@ export const curtains = pgTable("curtains", {
   name: text("name").notNull(),
   type: text("type").notNull(),
   color: text("color"),
+  group: text("group"),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   unity: text("unity"),
   accessories: json("accessories").$type<Accesory[]>(),

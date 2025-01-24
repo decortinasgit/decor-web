@@ -13,6 +13,7 @@ export async function processExcelData(
       name: item.NOMBRE,
       type: item.TELA || "-",
       color: item.Color || "-",
+      group: item.Categoria || "-",
       price: item["PRECIO EN USD"].toString(),
       unity: item.UNIDAD,
       category: item["TIPO DE ITEM"],

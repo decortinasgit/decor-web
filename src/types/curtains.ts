@@ -22,6 +22,7 @@ export interface ExcelData {
   Codigos: string;
   NOMBRE: string;
   TELA: string;
+  Categoria: string;
   Color: string;
   "PRECIO EN USD": number;
   "PRECIO EN $": number;
