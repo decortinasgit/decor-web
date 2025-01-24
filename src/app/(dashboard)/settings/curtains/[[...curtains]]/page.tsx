@@ -27,6 +27,7 @@ const CurtainsPage = () => {
       toast.error("Error al subir el archivo.");
     } finally {
       setLoading(false);
+      window.location.reload();
     }
   };
 
