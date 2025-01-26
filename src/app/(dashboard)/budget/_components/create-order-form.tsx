@@ -13,14 +13,7 @@ import { Accesory, Chain, Curtain } from "@/types/curtains";
 import { cn } from "@/lib/utils";
 import { profileSchema, type ProfileFormValues } from "./form-schema";
 import { CurtainsTable } from "./curtains-table/curtains-table";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { priceCalculation, resetCurtain } from "@/lib/curtains";
 
@@ -28,7 +21,6 @@ import Step0 from "./create-order/step-0";
 import Step1 from "./create-order/step-1";
 import CreateOrderFormNavigation from "./create-order/create-order-form-navigation";
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
-import { Input } from "@/components/ui/input";
 
 interface FormType {
   curtains: Curtain[];

@@ -2,83 +2,13 @@ import { z } from "zod";
 import { unstable_noStore as noStore } from "next/cache";
 import { db } from "@/db";
 import { orders, orderItems, OrderItem, OrderStatus } from "@/db/schema";
-import { eq, gte, lte, sql } from "drizzle-orm";
+import { desc, eq, gte, lte, sql } from "drizzle-orm";
 import {
   orderItemSchema,
   orderSchema,
   orderStatusSchema,
 } from "../validations/orders";
 import { OrderStats } from "@/types/orders";
-
-export async function addOrder(rawInput: z.infer<typeof orderSchema>) {
-  try {
-    const order = await db
-      .insert(orders)
-      .values({
-        id: rawInput.id,
-        company: rawInput.company,
-        client: rawInput.client,
-        email: rawInput.email,
-        status: "pending",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .returning({ id: orders.id, email: orders.email });
-
-    return {
-      data: order,
-      error: null,
-    };
-  } catch (err) {
-    console.error("Error adding order:", err);
-    return {
-      data: null,
-      error: err,
-    };
-  }
-}
-
-export async function addOrderItems(
-  rawItems: z.infer<typeof orderItemSchema>[]
-) {
-  try {
-    const insertedItems = await db.insert(orderItems).values(
-      rawItems.map((item) => ({
-        accessory: item.accessory,
-        category: item.category,
-        orderId: item.orderId,
-        qty: item.qty,
-        name: item.name,
-        type: item.type,
-        color: item.color,
-        height: item.height,
-        width: item.width,
-        support: item.support,
-        fall: item.fall,
-        chain: item.chain,
-        chainSide: item.chainSide,
-        opening: item.opening,
-        pinches: item.pinches,
-        panels: item.panels,
-        price: item.price,
-        comment: item.comment,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }))
-    );
-
-    return {
-      data: insertedItems,
-      error: null,
-    };
-  } catch (err) {
-    console.error("Error adding order items:", err);
-    return {
-      data: null,
-      error: err,
-    };
-  }
-}
 
 export async function addOrderWithItems(
   rawOrderInput: z.infer<typeof orderSchema>,
@@ -264,30 +194,6 @@ export async function getOrders({
   }
 }
 
-export async function updateOrder(rawInput: z.infer<typeof orderSchema>) {
-  try {
-    const result = await db
-      .update(orders)
-      .set({
-        company: rawInput.company,
-        client: rawInput.client,
-        updatedAt: new Date(),
-      })
-      .where(eq(orders.id, rawInput.id));
-
-    return {
-      data: result,
-      error: null,
-    };
-  } catch (err) {
-    console.error("Error updating order:", err);
-    return {
-      data: null,
-      error: err,
-    };
-  }
-}
-
 export async function updateOrderWithItems(
   orderId: string,
   rawOrderInput: z.infer<typeof orderSchema>,
@@ -360,66 +266,6 @@ export async function updateOrderWithItems(
     };
   } catch (err) {
     console.error("Error updating order with items:", err);
-    return {
-      data: null,
-      error: err,
-    };
-  }
-}
-
-export async function updateOrderItems(
-  rawItems: z.infer<typeof orderItemSchema>[]
-) {
-  try {
-    // Primero elimina ítems que no estén en el nuevo listado
-    const itemIds = rawItems.map((item) => item.id).filter(Boolean);
-    await db
-      .delete(orderItems)
-      .where(sql`${orderItems.id} NOT IN (${sql.join(itemIds)})`);
-
-    // Luego inserta o actualiza ítems existentes
-    for (const item of rawItems) {
-      if (item.id) {
-        // Actualiza ítem existente
-        await db
-          .update(orderItems)
-          .set({
-            accessory: item.accessory,
-            category: item.category,
-            orderId: item.orderId,
-            qty: item.qty,
-            name: item.name,
-            type: item.type,
-            color: item.color,
-            height: item.height,
-            width: item.width,
-            support: item.support,
-            fall: item.fall,
-            chain: item.chain,
-            chainSide: item.chainSide,
-            opening: item.opening,
-            pinches: item.pinches,
-            panels: item.panels,
-            price: item.price,
-            updatedAt: new Date(),
-          })
-          .where(eq(orderItems.id, item.id));
-      } else {
-        // Inserta nuevo ítem
-        await db.insert(orderItems).values({
-          ...item,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-      }
-    }
-
-    return {
-      data: "Items updated successfully",
-      error: null,
-    };
-  } catch (err) {
-    console.error("Error updating order items:", err);
     return {
       data: null,
       error: err,
@@ -587,6 +433,37 @@ export async function getOrderStatistics(): Promise<{
     };
   } catch (err) {
     console.error("Error fetching order statistics:", err);
+    return {
+      data: null,
+      error: err,
+    };
+  }
+}
+
+export async function getLastOrderId() {
+  try {
+    const lastOrder = await db
+      .select({
+        id: orders.id,
+      })
+      .from(orders)
+      .orderBy(desc(orders.createdAt))
+      .limit(1)
+      .execute();
+
+    if (lastOrder.length === 0) {
+      return {
+        data: null,
+        error: "No orders found.",
+      };
+    }
+
+    return {
+      data: lastOrder[0].id,
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error fetching the last order ID:", err);
     return {
       data: null,
       error: err,
