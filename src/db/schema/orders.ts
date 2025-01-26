@@ -17,6 +17,7 @@ export const orders = pgTable("orders", {
   client: text("client").notNull(),
   email: text("email").notNull(),
   status: orderStatus("status").default("pending").notNull(),
+  comment: text("comment"),
   ...lifecycleDates,
 });
 
@@ -41,6 +42,7 @@ export const orderItems = pgTable("order_items", {
   pinches: text("pinches"),
   panels: text("panels"),
   price: text("price"),
+  comment: text("comment"),
   ...lifecycleDates,
 });
 

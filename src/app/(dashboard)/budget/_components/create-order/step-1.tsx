@@ -301,7 +301,10 @@ const Step1 = ({
                         <Select
                           onValueChange={(value) => {
                             field.onChange(value);
-                            handleNameChange(index, getNameWithoutPrefix(value));
+                            handleNameChange(
+                              index,
+                              getNameWithoutPrefix(value)
+                            );
                           }}
                           {...field}
                         >
@@ -727,6 +730,27 @@ const Step1 = ({
                     />
                   )}
                 </div>
+                <FormField
+                  control={form.control}
+                  name={`curtains.${index}.comment`}
+                  render={({ field }) => (
+                    <FormItem className="mb-5 md:mb-0">
+                      <FormLabel>Comentario</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          disabled={loading}
+                          placeholder="Ingrese un comentario"
+                          value={field.value || ""}
+                          onChange={(e) =>
+                            field.onChange(e.target.value || undefined)
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </AccordionContent>
             </AccordionItem>
           </Accordion>

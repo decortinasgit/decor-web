@@ -61,6 +61,7 @@ export async function addOrderItems(
         pinches: item.pinches,
         panels: item.panels,
         price: item.price,
+        comment: item.comment,
         createdAt: new Date(),
         updatedAt: new Date(),
       }))
@@ -94,6 +95,7 @@ export async function addOrderWithItems(
           client: rawOrderInput.client,
           email: rawOrderInput.email,
           status: "pending",
+          comment: rawOrderInput.comment,
           createdAt: new Date(),
           updatedAt: new Date(),
         })
@@ -108,7 +110,7 @@ export async function addOrderWithItems(
         rawItemsInput.map((item) => ({
           accessory: item.accessory,
           category: item.category,
-          orderId: order.id, // Asociar con la ID de la orden creada
+          orderId: order.id,
           qty: item.qty,
           name: item.name,
           type: item.type,
@@ -123,6 +125,7 @@ export async function addOrderWithItems(
           pinches: item.pinches,
           panels: item.panels,
           price: item.price,
+          comment: item.comment,
           createdAt: new Date(),
           updatedAt: new Date(),
         }))

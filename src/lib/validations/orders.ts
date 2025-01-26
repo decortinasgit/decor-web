@@ -18,6 +18,7 @@ export const orderSchema = z.object({
   client: z.string().min(1, "Client name is required"),
   email: z.string().min(1, "Client email is required"),
   status: z.string(orderStatusSchema).optional(),
+  comment: z.string().optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
@@ -51,6 +52,7 @@ export const orderItemSchema = z.object({
   panels: z.string().optional(),
   price: z.string().min(1, "Item name is required"),
   category: z.string(),
+  comment: z.string().optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });

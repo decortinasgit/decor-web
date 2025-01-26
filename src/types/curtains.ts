@@ -16,6 +16,7 @@ export interface Curtain {
   pinches?: string | undefined;
   panels?: string | undefined;
   price?: string | undefined;
+  comment?: string | undefined;
 }
 
 export interface ExcelData {

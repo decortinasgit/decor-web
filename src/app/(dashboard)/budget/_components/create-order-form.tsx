@@ -195,6 +195,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
     form.setValue(`curtains.${index}.panels`, undefined);
     form.setValue(`curtains.${index}.pinches`, undefined);
     form.setValue(`curtains.${index}.support`, undefined);
+    form.setValue(`curtains.${index}.comment`, undefined);
   };
 
   const handleTypeChange = (index: number, value: string) => {
