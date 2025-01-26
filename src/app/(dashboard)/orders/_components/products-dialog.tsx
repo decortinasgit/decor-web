@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import {
   AlertDialogAction,
   AlertDialogContent,
@@ -9,7 +7,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { OrderWithItems } from "@/types/orders";
-import { formatPrice } from "@/lib/utils";
+import { CurtainsTable } from "../../budget/_components/curtains-table/curtains-table";
 
 interface ProductsDialogProps {
   orderProduct: OrderWithItems;
@@ -17,7 +15,7 @@ interface ProductsDialogProps {
 
 export function ProductsDialog({ orderProduct }: ProductsDialogProps) {
   return (
-    <AlertDialogContent className="max-w-screen-md max-h-[70vh] overflow-hidden">
+    <AlertDialogContent className="max-w-max max-h-[70vh] overflow-hidden">
       <AlertDialogHeader>
         <AlertDialogTitle>
           Productos para:{" "}
@@ -25,21 +23,15 @@ export function ProductsDialog({ orderProduct }: ProductsDialogProps) {
           {orderProduct.client}
         </AlertDialogTitle>
         <AlertDialogDescription className="flex flex-col gap-2 overflow-y-auto max-h-[calc(50vh-6rem)]">
-          {orderProduct.items?.length > 0 &&
-            orderProduct.items
-              .filter((item) => item !== null)
-              .map((item, index) => {
-                return (
-                  <div key={index} className="capitalize border rounded-md p-2">
-                    <div className="flex items-center gap-2">
-                      ({item.qty}) <strong className="mr-1">{item.name}</strong>
-                      <span className="truncate">
-                        {item.price ? formatPrice(item.price) : ""}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
+          {orderProduct.items?.length > 0 && (
+            <CurtainsTable
+              data={orderProduct.items}
+              pageCount={1}
+              hideActions
+              deleteRow={() => {}}
+              duplicateRow={() => {}}
+            />
+          )}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
