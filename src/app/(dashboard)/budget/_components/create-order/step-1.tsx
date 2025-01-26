@@ -233,12 +233,12 @@ const Step1 = ({
                       <Trash2Icon className="h-4 w-4 " />
                     </Button>
                   )}
+                  {errors?.curtains?.[index] && (
+                    <span className="alert right-8">
+                      <AlertTriangleIcon className="h-4 w-4 text-red-700" />
+                    </span>
+                  )}
                 </div>
-                {errors?.curtains?.[index] && (
-                  <span className="alert absolute right-8">
-                    <AlertTriangleIcon className="h-4 w-4 text-red-700" />
-                  </span>
-                )}
               </AccordionTrigger>
               <AccordionContent>
                 {rollerValidation && (
@@ -740,7 +740,7 @@ const Step1 = ({
                         <Input
                           type="text"
                           disabled={loading}
-                          placeholder="Ingrese un comentario"
+                          placeholder="Ingrese un comentario (opcional)"
                           value={field.value || ""}
                           onChange={(e) =>
                             field.onChange(e.target.value || undefined)
