@@ -73,7 +73,7 @@ export function AddOrderForm({ className, ...props }: AddOrderFormProps) {
                 <FormItem className="space-y-1">
                   <FormLabel>Empresa</FormLabel>
                   <FormControl>
-                    <Input placeholder="Decortinas" {...field} />
+                    <Input placeholder="Ingrese el nombre de la empresa..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -88,7 +88,7 @@ export function AddOrderForm({ className, ...props }: AddOrderFormProps) {
                     <FormLabel>Cliente</FormLabel>
                   </div>
                   <FormControl>
-                    <Input placeholder="Facundo Teran" {...field} />
+                    <Input placeholder="Ingrese nombre del cliente..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

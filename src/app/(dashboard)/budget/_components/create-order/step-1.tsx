@@ -53,11 +53,7 @@ import {
   supportOptions,
 } from "@/constants/curtains";
 import { ProfileFormValues } from "../form-schema";
-import {
-  validateFabricLimits,
-  validateRollerSystem,
-  validateVerticalBands,
-} from "@/lib/validations/curtains";
+import { validateCurtain } from "@/lib/validations/curtains";
 
 type Props = {
   fields: FieldArrayWithId<ProfileFormValues, "curtains", "id">[];
@@ -95,10 +91,6 @@ const Step1 = ({
   return (
     <>
       {fields.map((field, index) => {
-        let rollerValidation;
-        let fabricValidation;
-        let verticalBandValidation;
-
         const groupedNameOptions = getGroupedOptions(curtains, "name", "group");
 
         const typeOptions = getUniqueValues(
@@ -124,21 +116,14 @@ const Step1 = ({
         const name = form.watch(`curtains.${index}.name`);
         const type = form.watch(`curtains.${index}.type`);
 
-        if (width) {
-          if (accessory) {
-            rollerValidation =
-              name === "Roller"
-                ? validateRollerSystem(width, accessory)
-                : undefined;
-          }
-          if (height) {
-            fabricValidation = validateFabricLimits(type, height, width);
-          }
-          verticalBandValidation =
-            name === "Bandas Verticales"
-              ? validateVerticalBands(width)
-              : undefined;
-        }
+        const { rollerValidation, fabricValidation, verticalBandValidation } =
+          validateCurtain({
+            name: getNameWithoutPrefix(name),
+            type,
+            width,
+            height,
+            accessory,
+          });
 
         let isNotCategoryH;
         let isNotCategoryHOrD;

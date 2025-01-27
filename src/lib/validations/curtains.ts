@@ -43,3 +43,59 @@ export const validateVerticalBands = (width: number) => {
     return "El riel no puede superar los 4 metros. Cotizar en dos rieles.";
   return undefined;
 };
+
+type CurtainValidationParams = {
+  name: string;
+  type: string;
+  width?: number;
+  height?: number;
+  accessory?: string;
+};
+
+type CurtainValidationResult = {
+  rollerValidation?: string;
+  fabricValidation?: string;
+  verticalBandValidation?: string;
+};
+
+export const validateCurtain = ({
+  name,
+  type,
+  width,
+  height,
+  accessory,
+}: CurtainValidationParams): CurtainValidationResult => {
+  console.log("Validating curtain", name, type, width, height, accessory);
+  
+  const result: CurtainValidationResult = {};
+
+  // Validación para cortinas Roller
+  if (name === "Roller") {
+    if (width && accessory) {
+      const rollerError = validateRollerSystem(width, accessory);
+      if (rollerError) result.rollerValidation = rollerError;
+    }
+
+    // Validación específica para telas Roller
+    const restrictedFabrics = ["Sunscreen", "Southbeach", "Lux", "Cordoba"];
+    if (restrictedFabrics.includes(type) && width && height) {
+      if (height > 220 && width > 253) {
+        result.fabricValidation = `Para la tela "${type}", si la altura supera los 220 cm, el ancho no puede ser mayor a 253 cm.`;
+      }
+    }
+  }
+
+  // Validación para Bandas Verticales
+  if (name === "Bandas Verticales" && width) {
+    const verticalBandError = validateVerticalBands(width);
+    if (verticalBandError) result.verticalBandValidation = verticalBandError;
+  }
+
+  // Validación de límites de tela genérica
+  if (width && height) {
+    const fabricError = validateFabricLimits(type, height, width);
+    if (fabricError) result.fabricValidation = fabricError;
+  }
+
+  return result;
+};
