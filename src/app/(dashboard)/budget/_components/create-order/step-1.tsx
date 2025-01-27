@@ -70,6 +70,7 @@ type Props = {
   handleTypeChange: (index: number, value: string) => void;
   handleColorChange: (index: number, value: string) => void;
   append: UseFieldArrayAppend<ProfileFormValues, "curtains">;
+  isEditing?: boolean;
 };
 
 const Step1 = ({
@@ -87,6 +88,7 @@ const Step1 = ({
   handleTypeChange,
   handleColorChange,
   append,
+  isEditing,
 }: Props) => {
   return (
     <>
@@ -142,9 +144,9 @@ const Step1 = ({
         }
 
         const showField = (fieldName: string) =>
-          additionalFields(
-            getNameWithoutPrefix(selectedCurtainValues[index].name)
-          ).includes(fieldName);
+          additionalFields(selectedCurtainValues[index].name).includes(
+            fieldName
+          );
 
         const price = getCurtainObject(index)
           ? parseFloat(getCurtainObject(index)?.price!) *
@@ -284,6 +286,7 @@ const Step1 = ({
                       <FormItem className="mb-5 md:mb-0">
                         <FormLabel>Nombre</FormLabel>
                         <Select
+                          {...field}
                           onValueChange={(value) => {
                             field.onChange(value);
                             handleNameChange(
@@ -291,7 +294,11 @@ const Step1 = ({
                               getNameWithoutPrefix(value)
                             );
                           }}
-                          {...field}
+                          value={
+                            isEditing
+                              ? matchingCurtain?.group + "_" + field.value
+                              : field.value
+                          }
                         >
                           <FormControl>
                             <SelectTrigger>

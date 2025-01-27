@@ -20,6 +20,7 @@ import { generateEmailContent } from "@/lib/html";
 import { HiddenPDFContainer } from "@/components/hidden-pdf-container";
 import { PDFContent } from "@/app/(dashboard)/budget/_components/pdf-content";
 import { downloadPDFFromHTML } from "@/lib/pdf";
+import { convertItemsToCSV } from "@/lib/csv";
 
 const ActionsCell = ({
   order,
@@ -81,6 +82,21 @@ const ActionsCell = ({
     }
   }
 
+  async function copyItemsToClipboard(order: OrderWithItems) {
+    const csvContent = convertItemsToCSV(order);
+
+    try {
+      await navigator.clipboard.writeText(csvContent);
+      toast.message("Éxito!", {
+        description: `Los ítems de la orden han sido copiados al portapapeles en formato CSV.`,
+      });
+    } catch (error) {
+      toast.error("Lo siento!", {
+        description: `No se pudo copiar los ítems al portapapeles.`,
+      });
+      console.error("Error al copiar al portapapeles:", error);
+    }
+  }
   return (
     <>
       <HiddenPDFContainer ref={hiddenContainerRef}>
@@ -106,6 +122,9 @@ const ActionsCell = ({
             onClick={() => navigator.clipboard.writeText(order.id)}
           >
             Copiar ID
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => copyItemsToClipboard(order)}>
+            Copiar Artículos
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           {order.status === "pending" && (

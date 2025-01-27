@@ -8,7 +8,7 @@ import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
 import { Costs, Curtains } from "@/db/schema";
 import { Accesory, Chain, Curtain } from "@/types/curtains";
-import { cn } from "@/lib/utils";
+import { cn, extractPrefix, getNameWithoutPrefix } from "@/lib/utils";
 import { profileSchema, type ProfileFormValues } from "./form-schema";
 import { CurtainsTable } from "./curtains-table/curtains-table";
 import { Form } from "@/components/ui/form";
@@ -43,13 +43,11 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 }) => {
   const router = useRouter();
 
-  console.log(order, 'order');
-  
-
   const defaultValues = {
     company: order.company,
     client: order.client,
     curtains: order.items.map((item) => ({
+      id: item.id || "",
       accessory: item.accessory || "",
       category: item.category,
       chain: item.chain || "",
@@ -57,7 +55,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       color: item.color || "",
       fall: item.fall || "",
       height: item.height || 0,
-      id: item.id || "",
       name: item.name || "",
       opening: item.opening || "",
       orderId: item.orderId || "",
@@ -67,6 +64,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       qty: item.qty || 0,
       support: item.support || "",
       type: item.type || "",
+      group: item.group || "",
       width: item.width || 0,
     })),
   };
@@ -91,8 +89,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [data, setData] = useState<FormType>({} as FormType);
 
-  console.log(data, "data");
-
   const itemsPerPage = 10;
   const totalItems = data.curtains ? data.curtains.length : 0;
   const pageCount = Math.ceil(totalItems / itemsPerPage);
@@ -100,6 +96,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
   const [selectedCurtainValues, setSelectedCurtainValues] = useState<Curtain[]>(
     order.items.map((item) => ({
       ...defaultValues,
+      id: item.id || "",
       name: item.name || "",
       qty: item.qty || 0,
       price: item.price?.toString() || "0",
@@ -108,6 +105,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       color: item.color || "",
       type: item.type || "",
       category: item.category,
+      group: item.group || "",
     }))
   );
 
@@ -120,9 +118,15 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
         curtain.color === selectedCurtain.color
     );
 
-    return matchingCurtain
-      ? { ...matchingCurtain, category: matchingCurtain.category }
-      : null;
+    if (!matchingCurtain) {
+      return null;
+    }
+
+    return {
+      ...matchingCurtain,
+      category: matchingCurtain.category,
+      group: matchingCurtain.group || "",
+    };
   };
 
   const processForm: SubmitHandler<ProfileFormValues> = (formData) => {
@@ -178,6 +182,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
         category: matchingCurtain?.category || "",
         accessories: matchingCurtain?.accessories || undefined,
         chains: matchingCurtain?.chains || undefined,
+        group: matchingCurtain?.group || "",
       };
     });
 
@@ -205,6 +210,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       qty: updatedValues[index].qty,
       price: updatedValues[index].price,
       category: matchingCurtain?.category || "",
+      group: matchingCurtain?.group || "",
     };
 
     setSelectedCurtainValues(updatedValues);
@@ -295,10 +301,14 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
         userMail = response.data.email;
       }
 
-      const orderItemsData = data.curtains.map((curtain) => ({
+      const orderItemsData = data.curtains.map((curtain, index) => ({
         ...curtain,
         orderId: orderId,
+        id: order.items[index].id,
+        name: curtain.name,
       }));
+
+      console.log("Order items data:", orderItemsData);
 
       // Usar el nuevo endpoint PUT para actualizar la orden y los ítems
       await axios.put(
@@ -434,12 +444,13 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
                 handleNameChange={handleNameChange}
                 handleTypeChange={handleTypeChange}
                 handleColorChange={handleColorChange}
+                isEditing
               />
             )}
           </div>
         </form>
       </Form>
-      {currentStep === 2 && (
+      {currentStep === 2 && data.curtains ? (
         <div className="w-full flex-1">
           <div className="space-y-0.5">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
@@ -454,7 +465,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
             deleteRow={deleteRow}
           />
         </div>
-      )}
+      ) : null}
       {/* Navigation */}
       <CreateOrderFormNavigation
         prev={prev}

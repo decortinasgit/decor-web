@@ -43,6 +43,7 @@ export const orderItems = pgTable("order_items", {
   panels: text("panels"),
   price: text("price"),
   comment: text("comment"),
+  group: text("group"),
   ...lifecycleDates,
 });
 

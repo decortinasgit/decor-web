@@ -1,4 +1,5 @@
 export interface Curtain {
+  id?: string;
   name: string;
   type: string;
   color?: string | undefined;
@@ -17,6 +18,7 @@ export interface Curtain {
   panels?: string | undefined;
   price?: string | undefined;
   comment?: string | undefined;
+  group?: string | undefined;
 }
 
 export interface ExcelData {

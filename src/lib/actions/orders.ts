@@ -57,6 +57,7 @@ export async function addOrderWithItems(
           panels: item.panels,
           price: item.price,
           comment: item.comment,
+          group: item.group,
           createdAt: new Date(),
           updatedAt: new Date(),
         }))
@@ -249,6 +250,7 @@ export async function updateOrderWithItems(
           pinches: item.pinches,
           panels: item.panels,
           price: item.price,
+          group: item.group,
           createdAt: new Date(),
           updatedAt: new Date(),
         }))
@@ -277,6 +279,8 @@ export async function updateOrderWithItems(
 }
 
 export async function getOrderById(orderId: string) {
+  noStore();
+
   try {
     const order = await db
       .select()

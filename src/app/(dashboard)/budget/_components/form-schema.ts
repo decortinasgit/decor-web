@@ -18,13 +18,11 @@ export const profileSchema = z.object({
           .optional(),
         height: z
           .number()
-          .positive({ message: "La altura debe ser un número positivo" })
           .optional(),
         width: z
           .number()
-          .positive({ message: "El ancho debe ser un número positivo" })
           .optional(),
-
+        group: z.string().optional(), // Soporte
         // Campos opcionales
         support: z.string().optional(), // Soporte
         fall: z.string().optional(), // Caída

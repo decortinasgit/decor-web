@@ -65,8 +65,6 @@ export const validateCurtain = ({
   height,
   accessory,
 }: CurtainValidationParams): CurtainValidationResult => {
-  console.log("Validating curtain", name, type, width, height, accessory);
-  
   const result: CurtainValidationResult = {};
 
   // Validación para cortinas Roller

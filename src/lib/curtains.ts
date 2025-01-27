@@ -195,6 +195,7 @@ export const resetCurtain = {
   width: 0,
   qty: 0,
   category: "",
+  group: "",
   accessory: undefined,
   chain: undefined,
   chainSide: undefined,

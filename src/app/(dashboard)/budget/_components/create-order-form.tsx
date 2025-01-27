@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 import { Costs, Curtains } from "@/db/schema";
 import { Accesory, Chain, Curtain } from "@/types/curtains";
-import { cn } from "@/lib/utils";
+import { cn, extractPrefix, getNameWithoutPrefix } from "@/lib/utils";
 import { profileSchema, type ProfileFormValues } from "./form-schema";
 import { CurtainsTable } from "./curtains-table/curtains-table";
 import { Form } from "@/components/ui/form";
@@ -56,6 +56,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
         width: 0,
         height: 0,
         category: "",
+        group: "",
       },
     ],
   };
@@ -154,6 +155,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
         category: matchingCurtain?.category || "",
         accessories: matchingCurtain?.accessories || undefined,
         chains: matchingCurtain?.chains || undefined,
+        group: matchingCurtain?.group || "",
       };
     });
 
@@ -179,6 +181,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
       qty: updatedValues[index].qty,
       price: updatedValues[index].price,
       category: matchingCurtain?.category || "",
+      group: matchingCurtain?.group || "",
     };
 
     setSelectedCurtainValues(updatedValues);
@@ -308,9 +311,11 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
       }
 
       const orderItemsData = data.curtains.map((curtain) => ({
+        ...curtain,
         id: orderId,
         orderId,
-        ...curtain,
+        name: getNameWithoutPrefix(curtain.name),
+        group: extractPrefix(curtain.name),
       }));
 
       if (!userEmail) {

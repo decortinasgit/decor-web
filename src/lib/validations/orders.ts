@@ -52,6 +52,7 @@ export const orderItemSchema = z.object({
   price: z.string().min(1, "Item name is required"),
   category: z.string(),
   comment: z.string().optional(),
+  group: z.string().optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });

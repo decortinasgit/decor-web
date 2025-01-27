@@ -37,11 +37,7 @@ export const getColumns = ({
     {
       accessorKey: "name",
       header: "Nombre",
-      cell: ({ row }) => (
-        <div className="truncate">
-          {getNameWithoutPrefix(row.getValue("name"))}
-        </div>
-      ),
+      cell: ({ row }) => <div className="truncate">{row.getValue("name")}</div>,
     },
     {
       accessorKey: "type",
@@ -60,7 +56,7 @@ export const getColumns = ({
       header: "Largo",
       cell: ({ row }) => (
         <div>
-          {row.getValue("height") ? row.getValue("height") + "cm" : "N/A"}
+          {row.getValue("height") ? row.getValue("height") + "cm" : "-"}
         </div>
       ),
     },
@@ -69,7 +65,7 @@ export const getColumns = ({
       header: "Ancho",
       cell: ({ row }) => (
         <div>
-          {row.getValue("width") ? row.getValue("width") + "cm" : "N/A"}
+          {row.getValue("width") ? row.getValue("width") + "cm" : "-"}
         </div>
       ),
     },
@@ -77,48 +73,48 @@ export const getColumns = ({
       accessorKey: "Accesorio",
       header: "Accesorio",
       cell: ({ row }) => (
-        <div className="truncate">{row.original.accessory ?? "N/A"}</div>
+        <div className="truncate">{row.original.accessory || "-"}</div>
       ),
     },
     {
       accessorKey: "support",
       header: "Soporte",
-      cell: ({ row }) => <div>{row.getValue("support") || "N/A"}</div>,
+      cell: ({ row }) => <div>{row.getValue("support") || "-"}</div>,
     },
     {
       accessorKey: "fall",
       header: "Caída",
-      cell: ({ row }) => <div>{row.getValue("fall") || "N/A"}</div>,
+      cell: ({ row }) => <div>{row.getValue("fall") || "-"}</div>,
     },
     {
       accessorKey: "chain",
       header: "Cadena",
       cell: ({ row }) => (
-        <div className="truncate">{row.getValue("chain") || "N/A"}</div>
+        <div className="truncate">{row.getValue("chain") || "-"}</div>
       ),
     },
     {
       accessorKey: "chainSide",
       header: "Lado Cadena",
-      cell: ({ row }) => <div>{row.getValue("chainSide") || "N/A"}</div>,
+      cell: ({ row }) => <div>{row.getValue("chainSide") || "-"}</div>,
     },
     {
       accessorKey: "opening",
       header: "Apertura",
-      cell: ({ row }) => <div>{row.getValue("opening") || "N/A"}</div>,
+      cell: ({ row }) => <div>{row.getValue("opening") || "-"}</div>,
     },
     {
       accessorKey: "pinches",
       header: () => <div className="text-center">Pliegues</div>,
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue("pinches") || "N/A"}</div>
+        <div className="text-center">{row.getValue("pinches") || "-"}</div>
       ),
     },
     {
       accessorKey: "panels",
       header: () => <div className="text-center">Paños</div>,
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue("panels") || "N/A"}</div>
+        <div className="text-center">{row.getValue("panels") || "-"}</div>
       ),
     },
     {
