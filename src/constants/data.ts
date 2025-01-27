@@ -135,4 +135,10 @@ export const navItems: NavItem[] = [
     icon: "settings",
     label: "settings",
   },
+  {
+    title: "Soporte",
+    href: "/support",
+    icon: "help",
+    label: "support",
+  },
 ]

@@ -1,6 +1,7 @@
 import {
   IconArticle,
   IconBoxSeam,
+  IconHelp,
   IconLayoutDashboard,
   IconRouteAltLeft,
   IconSettings,
@@ -56,5 +57,11 @@ export const sidelinks: SideLink[] = [
     label: "",
     href: "/settings",
     icon: <IconSettings size={18} />,
+  },
+  {
+    title: "Soporte",
+    label: "",
+    href: "/support",
+    icon: <IconHelp size={18} />,
   },
 ]
