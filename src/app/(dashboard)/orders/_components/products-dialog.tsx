@@ -15,14 +15,14 @@ interface ProductsDialogProps {
 
 export function ProductsDialog({ orderProduct }: ProductsDialogProps) {
   return (
-    <AlertDialogContent className="max-w-max max-h-[70vh] overflow-hidden">
+    <AlertDialogContent className="max-w-max max-h-[70vh]">
       <AlertDialogHeader>
         <AlertDialogTitle>
           Productos para:{" "}
           {orderProduct.company ? orderProduct.company + " - " : ""}
           {orderProduct.client}
         </AlertDialogTitle>
-        <AlertDialogDescription className="flex flex-col gap-2 overflow-y-auto max-h-[calc(50vh-6rem)]">
+        <AlertDialogDescription className="flex flex-col gap-2 overflow-scroll max-h-[calc(50vh-6rem)]">
           {orderProduct.items?.length > 0 && (
             <CurtainsTable
               data={orderProduct.items}
