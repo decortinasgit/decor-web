@@ -98,8 +98,8 @@ export async function getUsers(input: SearchParams) {
             ? order === "asc"
               ? asc(users[column])
               : desc(users[column])
-            : asc(users.createdAt)
-        );
+            : desc(users.createdAt)
+        )
 
       const total = await tx
         .select({

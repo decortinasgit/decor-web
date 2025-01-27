@@ -105,7 +105,7 @@ export const getColumns = (
     accessorKey: "createdAt",
     header: "Fecha creación",
     cell: ({ row }) => (
-      <div>{new Date(row.getValue("createdAt")).toLocaleDateString()}</div>
+      <div>{new Date(row.getValue("createdAt")).toLocaleDateString('en-GB')}</div>
     ),
   },
   {
