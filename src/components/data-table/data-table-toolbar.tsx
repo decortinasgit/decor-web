@@ -4,6 +4,7 @@ import * as React from "react";
 import type { DataTableFilterField } from "@/types";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import type { Table } from "@tanstack/react-table";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,9 @@ export function DataTableToolbar<TData>({
   pdfTable,
   ...props
 }: DataTableToolbarProps<TData>) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const { searchableColumns, filterableColumns } = React.useMemo(() => {
     return {
       searchableColumns: filterFields.filter((field) => !field.options),
@@ -36,7 +40,23 @@ export function DataTableToolbar<TData>({
   // Estado local para inputs de búsqueda
   const [searchValues, setSearchValues] = React.useState<
     Record<string, string>
-  >({});
+  >(() => {
+    const initialValues: Record<string, string> = {};
+    searchableColumns.forEach((column) => {
+      const paramValue = searchParams.get(column.value as string);
+      if (paramValue) {
+        initialValues[column.value as string] = paramValue;
+      }
+    });
+    return initialValues;
+  });
+
+  // Calcular dinámicamente si hay valores de búsqueda activos
+  const hasSearchValues = React.useMemo(
+    () =>
+      Object.values(searchValues).some((value) => value.trim().length > 0),
+    [searchValues]
+  );
 
   // Manejo de cambios en los inputs
   const handleInputChange = (columnId: string, value: string) => {
@@ -47,17 +67,25 @@ export function DataTableToolbar<TData>({
   const handleSearch = () => {
     Object.entries(searchValues).forEach(([columnId, value]) => {
       table.getColumn(columnId)?.setFilterValue(value);
+
+      // Actualiza la URL con los parámetros de búsqueda
+      const params = new URLSearchParams(searchParams.toString());
+      if (value.trim()) {
+        params.set(columnId, value);
+      } else {
+        params.delete(columnId);
+      }
+      router.push(`?${params.toString()}`);
     });
   };
 
   const handleReset = () => {
     setSearchValues({});
     table.resetColumnFilters();
-  };
 
-  const hasSearchValues = Object.values(searchValues).some(
-    (value) => value.trim().length > 1
-  );
+    // Limpiar parámetros de la URL
+    router.push("?");
+  };
 
   return (
     <div
@@ -72,9 +100,8 @@ export function DataTableToolbar<TData>({
           searchableColumns.map(
             (column) =>
               table.getColumn(column.value ? String(column.value) : "") && (
-                <>
+                <div key={String(column.value)} className="flex gap-3">
                   <Input
-                    key={String(column.value)}
                     placeholder={column.placeholder}
                     value={searchValues[String(column.value) ?? ""] ?? ""}
                     onChange={(event) =>
@@ -93,7 +120,7 @@ export function DataTableToolbar<TData>({
                   >
                     Buscar
                   </Button>
-                </>
+                </div>
               )
           )}
         {filterableColumns.length > 0 &&

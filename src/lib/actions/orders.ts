@@ -112,6 +112,7 @@ export async function getOrders({
           items: sql`JSON_AGG(${orderItems})`.as("items"),
         })
         .from(orders)
+        .orderBy(desc(orders.createdAt))
         .leftJoin(orderItems, eq(orders.id, orderItems.orderId));
 
       // Filtro por email
