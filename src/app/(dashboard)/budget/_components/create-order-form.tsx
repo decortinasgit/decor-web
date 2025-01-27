@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 
 import { Costs, Curtains } from "@/db/schema";
 import { Accesory, Chain, Curtain } from "@/types/curtains";
@@ -291,10 +290,25 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
     }
 
     try {
-      const orderId = uuidv4();
+      const { data: lastOrderId } = await axios.get("/api/order/last-id");
+
+      if (!lastOrderId) {
+        toast.error("Lo siento", {
+          description: "Hubo un error al crear el pedido. Vuelva a intentarlo.",
+        });
+        setLoading(false);
+        return;
+      }
+
+      const orderId = (Number(lastOrderId.data) + 1).toString();
+
+      if (!userEmail) {
+        const response = await axios.get("/api/users");
+        userMail = response.data.email;
+      }
 
       const orderItemsData = data.curtains.map((curtain) => ({
-        id: uuidv4(),
+        id: orderId,
         orderId,
         ...curtain,
       }));

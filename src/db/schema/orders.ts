@@ -1,4 +1,4 @@
-import { pgTable, text, integer, uuid, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, pgEnum } from "drizzle-orm/pg-core";
 import { lifecycleDates } from "./utils";
 
 export const orderStatus = pgEnum("order_status", [
@@ -12,7 +12,7 @@ export const orderStatus = pgEnum("order_status", [
 ]);
 
 export const orders = pgTable("orders", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: text("id").primaryKey(),
   company: text("company").notNull(),
   client: text("client").notNull(),
   email: text("email").notNull(),
@@ -22,10 +22,10 @@ export const orders = pgTable("orders", {
 });
 
 export const orderItems = pgTable("order_items", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: text("id").primaryKey(),
   accessory: text("accessory"),
   category: text("category").notNull(),
-  orderId: uuid("order_id")
+  orderId: text("order_id")
     .references(() => orders.id)
     .notNull(),
   qty: integer("qty").notNull(),

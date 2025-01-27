@@ -1,4 +1,3 @@
-import { Accesory } from "@/types/curtains";
 import { z } from "zod";
 
 export const orderStatusSchema = z.enum([
@@ -13,7 +12,7 @@ export const orderStatusSchema = z.enum([
 
 // Esquema de validación para un pedido (order)
 export const orderSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   company: z.string().min(1, "Company name is required"),
   client: z.string().min(1, "Client name is required"),
   email: z.string().min(1, "Client email is required"),
@@ -24,7 +23,7 @@ export const orderSchema = z.object({
 });
 
 export const accessorySchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   price: z.string(),
   name: z.string(),
   type: z.string(),
@@ -34,9 +33,9 @@ export const accessorySchema = z.object({
 
 // Esquema de validación para un elemento de pedido (order item)
 export const orderItemSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   accessory: z.string().optional(),
-  orderId: z.string().uuid(),
+  orderId: z.string(),
   qty: z.number().int().min(1, "Quantity must be at least 1"),
   name: z.string().min(1, "Item name is required"),
   type: z.string().optional(),
@@ -56,5 +55,3 @@ export const orderItemSchema = z.object({
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
-
-

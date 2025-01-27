@@ -37,7 +37,8 @@ export async function addOrderWithItems(
 
       // Crear los ítems de la orden
       const insertedItems = await trx.insert(orderItems).values(
-        rawItemsInput.map((item) => ({
+        rawItemsInput.map((item, index) => ({
+          id: item.id + "-" + index,
           accessory: item.accessory,
           category: item.category,
           orderId: order.id,
@@ -229,6 +230,7 @@ export async function updateOrderWithItems(
       // Insertar los nuevos ítems
       const insertedItems = await trx.insert(orderItems).values(
         rawItemsInput.map((item) => ({
+          id: item.id,
           accessory: item.accessory,
           category: item.category,
           orderId: orderId, // Asociar con la ID de la orden
