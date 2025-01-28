@@ -7,7 +7,7 @@ export async function PUT(req: Request) {
     const body = await req.json();
 
     const schema = z.object({
-      orderId: z.string().uuid(),
+      orderId: z.string(),
       status: orderStatusSchema,
     });
 
