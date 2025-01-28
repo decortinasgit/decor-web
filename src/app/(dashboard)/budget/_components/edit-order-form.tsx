@@ -21,6 +21,7 @@ import CreateOrderFormNavigation from "./create-order/create-order-form-navigati
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
 import { OrderWithItems } from "@/types/orders";
 import { toast } from "sonner";
+import { uuid } from "drizzle-orm/pg-core";
 
 interface FormType {
   curtains: Curtain[];
@@ -55,7 +56,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       color: item.color || "",
       fall: item.fall || "",
       height: item.height || 0,
-      name: item.name || "",
+      name: item.group + "_" + item.name || "",
       opening: item.opening || "",
       orderId: item.orderId || "",
       panels: item.panels || "",
@@ -301,16 +302,31 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
         userMail = response.data.email;
       }
 
-      const orderItemsData = data.curtains.map((curtain, index) => ({
-        ...curtain,
-        orderId: orderId,
-        id: order.items[index].id,
-        name: curtain.name,
-      }));
+      const orderItemsData = data.curtains.map((curtain, index) => {
+        const existingItem = order.items[index];
+
+        if (existingItem && existingItem.id) {
+          // Producto existente
+          return {
+            ...curtain,
+            orderId: orderId,
+            id: existingItem.id,
+            name: getNameWithoutPrefix(curtain.name),
+          };
+        } else {
+          // Producto nuevo (sin ID)
+          return {
+            ...curtain,
+            orderId: orderId,
+            name: getNameWithoutPrefix(curtain.name),
+            id: String(uuid("v4")),
+          };
+        }
+      });
 
       console.log("Order items data:", orderItemsData);
 
-      // Usar el nuevo endpoint PUT para actualizar la orden y los ítems
+      // Usar el endpoint PUT para actualizar la orden y los ítems
       await axios.put(
         "/api/order",
         {
@@ -338,6 +354,8 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 
       router.push(`/orders`);
     } catch (error) {
+      console.log("Error updating order or order items:", error);
+
       if (axios.isAxiosError(error)) {
         console.error(
           "Failed to update order or order items:",
@@ -444,7 +462,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
                 handleNameChange={handleNameChange}
                 handleTypeChange={handleTypeChange}
                 handleColorChange={handleColorChange}
-                isEditing
               />
             )}
           </div>

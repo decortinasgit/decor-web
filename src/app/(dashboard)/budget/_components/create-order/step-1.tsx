@@ -70,7 +70,6 @@ type Props = {
   handleTypeChange: (index: number, value: string) => void;
   handleColorChange: (index: number, value: string) => void;
   append: UseFieldArrayAppend<ProfileFormValues, "curtains">;
-  isEditing?: boolean;
 };
 
 const Step1 = ({
@@ -88,7 +87,6 @@ const Step1 = ({
   handleTypeChange,
   handleColorChange,
   append,
-  isEditing,
 }: Props) => {
   return (
     <>
@@ -294,11 +292,6 @@ const Step1 = ({
                               getNameWithoutPrefix(value)
                             );
                           }}
-                          value={
-                            isEditing
-                              ? matchingCurtain?.group + "_" + field.value
-                              : field.value
-                          }
                         >
                           <FormControl>
                             <SelectTrigger>
