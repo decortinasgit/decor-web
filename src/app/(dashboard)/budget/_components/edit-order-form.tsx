@@ -21,7 +21,7 @@ import CreateOrderFormNavigation from "./create-order/create-order-form-navigati
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
 import { OrderWithItems } from "@/types/orders";
 import { toast } from "sonner";
-import { uuid } from "drizzle-orm/pg-core";
+import { v4 as uuidv4 } from 'uuid';
 
 interface FormType {
   curtains: Curtain[];
@@ -319,7 +319,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
             ...curtain,
             orderId: orderId,
             name: getNameWithoutPrefix(curtain.name),
-            id: String(uuid("v4")),
+            id: uuidv4(),
           };
         }
       });
