@@ -32,20 +32,6 @@ export async function processExcelData(
                 createdAt: now,
                 updatedAt: null,
               }))
-          : item["TIPO DE ITEM"] === Category.ITEM_E
-          ? data
-              .filter(
-                (accessory) =>
-                  accessory["TIPO DE ITEM"] === Category.ITEM_D &&
-                  accessory.NOMBRE === item.NOMBRE
-              )
-              .map((accessory) => ({
-                id: `${accessory.Codigos}-accessory`,
-                type: accessory.TELA,
-                price: accessory["PRECIO EN USD"].toString(),
-                createdAt: now,
-                updatedAt: null,
-              }))
           : null,
       chains:
         item["TIPO DE ITEM"] === Category.ITEM_B
