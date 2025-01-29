@@ -21,12 +21,13 @@ import CreateOrderFormNavigation from "./create-order/create-order-form-navigati
 import CreateOrderFormStepper from "./create-order/create-order-form-stepper";
 import { OrderWithItems } from "@/types/orders";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 interface FormType {
   curtains: Curtain[];
   company: string;
   client: string;
+  comment?: string;
 }
 
 interface EditOrderFormProps {
@@ -203,15 +204,17 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
   const handleNameChange = (index: number, value: string) => {
     const updatedValues = [...selectedCurtainValues];
 
-    const matchingCurtain = curtains.find((curtain) => curtain.name === value);
-
+    const matchingCurtain = curtains.find(
+      (curtain) => curtain.name === getNameWithoutPrefix(value)
+    );
+  
     updatedValues[index] = {
       ...resetCurtain,
-      name: value,
+      name: getNameWithoutPrefix(value),
       qty: updatedValues[index].qty,
       price: updatedValues[index].price,
       category: matchingCurtain?.category || "",
-      group: matchingCurtain?.group || "",
+      group: extractPrefix(value) || "",
     };
 
     setSelectedCurtainValues(updatedValues);
@@ -253,7 +256,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
     {
       id: "Paso 1",
       name: "Cliente",
-      fields: ["company", "client"],
+      fields: ["company", "client", "comment"],
     },
     {
       id: "Paso 2",
@@ -336,6 +339,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
             company: data.company,
             client: data.client,
             email: userMail,
+            comment: data.comment,
             // @ts-ignore
             status: data.status,
           },

@@ -108,6 +108,7 @@ export async function getOrders({
           client: orders.client,
           email: orders.email,
           status: orders.status,
+          comment: orders.comment,
           createdAt: orders.createdAt,
           updatedAt: orders.updatedAt,
           items: sql`JSON_AGG(${orderItems})`.as("items"),
@@ -176,6 +177,7 @@ export async function getOrders({
           client: order.client,
           email: order.email,
           status: order.status,
+          comment: order.comment,
           createdAt: order.createdAt,
           updatedAt: order.updatedAt,
           items: (order.items as OrderItem[]) || [],
@@ -222,6 +224,7 @@ export async function updateOrderWithItems(
           client: rawOrderInput.client,
           email: rawOrderInput.email,
           status: rawOrderInput.status as OrderStatus,
+          comment: rawOrderInput.comment,
           updatedAt: new Date(),
         })
         .where(eq(orders.id, orderId));
@@ -251,6 +254,7 @@ export async function updateOrderWithItems(
           panels: item.panels,
           price: item.price,
           group: item.group,
+          comment: item.comment,
           createdAt: new Date(),
           updatedAt: new Date(),
         }))

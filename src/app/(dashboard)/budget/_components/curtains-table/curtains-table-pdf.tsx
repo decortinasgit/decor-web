@@ -1,6 +1,20 @@
 import React from "react";
-import { OrderItem } from "@/db/schema";
+import type { OrderItem } from "@/db/schema";
 import { formatPrice } from "@/lib/utils";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface CurtainsTableProps {
   curtains: Array<OrderItem>;
@@ -9,55 +23,94 @@ interface CurtainsTableProps {
 
 export function CurtainsTablePDF({ curtains, total }: CurtainsTableProps) {
   return (
-    <table className="table-auto w-full border border-gray-300 text-sm">
-      <thead>
-        <tr className="bg-gray-100">
-          <th className="border px-2 py-2">Cantidad</th>
-          <th className="border px-2 py-2">Nombre</th>
-          <th className="border px-2 py-2">Tipo</th>
-          <th className="border px-2 py-2">Color</th>
-          <th className="border px-2 py-2">Dimensiones (Alto x Ancho)</th>
-          <th className="border px-2 py-2">Soporte</th>
-          <th className="border px-2 py-2">Caída</th>
-          <th className="border px-2 py-2">Cadena</th>
-          <th className="border px-2 py-2">Lado Cadena</th>
-          <th className="border px-2 py-2">Apertura</th>
-          <th className="border px-2 py-2">Pinzas</th>
-          <th className="border px-2 py-2">Paneles</th>
-          <th className="border px-2 py-2">Accesorios</th>
-          <th className="border px-2 py-2">Precio</th>
-        </tr>
-      </thead>
-      <tbody>
-        {curtains.map((item) => (
-          <tr key={item.id} className="text-center justify-center items-center">
-            <td className="border px-2 py-2">{item.qty}</td>
-            <td className="border px-2 py-2">{item.name}</td>
-            <td className="border px-2 py-2">{item.type || "-"}</td>
-            <td className="border px-2 py-2">{item.color || "-"}</td>
-            <td className="border px-2 py-2">
-              {item.height} x {item.width} cm
-            </td>
-            <td className="border px-2 py-2">{item.support || "-"}</td>
-            <td className="border px-2 py-2">{item.fall || "-"}</td>
-            <td className="border px-2 py-2">{item.chain || "-"}</td>
-            <td className="border px-2 py-2">{item.chainSide || "-"}</td>
-            <td className="border px-2 py-2">{item.opening || "-"}</td>
-            <td className="border px-2 py-2">{item.pinches || "-"}</td>
-            <td className="border px-2 py-2">{item.panels || "-"}</td>
-            <td className="border px-2 py-2">{item.accessory || "-"}</td>
-            <td className="border px-2 py-2">{formatPrice(item.price || 0)}</td>
-          </tr>
-        ))}
-      </tbody>
-      <tfoot>
-        <tr className="bg-gray-100 font-bold">
-          <td className="border px-2 py-2 text-right" colSpan={13}>
-            Total:
-          </td>
-          <td className="border px-2 py-2 text-center">{total}</td>
-        </tr>
-      </tfoot>
-    </table>
+    <Card className="border-none shadow-md">
+      <CardHeader className="bg-secondary">
+        <h3 className="text-lg font-semibold">Detalles del Pedido</h3>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead className="text-xs font-medium">Cantidad</TableHead>
+                <TableHead className="text-xs font-medium">Nombre</TableHead>
+                <TableHead className="text-xs font-medium">Tipo</TableHead>
+                <TableHead className="text-xs font-medium">Color</TableHead>
+                <TableHead className="text-xs font-medium">
+                  Dimensiones
+                </TableHead>
+                <TableHead className="text-xs font-medium">Soporte</TableHead>
+                <TableHead className="text-xs font-medium">Caída</TableHead>
+                <TableHead className="text-xs font-medium">Cadena</TableHead>
+                <TableHead className="text-xs font-medium">
+                  Lado Cadena
+                </TableHead>
+                <TableHead className="text-xs font-medium">Apertura</TableHead>
+                <TableHead className="text-xs font-medium">Pliegues</TableHead>
+                <TableHead className="text-xs font-medium">Paños</TableHead>
+                <TableHead className="text-xs font-medium">
+                  Accesorios
+                </TableHead>
+                <TableHead className="text-xs font-medium">Precio</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {curtains.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell className="text-center text-xs">
+                    {item.qty}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.name}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.type || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.color || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.height} x {item.width} cm
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.support || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.fall || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.chain || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.chainSide || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.opening || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.pinches || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.panels || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {item.accessory || "-"}
+                  </TableCell>
+                  <TableCell className="text-center text-xs">
+                    {formatPrice(item.price || 0)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+      <CardFooter className="bg-muted/50 px-6 py-3">
+        <div className="ml-auto flex items-center">
+          <span className="text-sm font-semibold mr-4">Total:</span>
+          <span className="text-lg font-bold">{total}</span>
+        </div>
+      </CardFooter>
+    </Card>
   );
 }

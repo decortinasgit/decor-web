@@ -104,6 +104,7 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
           clientName={order.client}
           total={formatPrice(calculateOrderTotals(order.items).totalAmount)}
           quoteDate={formatDate(order.createdAt)}
+          comment={order.comment}
         />
       </HiddenPDFContainer>
     </>

@@ -26,9 +26,11 @@ export const getColumns = ({
   const columns: ColumnDef<OrderWithItems>[] = [
     {
       accessorKey: "id",
-      header: "ID del Pedido",
+      header: () => <div className="text-center">ID</div>,
       cell: ({ row }) => (
-        <div className="truncate max-w-24">{row.getValue("id")}</div>
+        <div className="truncate max-w-24 text-center font-bold">
+          {row.getValue("id")}
+        </div>
       ),
     },
     {

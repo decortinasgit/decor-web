@@ -97,6 +97,9 @@ const ActionsCell = ({
       console.error("Error al copiar al portapapeles:", error);
     }
   }
+
+  console.log(order, 'order');
+  
   return (
     <>
       <HiddenPDFContainer ref={hiddenContainerRef}>
@@ -105,6 +108,7 @@ const ActionsCell = ({
           clientName={order.client}
           quoteDate={formatDate(order.createdAt)}
           total={formatPrice(calculateOrderTotals(order.items).totalAmount)}
+          comment={order.comment}
         />
       </HiddenPDFContainer>
 
