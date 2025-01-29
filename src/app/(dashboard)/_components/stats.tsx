@@ -29,7 +29,7 @@ const StatsHome = ({ stats }: Props) => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
+          <div className="text-2xl font-bold truncate">
             {formatPrice(stats.totalPriceCompletedOrders)}
           </div>
         </CardContent>
@@ -55,7 +55,9 @@ const StatsHome = ({ stats }: Props) => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.completedOrdersCount}</div>
+          <div className="text-2xl font-bold truncate">
+            {stats.completedOrdersCount}
+          </div>
         </CardContent>
       </Card>
       <Card>
@@ -78,7 +80,9 @@ const StatsHome = ({ stats }: Props) => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.pendingOrdersCount}</div>
+          <div className="text-2xl font-bold truncate">
+            {stats.pendingOrdersCount}
+          </div>
         </CardContent>
       </Card>
       <Card>
@@ -98,7 +102,9 @@ const StatsHome = ({ stats }: Props) => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.totalOrdersCount}</div>
+          <div className="text-2xl font-bold truncate">
+            {stats.totalOrdersCount}
+          </div>
         </CardContent>
       </Card>
     </div>

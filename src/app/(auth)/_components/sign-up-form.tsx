@@ -512,9 +512,9 @@ export function SignUpForm() {
                     disabled={loading}
                     loading={loading}
                   >
-                    Continuar
+                    Confirmar
                     <span className="sr-only">
-                      Continuar para la verificación
+                      Confirmar para la verificación
                     </span>
                   </Button>
                 )}

@@ -173,15 +173,17 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
   const handleNameChange = (index: number, value: string) => {
     const updatedValues = [...selectedCurtainValues];
 
-    const matchingCurtain = curtains.find((curtain) => curtain.name === value);
+    const matchingCurtain = curtains.find(
+      (curtain) => curtain.name === getNameWithoutPrefix(value)
+    );
 
     updatedValues[index] = {
       ...resetCurtain,
-      name: value,
+      name: getNameWithoutPrefix(value),
       qty: updatedValues[index].qty,
       price: updatedValues[index].price,
       category: matchingCurtain?.category || "",
-      group: matchingCurtain?.group || "",
+      group: extractPrefix(value) || "",
     };
 
     setSelectedCurtainValues(updatedValues);

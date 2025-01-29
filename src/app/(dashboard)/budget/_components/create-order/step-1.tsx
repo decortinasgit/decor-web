@@ -95,7 +95,10 @@ const Step1 = ({
 
         const typeOptions = getUniqueValues(
           curtains.filter((curtain) => {
-            return curtain.name === selectedCurtainValues[index].name;
+            return (
+              curtain.name === selectedCurtainValues[index].name &&
+              curtain.group === selectedCurtainValues[index].group
+            );
           }),
           "type"
         );
@@ -287,10 +290,7 @@ const Step1 = ({
                           {...field}
                           onValueChange={(value) => {
                             field.onChange(value);
-                            handleNameChange(
-                              index,
-                              getNameWithoutPrefix(value)
-                            );
+                            handleNameChange(index, value as string);
                           }}
                         >
                           <FormControl>
