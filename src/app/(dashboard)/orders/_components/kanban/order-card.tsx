@@ -91,7 +91,7 @@ export function OrderCard({ order, isOverlay }: OrderCardProps) {
               variant={"secondary"}
               className="ml-auto max-w-60 font-mono text-xs"
             >
-              <p className="truncate">{order.id}</p>
+              <p className="truncate">ID: {order.id}</p>
             </Badge>
           </TooltipTrigger>
           <TooltipContent>{order.id}</TooltipContent>
