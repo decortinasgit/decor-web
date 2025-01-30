@@ -2,7 +2,7 @@ import { z } from "zod";
 import { unstable_noStore as noStore } from "next/cache";
 import { db } from "@/db";
 import { orders, orderItems, OrderItem, OrderStatus } from "@/db/schema";
-import { desc, eq, gte, lte, sql } from "drizzle-orm";
+import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 import {
   orderItemSchema,
   orderSchema,
@@ -475,6 +475,76 @@ export async function getLastOrderId() {
     };
   } catch (err) {
     console.error("Error fetching the last order ID:", err);
+    return {
+      data: null,
+      error: err,
+    };
+  }
+}
+
+export async function getUserOrderStatistics(email: string): Promise<{
+  data: OrderStats | null;
+  error: any;
+}> {
+  console.log(email, 'emails');
+  
+  try {
+    const stats = await db.transaction(async (tx) => {
+      // Cantidad de órdenes en status "completed" para el usuario
+      const completedOrdersCount = await tx
+        .select({
+          count: sql`COUNT(${orders.id})`.as("count"),
+        })
+        .from(orders)
+        .where(and(eq(orders.email, email), eq(orders.status, "completed")))
+        .then((res) => Number(res[0]?.count ?? 0));
+
+      // Cantidad total de órdenes del usuario
+      const totalOrdersCount = await tx
+        .select({
+          count: sql`COUNT(${orders.id})`.as("count"),
+        })
+        .from(orders)
+        .where(eq(orders.email, email))
+        .then((res) => Number(res[0]?.count ?? 0));
+
+      // Suma total de price de los items en las órdenes "completed" del usuario
+      const totalPriceCompletedOrders = await tx
+        .select({
+          totalPrice:
+            sql`COALESCE(SUM(CAST(${orderItems.price} AS numeric) * ${orderItems.qty}), 0)`.as(
+              "totalPrice"
+            ),
+        })
+        .from(orderItems)
+        .leftJoin(orders, eq(orderItems.orderId, orders.id))
+        .where(and(eq(orders.email, email), eq(orders.status, "completed")))
+
+        .then((res) => Number(res[0]?.totalPrice ?? 0));
+
+      // Cantidad de órdenes en status "pending" para el usuario
+      const pendingOrdersCount = await tx
+        .select({
+          count: sql`COUNT(${orders.id})`.as("count"),
+        })
+        .from(orders)
+        .where(and(eq(orders.email, email), eq(orders.status, "pending")))
+        .then((res) => Number(res[0]?.count ?? 0));
+
+      return {
+        completedOrdersCount,
+        totalOrdersCount,
+        totalPriceCompletedOrders,
+        pendingOrdersCount,
+      };
+    });
+
+    return {
+      data: stats,
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error fetching user order statistics:", err);
     return {
       data: null,
       error: err,

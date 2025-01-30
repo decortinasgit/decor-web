@@ -15,7 +15,7 @@ export default async function DashboardLayout({
 }: DashboardLayoutProps) {
   const user = await getUserWithAttributes();
 
-  if(!user) {
+  if (!user) {
     redirect("/signin");
   } else if (!user?.emailVerified) {
     redirect("/signup/verify-account");
