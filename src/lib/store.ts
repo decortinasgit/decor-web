@@ -6,8 +6,8 @@ import { OrderWithItems } from "@/types/orders";
 import { Column } from "@/app/(dashboard)/orders/_components/kanban/board-column";
 
 export const defaultStatusCols = [
-  { id: "pending", title: "Pendiente" },
-  { id: "budgeted", title: "Presupuestado" },
+  { id: "pending", title: "Presupuestado" },
+  { id: "budgeted", title: "Dado de Alta" },
   { id: "confirmed", title: "Orden confirmada" },
   { id: "fabric", title: "Enviado a fabrica" },
   { id: "shipped", title: "Pendiente de envío" },

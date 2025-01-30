@@ -144,11 +144,13 @@ const ActionsCell = ({
             Descargar PDF
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => router.push(`/budget/${order.id}/edit`)}
-          >
-            Editar pedido
-          </DropdownMenuItem>
+          {order.status === "pending" && (
+            <DropdownMenuItem
+              onClick={() => router.push(`/budget/${order.id}/edit`)}
+            >
+              Editar pedido
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={handleDelete}>
             Eliminar pedido
           </DropdownMenuItem>

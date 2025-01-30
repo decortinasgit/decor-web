@@ -235,7 +235,7 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
       const activeOrder = data.order;
 
       if (activeOrder.status === "pending") {
-        toast.error("No puedes mover órdenes con estado 'Pendiente'.", {
+        toast.error("No puedes mover órdenes con estado 'Presupuestado'.", {
           description: "Solo puedes actualizar dando de alta el presupuesto.",
         });
         return;

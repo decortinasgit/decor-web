@@ -4,6 +4,7 @@ import Loader from "@/components/custom/loader";
 import { getCurtains } from "@/lib/actions/curtains";
 import { getCosts } from "@/lib/actions/costs";
 import { EditOrderForm } from "../../_components/edit-order-form";
+import { redirect } from "next/navigation";
 
 interface BudgetEditProps {
   params: { id: string };
@@ -21,6 +22,10 @@ export default async function BudgetEdit({ params }: BudgetEditProps) {
   const order = await getOrderById(orderID);
   const curtainsTransaction = await getCurtains();
   const costsTransaction = await getCosts();
+
+  if (order.data?.status !== "pending") {
+    redirect("/orders");
+  }
 
   return (
     <React.Suspense fallback={<Loader />}>
