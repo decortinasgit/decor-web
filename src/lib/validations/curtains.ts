@@ -16,11 +16,11 @@ export const curtainSchema = z.object({
 export type CurtainSchema = z.infer<typeof curtainSchema>;
 
 export const validateRollerSystem = (width: number, accessory: string) => {
-  if (width <= 180 && accessory !== "SQ3838-accessory")
+  if (width <= 180 && accessory !== "Sistema Quantum 38 - Caño 38")
     return "Se recomienda Sistema Quantum 38mm con caño de 38mm.";
-  if (width > 180 && width < 240 && accessory !== "SQ4545-accessory")
+  if (width > 180 && width < 240 && accessory !== "Sistema Quantum 45 - Caño 45")
     return "Se recomienda Sistema Quantum 45mm con caño de 45mm.";
-  if (width >= 240 && accessory !== "SQ4558-accessory") {
+  if (width >= 240 && accessory !== "Sistema Quantum 45 - Caño 58") {
     return "Se recomienda Sistema Quantum 45mm con caño de 58mm.";
   }
   return undefined;

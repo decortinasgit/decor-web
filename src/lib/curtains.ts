@@ -1,4 +1,4 @@
-import { OrderItem } from "@/db/schema";
+import { Curtains, OrderItem } from "@/db/schema";
 import { Accesory, Category, Chain } from "@/types/curtains";
 
 export const additionalFields = (curtainName: string) => {

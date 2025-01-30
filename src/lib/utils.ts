@@ -137,6 +137,7 @@ export function calculateOrderTotals(items: OrderItem[]) {
 }
 
 export function getNameWithoutPrefix(fullName: string) {
+  if (!fullName.includes("_")) return fullName;
   return fullName.split("_").slice(1).join("_"); // Elimina el prefijo antes del guion bajo
 }
 

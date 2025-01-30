@@ -98,8 +98,6 @@ const ActionsCell = ({
     }
   }
 
-  console.log(order, 'order');
-  
   return (
     <>
       <HiddenPDFContainer ref={hiddenContainerRef}>

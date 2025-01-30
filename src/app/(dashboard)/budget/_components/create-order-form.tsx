@@ -112,7 +112,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
 
       const handleGetAccessory = (): Accesory | undefined => {
         const matchingAccessory = matchingCurtain?.accessories?.filter(
-          (data) => data.id === form.watch(`curtains.${index}.accessory`)
+          (data) => data.type === form.watch(`curtains.${index}.accessory`)
         );
 
         if (matchingAccessory) {
@@ -124,7 +124,7 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
 
       const handleGetChain = (): Chain | undefined => {
         const matchingChain = matchingCurtain?.chains?.filter(
-          (data) => data.id === form.watch(`curtains.${index}.chain`)
+          (data) => data.name === form.watch(`curtains.${index}.chain`)
         );
 
         if (matchingChain) {

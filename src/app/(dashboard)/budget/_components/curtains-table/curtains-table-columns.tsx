@@ -14,6 +14,7 @@ import { Button } from "@/components/custom/button";
 import { MoreHorizontal } from "lucide-react";
 import { formatPrice, getNameWithoutPrefix } from "@/lib/utils";
 import { OrderItem } from "@/db/schema";
+import axios from "axios";
 
 interface GetColumnsOptions {
   duplicateRow: (index: number) => void;
@@ -37,7 +38,11 @@ export const getColumns = ({
     {
       accessorKey: "name",
       header: "Nombre",
-      cell: ({ row }) => <div className="truncate">{row.getValue("name")}</div>,
+      cell: ({ row }) => (
+        <div className="truncate">
+          {getNameWithoutPrefix(row.getValue("name"))}
+        </div>
+      ),
     },
     {
       accessorKey: "type",
@@ -64,9 +69,7 @@ export const getColumns = ({
       accessorKey: "width",
       header: "Ancho",
       cell: ({ row }) => (
-        <div>
-          {row.getValue("width") ? row.getValue("width") + "cm" : "-"}
-        </div>
+        <div>{row.getValue("width") ? row.getValue("width") + "cm" : "-"}</div>
       ),
     },
     {

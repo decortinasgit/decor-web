@@ -156,7 +156,7 @@ const Step1 = ({
 
         const handleGetAccessory = (): Accesory | undefined => {
           const matchingAccessory = matchingCurtain?.accessories?.filter(
-            (data) => data.id === form.watch(`curtains.${index}.accessory`)
+            (data) => data.type === form.watch(`curtains.${index}.accessory`)
           );
 
           if (matchingAccessory) {
@@ -168,7 +168,7 @@ const Step1 = ({
 
         const handleGetChain = (): Chain | undefined => {
           const matchingChain = matchingCurtain?.chains?.filter(
-            (data) => data.id === form.watch(`curtains.${index}.chain`)
+            (data) => data.name === form.watch(`curtains.${index}.chain`)
           );
 
           if (matchingChain) {
@@ -409,7 +409,7 @@ const Step1 = ({
                                 matchingCurtain.accessories.map((value) => (
                                   <SelectItem
                                     key={value.id}
-                                    value={value.id ?? "-"}
+                                    value={value.type ?? "-"}
                                   >
                                     {value.type}
                                   </SelectItem>
@@ -575,7 +575,7 @@ const Step1 = ({
                                   matchingCurtain.chains.map((value) => (
                                     <SelectItem
                                       key={value.id}
-                                      value={value.id ?? "-"}
+                                      value={value.name ?? "-"}
                                     >
                                       {value.name}
                                     </SelectItem>
