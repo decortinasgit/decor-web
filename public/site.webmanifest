@@ -1,9 +1,9 @@
 {
-  "name": "Skateshop",
-  "short_name": "Skateshop",
+  "name": "Distribuidores Decortinas",
+  "short_name": "Decortinas",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "./images/favicon.ico",
       "sizes": "32x32",
       "type": "image/png"
     }
