@@ -15,13 +15,25 @@ export const curtainSchema = z.object({
 
 export type CurtainSchema = z.infer<typeof curtainSchema>;
 
-export const validateRollerSystem = (width: number, accessory: string) => {
+export const validateRollerSystem = (
+  width: number,
+  height: number,
+  accessory: string
+) => {
   if (width <= 180 && accessory !== "Sistema Quantum 38 - Caño 38")
     return "Se recomienda Sistema Quantum 38mm con caño de 38mm.";
-  if (width > 180 && width < 240 && accessory !== "Sistema Quantum 45 - Caño 45")
+  if (
+    width > 180 &&
+    width < 240 &&
+    accessory !== "Sistema Quantum 45 - Caño 45"
+  )
     return "Se recomienda Sistema Quantum 45mm con caño de 45mm.";
   if (width >= 240 && accessory !== "Sistema Quantum 45 - Caño 58") {
     return "Se recomienda Sistema Quantum 45mm con caño de 58mm.";
+  }
+
+  if (height > 350 && accessory !== "Sistema Quantum 45 - Caño 45") {
+    return "Se recomienda utilizar caño de 45mm para alturas superiores a 350 cm.";
   }
   return undefined;
 };
@@ -69,8 +81,8 @@ export const validateCurtain = ({
 
   // Validación para cortinas Roller
   if (name === "Roller") {
-    if (width && accessory) {
-      const rollerError = validateRollerSystem(width, accessory);
+    if (width && height && accessory) {
+      const rollerError = validateRollerSystem(width, height, accessory);
       if (rollerError) result.rollerValidation = rollerError;
     }
 
