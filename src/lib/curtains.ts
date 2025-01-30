@@ -88,8 +88,6 @@ export const priceCalculation = (
   accessory?: Accesory | undefined,
   pinches?: string
 ) => {
-  let error;
-
   if (
     category === Category.ITEM_B &&
     accessory &&
