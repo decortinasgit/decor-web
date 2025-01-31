@@ -1,5 +1,5 @@
-import { type Metadata } from "next"
-import { env } from "@/env.js"
+import { type Metadata } from "next";
+import { env } from "@/env.js";
 
 import {
   Card,
@@ -7,24 +7,25 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Shell } from "@/components/shell"
-import { ForgotFormConfirm } from "@/app/(auth)/_components/forgot-form-confirm"
+} from "@/components/ui/card";
+import { Shell } from "@/components/shell";
+import { ForgotFormConfirm } from "@/app/(auth)/_components/forgot-form-confirm";
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: "Reset Password",
-  description: "Enter your email to reset your password",
-}
+  title: "Restaurar contraseña",
+  description: "Ingresa tu código para restaurar la contraseña",
+};
 
 export default function ResetPasswordConfirmPage() {
   return (
     <Shell className="max-w-lg">
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Reset password</CardTitle>
+          <CardTitle className="text-2xl">Restaurar contraseña</CardTitle>
           <CardDescription>
-            Enter your email address and we will send you a verification code
+            Ingresa el código de verificación que enviamos a tu mail y tu nueva
+            contraseña.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -32,5 +33,5 @@ export default function ResetPasswordConfirmPage() {
         </CardContent>
       </Card>
     </Shell>
-  )
+  );
 }

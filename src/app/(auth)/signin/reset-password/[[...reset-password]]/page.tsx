@@ -14,8 +14,8 @@ import Link from "next/link"
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: "Reset Password",
-  description: "Enter your email to reset your password",
+  title: "Restaurar contraseña",
+  description: "Ingresa tu email para restaurar la contraseña",
 }
 
 export default function ResetPasswordPage() {
