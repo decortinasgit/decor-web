@@ -98,6 +98,43 @@ const ActionsCell = ({
     }
   }
 
+  async function duplicateOrder(orderId: string) {
+    try {
+      const { data: lastOrderId } = await axios.get("/api/order/last-id");
+
+      if (!lastOrderId) {
+        toast.error("Lo siento", {
+          description: "Hubo un error al crear el pedido. Vuelva a intentarlo.",
+        });
+        return;
+      }
+
+      const newOrderId = (Number(lastOrderId.data) + 1).toString();
+
+      const response = await axios.post("/api/order/duplicate", {
+        orderId: orderId,
+        newOrderId: newOrderId,
+      });
+
+      if (response.status === 201) {
+        toast.success("Pedido duplicado!", {
+          description: `Se creó un nuevo pedido con ID ${newOrderId}.`,
+        });
+
+        if (handleFetchOrders) {
+          await handleFetchOrders();
+        }
+      } else {
+        throw new Error("Respuesta inesperada del servidor");
+      }
+    } catch (error) {
+      console.error("Error al duplicar la orden:", error);
+      toast.error("Lo siento!", {
+        description: "Hubo un error al duplicar el pedido.",
+      });
+    }
+  }
+
   return (
     <>
       <HiddenPDFContainer ref={hiddenContainerRef}>
@@ -151,6 +188,9 @@ const ActionsCell = ({
               Editar pedido
             </DropdownMenuItem>
           )}
+          <DropdownMenuItem onClick={() => duplicateOrder(order.id)}>
+            Duplicar pedido
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={handleDelete}>
             Eliminar pedido
           </DropdownMenuItem>

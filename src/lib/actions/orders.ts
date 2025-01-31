@@ -282,6 +282,91 @@ export async function updateOrderWithItems(
   }
 }
 
+export async function duplicateOrder(orderId: string, newOrderId: string) {
+  try {
+    const result = await db.transaction(async (trx) => {
+      // Obtener la orden original
+      const [existingOrder] = await trx
+        .select()
+        .from(orders)
+        .where(eq(orders.id, orderId));
+
+      if (!existingOrder) {
+        throw new Error(`Order with ID ${orderId} not found`);
+      }
+
+      // Obtener los ítems de la orden original
+      const existingItems = await trx
+        .select()
+        .from(orderItems)
+        .where(eq(orderItems.orderId, orderId));
+
+      // Insertar la nueva orden con un estado "pending"
+      const [newOrder] = await trx
+        .insert(orders)
+        .values({
+          id: newOrderId,
+          company: existingOrder.company,
+          client: existingOrder.client,
+          email: existingOrder.email,
+          status: "pending", // Reiniciamos el estado
+          comment: existingOrder.comment,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning({ id: orders.id });
+
+      if (!newOrder || !newOrder.id) {
+        throw new Error("Failed to create duplicate order: No ID returned");
+      }
+
+      // Insertar los ítems de la orden duplicada
+      const duplicatedItems = existingItems.map((item, index) => ({
+        id: `${newOrderId}-${index}`,
+        orderId: newOrder.id,
+        accessory: item.accessory,
+        category: item.category,
+        qty: item.qty,
+        name: item.name,
+        type: item.type,
+        color: item.color,
+        height: item.height,
+        width: item.width,
+        support: item.support,
+        fall: item.fall,
+        chain: item.chain,
+        chainSide: item.chainSide,
+        opening: item.opening,
+        pinches: item.pinches,
+        panels: item.panels,
+        price: item.price,
+        group: item.group,
+        comment: item.comment,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }));
+
+      await trx.insert(orderItems).values(duplicatedItems);
+
+      return {
+        newOrder,
+        duplicatedItems,
+      };
+    });
+
+    return {
+      data: result,
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error duplicating order:", err);
+    return {
+      data: null,
+      error: err,
+    };
+  }
+}
+
 export async function getOrderById(orderId: string) {
   noStore();
 
@@ -486,8 +571,8 @@ export async function getUserOrderStatistics(email: string): Promise<{
   data: OrderStats | null;
   error: any;
 }> {
-  console.log(email, 'emails');
-  
+  console.log(email, "emails");
+
   try {
     const stats = await db.transaction(async (tx) => {
       // Cantidad de órdenes en status "completed" para el usuario
