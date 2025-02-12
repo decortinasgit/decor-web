@@ -15,6 +15,7 @@ import { CurtainsTable } from "./curtains-table/curtains-table";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { priceCalculation, resetCurtain } from "@/lib/curtains";
+import { v4 as uuidv4 } from "uuid";
 
 import Step0 from "./create-order/step-0";
 import Step1 from "./create-order/step-1";
@@ -295,26 +296,11 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
     }
 
     try {
-      const { data: lastOrderId } = await axios.get("/api/order/last-id");
-
-      if (!lastOrderId) {
-        toast.error("Lo siento", {
-          description: "Hubo un error al crear el pedido. Vuelva a intentarlo.",
-        });
-        setLoading(false);
-        return;
-      }
-
-      const orderId = (Number(lastOrderId.data) + 1).toString();
-
-      if (!userEmail) {
-        const response = await axios.get("/api/users");
-        userMail = response.data.email;
-      }
+      const orderId = uuidv4().toString();
 
       const orderItemsData = data.curtains.map((curtain) => ({
         ...curtain,
-        id: orderId,
+        id: uuidv4().toString(),
         orderId,
         name: getNameWithoutPrefix(curtain.name),
         group: extractPrefix(curtain.name),

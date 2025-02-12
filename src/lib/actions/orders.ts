@@ -111,6 +111,7 @@ export async function getOrders({
           comment: orders.comment,
           createdAt: orders.createdAt,
           updatedAt: orders.updatedAt,
+          serial: orders.serial,
           items: sql`JSON_AGG(${orderItems})`.as("items"),
         })
         .from(orders)
@@ -180,6 +181,7 @@ export async function getOrders({
           comment: order.comment,
           createdAt: order.createdAt,
           updatedAt: order.updatedAt,
+          serial: order.serial,
           items: (order.items as OrderItem[]) || [],
         })),
         total,

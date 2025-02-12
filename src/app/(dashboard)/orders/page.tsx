@@ -28,6 +28,9 @@ export default function OrdersPage() {
     pageCount: 0,
   });
 
+  console.log(orders);
+  
+
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);

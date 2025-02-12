@@ -1,4 +1,4 @@
-import { pgTable, text, integer, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, pgEnum, serial, uuid } from "drizzle-orm/pg-core";
 import { lifecycleDates } from "./utils";
 
 export const orderStatus = pgEnum("order_status", [
@@ -13,6 +13,7 @@ export const orderStatus = pgEnum("order_status", [
 
 export const orders = pgTable("orders", {
   id: text("id").primaryKey(),
+  serial: serial('serial'),
   company: text("company").notNull(),
   client: text("client").notNull(),
   email: text("email").notNull(),
