@@ -54,6 +54,7 @@ import {
 } from "@/constants/curtains";
 import { ProfileFormValues } from "../form-schema";
 import { validateCurtain } from "@/lib/validations/curtains";
+import ValidationAlert from "@/components/validation-alert";
 
 type Props = {
   fields: FieldArrayWithId<ProfileFormValues, "curtains", "id">[];
@@ -119,14 +120,50 @@ const Step1 = ({
         const name = form.watch(`curtains.${index}.name`);
         const type = form.watch(`curtains.${index}.type`);
 
-        const { rollerValidation, fabricValidation, verticalBandValidation } =
-          validateCurtain({
-            name: getNameWithoutPrefix(name),
-            type,
-            width,
-            height,
-            accessory,
-          });
+        const {
+          rollerValidation,
+          fabricValidation,
+          verticalBandValidation,
+          heightWidthRatioValidation,
+          zebraValidation,
+          europeanRailValidation,
+          barsValidation,
+        } = validateCurtain({
+          name: getNameWithoutPrefix(name),
+          type,
+          width,
+          height,
+          accessory,
+        });
+
+        const validations = [
+          { condition: rollerValidation, message: rollerValidation },
+          {
+            condition: verticalBandValidation,
+            message: verticalBandValidation,
+          },
+          { condition: fabricValidation, message: fabricValidation },
+          {
+            condition: heightWidthRatioValidation,
+            message: heightWidthRatioValidation,
+          },
+          {
+            condition: zebraValidation,
+            message: zebraValidation?.productionDelay,
+          },
+          {
+            condition: zebraValidation?.maxWidthValidation,
+            message: zebraValidation?.maxWidthValidation,
+          },
+          {
+            condition: europeanRailValidation,
+            message: europeanRailValidation,
+          },
+          {
+            condition: barsValidation,
+            message: barsValidation,
+          },
+        ];
 
         let isNotCategoryH;
         let isNotCategoryHOrD;
@@ -229,28 +266,14 @@ const Step1 = ({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {rollerValidation && (
-                  <Alert variant="destructive" className="mb-2">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Cuidado</AlertTitle>
-                    <AlertDescription>{rollerValidation}</AlertDescription>
-                  </Alert>
-                )}
-                {verticalBandValidation && (
-                  <Alert variant="destructive" className="mb-2">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Cuidado</AlertTitle>
-                    <AlertDescription>
-                      {verticalBandValidation}
-                    </AlertDescription>
-                  </Alert>
-                )}
-                {fabricValidation && (
-                  <Alert variant="destructive" className="mb-2">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Cuidado</AlertTitle>
-                    <AlertDescription>{fabricValidation}</AlertDescription>
-                  </Alert>
+                {validations.map(
+                  (validation, index) =>
+                    validation.condition && (
+                      <ValidationAlert
+                        key={index}
+                        message={validation.message}
+                      />
+                    )
                 )}
                 <div
                   className={cn(
@@ -440,7 +463,7 @@ const Step1 = ({
                               type="number"
                               min={0}
                               disabled={loading}
-                              placeholder="Ingrese el ancho"
+                              placeholder="Ej: 300 (cm)"
                               value={field.value || ""}
                               onChange={(e) =>
                                 field.onChange(Number(e.target.value) || 0)

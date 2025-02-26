@@ -18,20 +18,24 @@ export const profileSchema = z.object({
           .optional(),
         height: z
           .number()
+          .int({ message: "El alto debe ser un número entero en cm" })
+          .positive({ message: "El alto debe ser mayor a 0" })
           .optional(),
         width: z
           .number()
+          .int({ message: "El ancho debe ser un número entero en cm" })
+          .positive({ message: "El ancho debe ser mayor a 0" })
           .optional(),
-        group: z.string().optional(), // Soporte
+        group: z.string().optional(),
         // Campos opcionales
-        support: z.string().optional(), // Soporte
-        fall: z.string().optional(), // Caída
-        chain: z.string().optional(), // Cadena
-        accessory: z.string().optional(), // Cadena
-        chainSide: z.string().optional(), // Lado de cadena
-        opening: z.string().optional(), // Apertura
-        pinches: z.string().optional(), // Pellizcos
-        panels: z.string().optional(), // Paños
+        support: z.string().optional(),
+        fall: z.string().optional(),
+        chain: z.string().optional(),
+        accessory: z.string().optional(),
+        chainSide: z.string().optional(),
+        opening: z.string().optional(),
+        pinches: z.string().optional(),
+        panels: z.string().optional(),
         price: z.string().optional(),
         accessories: z.string().optional(),
         comment: z.string().optional(),

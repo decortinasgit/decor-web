@@ -52,10 +52,49 @@ export const validateFabricLimits = (
 
 export const validateVerticalBands = (width: number) => {
   if (width > 400)
-    return "El riel no puede superar los 4 metros. Cotizar en dos rieles.";
+    return "El riel no puede superar los 400 cm. Cotizar en dos rieles.";
   return undefined;
 };
 
+export const validateHeightWidthRatio = (height: number, width: number) => {
+  console.log("height", height);
+
+  if (height > 3 * width) {
+    return "Cuando el alto de la cortina supere tres veces al ancho de la misma, no se otorgará garantía de funcionamiento.";
+  }
+  return undefined;
+};
+
+export const validateZebra = (width?: number) => {
+  const result: {
+    productionDelay: string;
+    maxWidthValidation?: string;
+  } = {
+    productionDelay:
+      "El tiempo de producción de las cortinas zebra es de 20 días hábiles. Recordar antes de encargar este tipo de cortinas consultar disponibilidad del color requerido.",
+  };
+
+  if (width && width > 283) {
+    result.maxWidthValidation =
+      "El ancho máximo disponible para este tipo de cortina es de 283 cm.";
+  }
+
+  return result;
+};
+
+export const validateEuropeanRail = (width?: number) => {
+  if (width && width > 600) {
+    return "El ancho máximo del riel en un paño es de 600 cm. En caso de superar esta medida, se deben cotizar como cortinas separadas.";
+  }
+  return undefined;
+};
+
+export const validateBars = (width?: number) => {
+  if (width && width > 300) {
+    return "Los barrales vienen en tiras de 600 cm de ancho. Aconsejamos no realizar paños de más de 300 cm de ancho sin soportes en el medio, ya que el barral se puede doblar.";
+  }
+  return undefined;
+};
 type CurtainValidationParams = {
   name: string;
   type: string;
@@ -68,6 +107,13 @@ type CurtainValidationResult = {
   rollerValidation?: string;
   fabricValidation?: string;
   verticalBandValidation?: string;
+  heightWidthRatioValidation?: string;
+  zebraValidation?: {
+    productionDelay: string;
+    maxWidthValidation?: string;
+  };
+  europeanRailValidation?: string;
+  barsValidation?: string;
 };
 
 export const validateCurtain = ({
@@ -105,6 +151,30 @@ export const validateCurtain = ({
   if (width && height) {
     const fabricError = validateFabricLimits(type, height, width);
     if (fabricError) result.fabricValidation = fabricError;
+  }
+
+  // Validación de relación alto/ancho
+  if (width && height) {
+    const heightWidthRatioError = validateHeightWidthRatio(height, width);
+    if (heightWidthRatioError)
+      result.heightWidthRatioValidation = heightWidthRatioError;
+  }
+
+  // Validaciones específicas para Cortinas Zebra
+  if (name === "Cortinas Zebra") {
+    result.zebraValidation = validateZebra(width);
+  }
+
+  // Validación para Riel Europeo
+  if (name === "Riel Europeo" && width) {
+    const europeanRailError = validateEuropeanRail(width);
+    if (europeanRailError) result.europeanRailValidation = europeanRailError;
+  }
+
+  // Validación para Barrales
+  if (name === "Barral" && width) {
+    const barsError = validateBars(width);
+    if (barsError) result.barsValidation = barsError;
   }
 
   return result;
