@@ -95,6 +95,10 @@ export const validateBars = (width?: number) => {
   }
   return undefined;
 };
+
+const validateMotorRollerWidth = () => {
+  return "El ancho mínimo requerido para motorizar una cortina roller es de 70 cm.";
+};
 type CurtainValidationParams = {
   name: string;
   type: string;
@@ -114,6 +118,7 @@ type CurtainValidationResult = {
   };
   europeanRailValidation?: string;
   barsValidation?: string;
+  motorRollerValidation?: string;
 };
 
 export const validateCurtain = ({
@@ -175,6 +180,11 @@ export const validateCurtain = ({
   if (name === "Barral" && width) {
     const barsError = validateBars(width);
     if (barsError) result.barsValidation = barsError;
+  }
+
+  if (name === "Accesorios" && type.includes("Motor Roller")) {
+    const motorRollerError = validateMotorRollerWidth();
+    if (motorRollerError) result.motorRollerValidation = motorRollerError;
   }
 
   return result;

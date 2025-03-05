@@ -128,6 +128,7 @@ const Step1 = ({
           zebraValidation,
           europeanRailValidation,
           barsValidation,
+          motorRollerValidation,
         } = validateCurtain({
           name: getNameWithoutPrefix(name),
           type,
@@ -162,6 +163,10 @@ const Step1 = ({
           {
             condition: barsValidation,
             message: barsValidation,
+          },
+          {
+            condition: motorRollerValidation,
+            message: motorRollerValidation,
           },
         ];
 
