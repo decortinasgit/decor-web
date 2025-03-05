@@ -322,21 +322,23 @@ const Step1 = ({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {groupedNameOptions.map(
-                              ({ group, types: names }, index) => (
+                            {groupedNameOptions
+                              .sort((a, b) => a.group.localeCompare(b.group))
+                              .map(({ group, types: names }, index) => (
                                 <SelectGroup key={index}>
                                   <SelectLabel>{group}</SelectLabel>
-                                  {names.map((name, index) => (
-                                    <SelectItem
-                                      key={index}
-                                      value={group + "_" + name}
-                                    >
-                                      {name}
-                                    </SelectItem>
-                                  ))}
+                                  {names
+                                    .sort((a, b) => a.localeCompare(b))
+                                    .map((name, index) => (
+                                      <SelectItem
+                                        key={index}
+                                        value={group + "_" + name}
+                                      >
+                                        {name}
+                                      </SelectItem>
+                                    ))}
                                 </SelectGroup>
-                              )
-                            )}
+                              ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -364,11 +366,13 @@ const Step1 = ({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {typeOptions.map((type) => (
-                              <SelectItem key={type} value={type}>
-                                {type}
-                              </SelectItem>
-                            ))}
+                            {typeOptions
+                              .sort((a, b) => a.localeCompare(b))
+                              .map((type) => (
+                                <SelectItem key={type} value={type}>
+                                  {type}
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -493,7 +497,7 @@ const Step1 = ({
                               type="number"
                               min={0}
                               disabled={loading}
-                              placeholder="Ingrese el alto"
+                              placeholder="Ej: 300 (cm)"
                               value={field.value || ""}
                               onChange={(e) =>
                                 field.onChange(Number(e.target.value) || 0)

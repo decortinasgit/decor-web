@@ -216,6 +216,8 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
     updatedValues[index].color = "";
     updatedValues[index].category = matchingCurtain?.category || "";
 
+    form.setValue(`curtains.${index}.color`, "");
+
     setSelectedCurtainValues(updatedValues);
   };
 
