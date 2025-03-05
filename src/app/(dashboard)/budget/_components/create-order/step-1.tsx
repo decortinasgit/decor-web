@@ -568,7 +568,15 @@ const Step1 = ({
                             </FormControl>
                             <SelectContent>
                               {fallOptions.map((value) => (
-                                <SelectItem key={value} value={value ?? "-"}>
+                                <SelectItem
+                                  key={value}
+                                  value={value ?? "-"}
+                                  disabled={
+                                    value === "Adelante" &&
+                                    selectedCurtainValues[index].type ===
+                                      "Zebra"
+                                  }
+                                >
                                   {value}
                                 </SelectItem>
                               ))}
