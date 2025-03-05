@@ -187,9 +187,10 @@ const Step1 = ({
         }
 
         const showField = (fieldName: string) =>
-          additionalFields(selectedCurtainValues[index].name).includes(
-            fieldName
-          );
+          additionalFields(
+            selectedCurtainValues[index].name,
+            form.getValues(`curtains.${index}.accessory`)
+          ).includes(fieldName);
 
         const price = getCurtainObject(index)
           ? parseFloat(getCurtainObject(index)?.price!) *
