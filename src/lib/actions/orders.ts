@@ -405,7 +405,7 @@ export async function getOrderById(orderId: string) {
     console.error(`Error fetching order with ID ${orderId}:`, err);
     return {
       data: null,
-      error: err,
+      error: "Failed to fetch order.",
     };
   }
 }
