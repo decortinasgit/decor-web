@@ -394,7 +394,7 @@ export const PDFRender = ({ order }: { order: OrderWithItems }) => {
                   {item.color || "-"}
                 </Text>
                 <Text style={[styles.tableCell, { flex: 1.5 }]}>
-                  {item.height} x {item.width} cm
+                   {item.width} x {item.height} cm
                 </Text>
                 <Text style={[styles.tableCell, { flex: 1 }]}>
                   {item.support || "-"}
