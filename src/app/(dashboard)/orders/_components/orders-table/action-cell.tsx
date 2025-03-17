@@ -19,7 +19,6 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { generateEmailContent } from "@/lib/html";
 import { HiddenPDFContainer } from "@/components/hidden-pdf-container";
 import { PDFContent } from "@/app/(dashboard)/budget/_components/pdf-content";
-import { downloadPDFFromHTML } from "@/lib/pdf";
 import { convertItemsToCSV } from "@/lib/csv";
 
 const ActionsCell = ({
@@ -176,9 +175,9 @@ const ActionsCell = ({
             </DropdownMenuItem>
           )}
           <DropdownMenuItem
-            onClick={() => downloadPDFFromHTML(hiddenContainerRef)}
+            onClick={() => router.push(`/orders/pdf/${order.id}`)}
           >
-            Descargar PDF
+            Ver PDF
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           {order.status === "pending" && (

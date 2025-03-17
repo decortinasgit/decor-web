@@ -17,7 +17,6 @@ import { totalAmount } from "@/lib/curtains";
 import { PDFContent } from "./pdf-content";
 import { OrderWithItems } from "@/types/orders";
 import { calculateOrderTotals, formatDate, formatPrice } from "@/lib/utils";
-import { downloadPDFFromHTML } from "@/lib/pdf";
 import { HiddenPDFContainer } from "@/components/hidden-pdf-container";
 
 interface OrderSuccessProps {
@@ -90,10 +89,10 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
             <Store className="mr-2 h-4 w-4" /> Ver Pedidos
           </Button>
           <Button
-            onClick={() => downloadPDFFromHTML(hiddenContainerRef)}
+            onClick={() => router.push(`/orders/pdf/${order.id}`)}
             className="w-full"
           >
-            <Download className="mr-2 h-4 w-4" /> Descargar PDF
+            <Download className="mr-2 h-4 w-4" /> Ver PDF
           </Button>
         </CardFooter>
       </Card>
