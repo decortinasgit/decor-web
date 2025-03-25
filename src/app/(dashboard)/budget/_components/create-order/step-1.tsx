@@ -71,6 +71,7 @@ type Props = {
   handleTypeChange: (index: number, value: string) => void;
   handleColorChange: (index: number, value: string) => void;
   append: UseFieldArrayAppend<ProfileFormValues, "curtains">;
+  deleteRow: (index: number) => void;
 };
 
 const Step1 = ({
@@ -88,6 +89,7 @@ const Step1 = ({
   handleTypeChange,
   handleColorChange,
   append,
+  deleteRow,
 }: Props) => {
   return (
     <>
@@ -171,11 +173,15 @@ const Step1 = ({
         ];
 
         let isNotCategoryH;
+        let isNotCategoryI;
         let isNotCategoryHOrD;
         let isNotCategoryGOrC;
 
         if (matchingCurtain?.category) {
           isNotCategoryH = ![Category.ITEM_H].includes(
+            matchingCurtain?.category
+          );
+          isNotCategoryI = ![Category.ITEM_I].includes(
             matchingCurtain?.category
           );
           isNotCategoryHOrD = ![Category.ITEM_H, Category.ITEM_D].includes(
@@ -259,7 +265,7 @@ const Step1 = ({
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => remove(index)}
+                      onClick={() => deleteRow(index)}
                     >
                       <Trash2Icon className="h-4 w-4 " />
                     </Button>
@@ -456,7 +462,7 @@ const Step1 = ({
                   )}
 
                   {/* Otros campos principales y adicionales */}
-                  {isNotCategoryGOrC && (
+                  {isNotCategoryGOrC && isNotCategoryI && (
                     <FormField
                       control={form.control}
                       name={`curtains.${index}.width`}
@@ -486,7 +492,7 @@ const Step1 = ({
                     />
                   )}
 
-                  {isNotCategoryGOrC && (
+                  {isNotCategoryGOrC && isNotCategoryH && (
                     <FormField
                       control={form.control}
                       name={`curtains.${index}.height`}

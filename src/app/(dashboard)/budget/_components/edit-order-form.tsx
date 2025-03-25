@@ -89,7 +89,32 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [data, setData] = useState<FormType>({} as FormType);
+  const [data, setData] = useState<FormType>({
+    company: order.company,
+    client: order.client,
+    comment: order.comment || "",
+    curtains: order.items.map((item) => ({
+      id: item.id || "",
+      accessory: item.accessory || "",
+      category: item.category,
+      chain: item.chain || "",
+      chainSide: item.chainSide || "",
+      color: item.color || "",
+      fall: item.fall || "",
+      height: item.height || 0,
+      name: item.group + "_" + item.name || "",
+      opening: item.opening || "",
+      orderId: item.orderId || "",
+      panels: item.panels || "",
+      pinches: item.pinches || "",
+      price: item.price?.toString() || "0",
+      qty: item.qty || 0,
+      support: item.support || "",
+      type: item.type || "",
+      group: item.group || "",
+      width: item.width || 0,
+    })),
+  });
 
   const itemsPerPage = 10;
   const totalItems = data.curtains ? data.curtains.length : 0;
@@ -207,7 +232,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
     const matchingCurtain = curtains.find(
       (curtain) => curtain.name === getNameWithoutPrefix(value)
     );
-  
+
     updatedValues[index] = {
       ...resetCurtain,
       name: getNameWithoutPrefix(value),
@@ -337,9 +362,9 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
           orderData: {
             id: orderId,
             company: data.company,
-            client: data.client,
+            client: form.getValues("client"),
             email: userMail,
-            comment: data.comment,
+            comment: form.getValues("comment"),
             // @ts-ignore
             status: data.status,
           },
@@ -466,6 +491,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
                 handleNameChange={handleNameChange}
                 handleTypeChange={handleTypeChange}
                 handleColorChange={handleColorChange}
+                deleteRow={deleteRow}
               />
             )}
           </div>
