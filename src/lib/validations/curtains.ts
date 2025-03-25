@@ -57,8 +57,6 @@ export const validateVerticalBands = (width: number) => {
 };
 
 export const validateHeightWidthRatio = (height: number, width: number) => {
-  console.log("height", height);
-
   if (height > 3 * width) {
     return "Cuando el alto de la cortina supere tres veces al ancho de la misma, no se otorgará garantía de funcionamiento.";
   }

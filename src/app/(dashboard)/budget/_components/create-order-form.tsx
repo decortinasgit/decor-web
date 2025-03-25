@@ -165,10 +165,10 @@ export const CreateOrderForm: React.FC<ProfileFormType> = ({
       curtains: updatedCurtains,
     });
 
-    console.log("Data with calculated prices:", {
-      ...formData,
-      curtains: updatedCurtains,
-    });
+    // console.log("Data with calculated prices:", {
+    //   ...formData,
+    //   curtains: updatedCurtains,
+    // });
   };
 
   const handleNameChange = (index: number, value: string) => {

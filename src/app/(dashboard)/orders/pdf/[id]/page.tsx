@@ -25,7 +25,6 @@ export default function PDFRenderer() {
     try {
       setLoading(true);
       const response = await axios.get(`/api/orders/${id}`);
-      console.log(response.data);
 
       if (response.data && response.data.items.length > 0) {
         setOrder(response.data);

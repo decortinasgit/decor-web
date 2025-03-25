@@ -339,7 +339,7 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
         toast.message("Éxito!", {
           description: `Tu orden fue actualizada!`,
         });
-        console.log(`Order ${activeId} status updated to ${overId}`);
+        // console.log(`Order ${activeId} status updated to ${overId}`);
       } catch (error) {
         console.error(`Failed to update order ${activeId} status:`, error);
         toast.error("Error!", {
@@ -375,7 +375,7 @@ export function KanbanBoard({ data }: KanbanBoardProps) {
         toast.message("Éxito!", {
           description: `Tu orden fue actualizada!`,
         });
-        console.log(`Order ${activeId} status updated to ${overStatus}`);
+        // console.log(`Order ${activeId} status updated to ${overStatus}`);
       } catch (error) {
         console.error(`Failed to update order ${activeId} status:`, error);
         toast.error("Error!", {

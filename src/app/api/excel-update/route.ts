@@ -40,10 +40,10 @@ export const PUT = async () => {
       (curtain) => !newCurtainIds.has(curtain.id)
     );
 
-    console.log("=============== Cortinas ===============");
-    console.log("Actualizar:", changedOrNewCurtains.length);
-    console.log("Eliminar:", curtainsToDelete.length);
-    console.log("========================================");
+    // console.log("=============== Cortinas ===============");
+    // console.log("Actualizar:", changedOrNewCurtains.length);
+    // console.log("Eliminar:", curtainsToDelete.length);
+    // console.log("========================================");
 
     if (curtainsToDelete.length > 0) {
       await deleteCurtains(curtainsToDelete.map((curtain) => curtain.id));

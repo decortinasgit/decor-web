@@ -188,17 +188,17 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       };
     });
 
-    console.log("Updated curtains:", updatedCurtains);
+    // console.log("Updated curtains:", updatedCurtains);
 
     setData({
       ...formData,
       curtains: updatedCurtains,
     });
 
-    console.log("Data with calculated prices:", {
-      ...formData,
-      curtains: updatedCurtains,
-    });
+    // console.log("Data with calculated prices:", {
+    //   ...formData,
+    //   curtains: updatedCurtains,
+    // });
   };
 
   const handleNameChange = (index: number, value: string) => {
@@ -327,7 +327,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
         }
       });
 
-      console.log("Order items data:", orderItemsData);
+      // console.log("Order items data:", orderItemsData);
 
       // Usar el endpoint PUT para actualizar la orden y los ítems
       await axios.put(
@@ -358,7 +358,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 
       router.push(`/orders`);
     } catch (error) {
-      console.log("Error updating order or order items:", error);
+      // console.log("Error updating order or order items:", error);
 
       if (axios.isAxiosError(error)) {
         console.error(

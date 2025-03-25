@@ -573,8 +573,6 @@ export async function getUserOrderStatistics(email: string): Promise<{
   data: OrderStats | null;
   error: any;
 }> {
-  console.log(email, "emails");
-
   try {
     const stats = await db.transaction(async (tx) => {
       // Cantidad de órdenes en status "completed" para el usuario

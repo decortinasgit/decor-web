@@ -2,15 +2,11 @@ import { NextResponse } from "next/server";
 import { getOrderById } from "@/lib/actions/orders";
 
 export async function GET(req: Request) {
-  console.log(req.url, "req");
-
   try {
     // Extraer el id de la URL
     const url = new URL(req.url);
     const pathParts = url.pathname.split("/"); // Split the pathname into parts
     const id = pathParts[pathParts.length - 1]; // Get the last part of the path
-
-    console.log(id, "id");
 
     if (!id) {
       return new NextResponse("Order ID is required", { status: 400 });
