@@ -166,7 +166,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 
       const handleGetAccessory = (): Accesory | undefined => {
         const matchingAccessory = matchingCurtain?.accessories?.filter(
-          (data) => data.type === form.watch(`curtains.${index}.accessories`)
+          (data) => data.type === formData.curtains[index].accessory
         );
 
         if (matchingAccessory) {
@@ -178,7 +178,7 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 
       const handleGetChain = (): Chain | undefined => {
         const matchingChain = matchingCurtain?.chains?.filter(
-          (data) => data.name === form.watch(`curtains.${index}.chain`)
+          (data) => data.name === formData.curtains[index].chain
         );
 
         if (matchingChain) {
@@ -189,23 +189,23 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       };
 
       const calculatedPrice = priceCalculation(
-        form.watch(`curtains.${index}.qty`),
+        formData.curtains[index].qty,
         price,
         selectedCurtainValues[index].category,
         parseFloat(costs[0].dolarPrice),
         parseFloat(costs[0].making),
         {
-          width: form.watch(`curtains.${index}.width`) ?? undefined,
-          height: form.watch(`curtains.${index}.height`) ?? undefined,
+          width: formData.curtains[index].width ?? undefined,
+          height: formData.curtains[index].height ?? undefined,
         },
         handleGetChain(),
         handleGetAccessory(),
-        form.watch(`curtains.${index}.pinches`) ?? undefined
+        formData.curtains[index].pinches ?? undefined
       ).price?.toFixed(2);
 
       return {
         ...curtain,
-        price: calculatedPrice?.toString(),
+        price: calculatedPrice?.toString() || "0",
         category: matchingCurtain?.category || "",
         accessories: matchingCurtain?.accessories || undefined,
         chains: matchingCurtain?.chains || undefined,
@@ -213,17 +213,10 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
       };
     });
 
-    // console.log("Updated curtains:", updatedCurtains);
-
     setData({
       ...formData,
       curtains: updatedCurtains,
     });
-
-    // console.log("Data with calculated prices:", {
-    //   ...formData,
-    //   curtains: updatedCurtains,
-    // });
   };
 
   const handleNameChange = (index: number, value: string) => {
@@ -308,7 +301,8 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 
     if (currentStep < steps.length - 1) {
       if (currentStep === steps.length - 2) {
-        await form.handleSubmit(processForm)();
+        const formData = form.getValues();
+        await processForm(formData);
       }
       setCurrentStep((step) => step + 1);
     }
@@ -352,8 +346,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
         }
       });
 
-      // console.log("Order items data:", orderItemsData);
-
       // Usar el endpoint PUT para actualizar la orden y los ítems
       await axios.put(
         "/api/order",
@@ -383,8 +375,6 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({
 
       router.push(`/orders`);
     } catch (error) {
-      // console.log("Error updating order or order items:", error);
-
       if (axios.isAxiosError(error)) {
         console.error(
           "Failed to update order or order items:",
