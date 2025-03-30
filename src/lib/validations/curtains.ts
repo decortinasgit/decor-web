@@ -117,6 +117,7 @@ type CurtainValidationResult = {
   europeanRailValidation?: string;
   barsValidation?: string;
   motorRollerValidation?: string;
+  accessoryValidation?: string;
 };
 
 export const validateCurtain = ({
@@ -130,6 +131,15 @@ export const validateCurtain = ({
 
   // Validación para cortinas Roller
   if (name === "Roller") {
+    if (width && height) {
+      const heightWidthRatioError = validateHeightWidthRatio(height, width);
+      if (heightWidthRatioError)
+        result.heightWidthRatioValidation = heightWidthRatioError;
+
+      const fabricError = validateFabricLimits(type, height, width);
+      if (fabricError) result.fabricValidation = fabricError;
+    }
+
     if (width && height && accessory) {
       const rollerError = validateRollerSystem(width, height, accessory);
       if (rollerError) result.rollerValidation = rollerError;
@@ -150,34 +160,27 @@ export const validateCurtain = ({
     if (verticalBandError) result.verticalBandValidation = verticalBandError;
   }
 
-  // Validación de límites de tela genérica
-  if (width && height) {
-    const fabricError = validateFabricLimits(type, height, width);
-    if (fabricError) result.fabricValidation = fabricError;
-  }
-
-  // Validación de relación alto/ancho
-  if (width && height) {
-    const heightWidthRatioError = validateHeightWidthRatio(height, width);
-    if (heightWidthRatioError)
-      result.heightWidthRatioValidation = heightWidthRatioError;
-  }
-
   // Validaciones específicas para Cortinas Zebra
   if (name === "Cortinas Zebra") {
     result.zebraValidation = validateZebra(width);
   }
 
   // Validación para Riel Europeo
-  if (name === "Riel Europeo" && width) {
-    const europeanRailError = validateEuropeanRail(width);
-    if (europeanRailError) result.europeanRailValidation = europeanRailError;
+  if (name === "Riel Europeo") {
+    if (width) {
+      const europeanRailError = validateEuropeanRail(width);
+      if (europeanRailError) result.europeanRailValidation = europeanRailError;
+    }
+    result.accessoryValidation = "Recordar que el Riel no viene con bastones incluidos, se deben cotizar por aparte";
   }
 
   // Validación para Barrales
-  if (name === "Barral" && width) {
-    const barsError = validateBars(width);
-    if (barsError) result.barsValidation = barsError;
+  if (name === "Barral") {
+    if (width) {
+      const barsError = validateBars(width);
+      if (barsError) result.barsValidation = barsError;
+    }
+    result.accessoryValidation = "Recordar que el Barral no viene con bastones incluidos, se deben cotizar por aparte";
   }
 
   if (name === "Accesorios" && type.includes("Motor Roller")) {

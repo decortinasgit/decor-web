@@ -131,6 +131,7 @@ const Step1 = ({
           europeanRailValidation,
           barsValidation,
           motorRollerValidation,
+          accessoryValidation,
         } = validateCurtain({
           name: getNameWithoutPrefix(name),
           type,
@@ -169,6 +170,10 @@ const Step1 = ({
           {
             condition: motorRollerValidation,
             message: motorRollerValidation,
+          },
+          {
+            condition: accessoryValidation,
+            message: accessoryValidation,
           },
         ];
 
