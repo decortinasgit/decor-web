@@ -23,6 +23,12 @@ export const PUT = async () => {
 
     const filteredData = await processExcelData(jsonData);
 
+    if (!filteredData.curtains.length) {
+      return NextResponse.json({
+        message: "No se encontraron cortinas en el archivo Excel",
+      });
+    }
+
     // Obtener datos existentes
     const existingCurtains = await getCurtains();
 
