@@ -185,6 +185,11 @@ const splitItemsIntoPages = (items: any[]) => {
     pages.push(currentPage);
   }
 
+  // If we have between 3-9 items, add an empty page for comments, FAQ and footer
+  if (items.length >= 3 && items.length <= 9 && pages.length === 1) {
+    pages.push([]);
+  }
+
   return pages;
 };
 
@@ -327,122 +332,121 @@ export const PDFRender = ({ order }: { order: OrderWithItems }) => {
           )}
 
           {/* Tabla */}
-          <View style={styles.table}>
-            <View style={styles.tableHeader}>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 0.8 }]}>
-                {" "}
-                {/* Reducir el ancho */}
-                Cantidad
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1.5 }]}>
-                {" "}
-                {/* Reducir el ancho */}
-                Nombre
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Tipo
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Color
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1.5 }]}>
-                {" "}
-                {/* Reducir el ancho */}
-                Dimensiones
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Soporte
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Caída
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Cadena
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Lado Cadena
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Apertura
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Pliegues
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Paños
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Accesorios
-              </Text>
-              <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
-                Precio
-              </Text>
-            </View>
-
-            {pageItems.map((item, index) => (
-              <View style={styles.tableRow} key={index}>
-                <Text style={[styles.tableCell, { flex: 0.8 }]}>
-                  {item.qty}
+          {pageItems.length > 0 && (
+            <View style={styles.table}>
+              <View style={styles.tableHeader}>
+                <Text style={[styles.boldText, styles.tableCell, { flex: 0.8 }]}>
+                  Cantidad
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1.5 }]}>
-                  {item.name}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1.5 }]}>
+                  Nombre
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.type || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Tipo
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.color || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Color
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1.5 }]}>
-                   {item.width} x {item.height} cm
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1.5 }]}>
+                  Dimensiones
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.support || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Soporte
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.fall || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Caída
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.chain || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Cadena
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.chainSide || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Lado Cadena
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.opening || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Apertura
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.pinches || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Pliegues
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.panels || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Paños
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {item.accessory || "-"}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Accesorios
                 </Text>
-                <Text style={[styles.tableCell, { flex: 1 }]}>
-                  {formatPrice(item.price)}
+                <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
+                  Precio
                 </Text>
               </View>
-            ))}
-          </View>
 
-          {/* Totales (solo en la última página) */}
-          {pageIndex === pages.length - 1 && (
-            <>
-              <View style={styles.totals}>
-                <View>
-                  <View style={styles.totalRow}>
-                    <Text style={[styles.boldText, styles.totalRowText]}>
-                      Total:
-                    </Text>
-                    <Text style={[styles.boldText, styles.totalRowText]}>
-                      {formatPrice(total)}
-                    </Text>
-                  </View>
+              {pageItems.map((item, index) => (
+                <View style={styles.tableRow} key={index}>
+                  <Text style={[styles.tableCell, { flex: 0.8 }]}>
+                    {item.qty}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1.5 }]}>
+                    {item.name}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.type || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.color || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1.5 }]}>
+                    {item.width} x {item.height} cm
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.support || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.fall || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.chain || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.chainSide || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.opening || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.pinches || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.panels || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {item.accessory || "-"}
+                  </Text>
+                  <Text style={[styles.tableCell, { flex: 1 }]}>
+                    {formatPrice(item.price)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* Totales (siempre en la primera página cuando hay 3-9 items) */}
+          {(pageIndex === 0 || order.items.length <= 2) && (
+            <View style={styles.totals}>
+              <View>
+                <View style={styles.totalRow}>
+                  <Text style={[styles.boldText, styles.totalRowText]}>
+                    Total:
+                  </Text>
+                  <Text style={[styles.boldText, styles.totalRowText]}>
+                    {formatPrice(total)}
+                  </Text>
                 </View>
               </View>
+            </View>
+          )}
 
+          {/* Sección de Comentarios, FAQ y Footer (en segunda página cuando hay 3-9 items) */}
+          {(order.items.length <= 2 || pageIndex === 1) && (
+            <>
               {/* Sección de Comentarios */}
               {(order.comment || itemsWithComments.length > 0) && (
                 <View style={styles.commentSection}>
