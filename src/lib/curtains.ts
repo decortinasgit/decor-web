@@ -178,7 +178,12 @@ export const priceCalculation = (
     (category === Category.ITEM_D || category === Category.ITEM_H) &&
     sizes?.width
   ) {
-    return { price: price * (sizes.width / 100) };
+    // For ITEM_D, set minimum width to 120
+    const effectiveWidth = category === Category.ITEM_D 
+      ? Math.max(sizes.width, 120) 
+      : sizes.width;
+    
+    return { price: price * (effectiveWidth / 100) };
   } else if (category === Category.ITEM_I && sizes?.height) {
     return { price: price * (sizes.height / 100) };
   }
