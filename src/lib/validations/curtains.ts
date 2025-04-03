@@ -171,7 +171,7 @@ export const validateCurtain = ({
       const europeanRailError = validateEuropeanRail(width);
       if (europeanRailError) result.europeanRailValidation = europeanRailError;
     }
-    result.accessoryValidation = "Recordar que el Riel no viene con bastones incluidos, se deben cotizar por aparte";
+    result.accessoryValidation = "Recordar que el Riel viene con 2 bastones de 75cm cada uno.";
   }
 
   // Validación para Barrales
