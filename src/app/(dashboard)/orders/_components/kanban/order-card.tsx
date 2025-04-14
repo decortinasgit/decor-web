@@ -17,7 +17,18 @@ import {
   Package,
   Calendar,
   DollarSign,
+  MoreHorizontal,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useOrderStore, defaultStatusCols } from "@/lib/store";
+import { OrderStatus } from "@/db/schema";
+import axios from "axios";
+import { toast } from "sonner";
 
 interface OrderCardProps {
   order: OrderWithItems;
@@ -50,6 +61,9 @@ export function OrderCard({ order, isOverlay }: OrderCardProps) {
     },
   });
 
+  const setOrders = useOrderStore((state) => state.setOrders);
+  const orders = useOrderStore((state) => state.orders);
+
   const style = {
     transition,
     transform: CSS.Translate.toString(transform),
@@ -63,6 +77,48 @@ export function OrderCard({ order, isOverlay }: OrderCardProps) {
       },
     },
   });
+
+  async function updateOrderStatus(orderId: string, status: string) {
+    try {
+      const response = await axios.put("/api/order-status", {
+        orderId,
+        status,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      throw new Error("Failed to update order status");
+    }
+  }
+
+  const handleStatusChange = async (newStatus: OrderStatus) => {
+    if (order.status === "pending") {
+      toast.error("No puedes mover órdenes con estado 'Presupuestado'.", {
+        description: "Solo puedes actualizar dando de alta el presupuesto.",
+      });
+      return;
+    }
+
+    const updatedOrders = orders.map((o) =>
+      o.id === order.id ? { ...o, status: newStatus } : o
+    );
+
+    // Update local state
+    setOrders(updatedOrders);
+
+    // Update server
+    try {
+      await updateOrderStatus(order.id as string, newStatus);
+      toast.message("Éxito!", {
+        description: `Tu orden fue actualizada!`,
+      });
+    } catch (error) {
+      console.error(`Failed to update order ${order.id} status:`, error);
+      toast.error("Error!", {
+        description: `Tu orden no pudo ser actualizada, intente nuevamente!`,
+      });
+    }
+  };
 
   return (
     <Card
@@ -96,6 +152,25 @@ export function OrderCard({ order, isOverlay }: OrderCardProps) {
           </TooltipTrigger>
           <TooltipContent>{order.serial ?? order.id}</TooltipContent>
         </Tooltip>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0 ml-4">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {defaultStatusCols.map((status) => (
+              <DropdownMenuItem
+                key={status.id}
+                onClick={() => handleStatusChange(status.id as OrderStatus)}
+                disabled={order.status === status.id}
+              >
+                Cambiar a {status.title}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardHeader>
       <CardContent className="grid gap-2 px-4 pt-2 pb-4">
         <h3 className="font-semibold text-lg truncate">
