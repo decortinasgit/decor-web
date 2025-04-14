@@ -3,13 +3,13 @@ import { duplicateOrder } from "@/lib/actions/orders";
 
 export async function POST(req: Request) {
   try {
-    const { orderId, newOrderId } = await req.json();
+    const { orderId } = await req.json();
 
     if (!orderId) {
       return new Response("Order ID is required", { status: 400 });
     }
 
-    const result = await duplicateOrder(orderId, newOrderId);
+    const result = await duplicateOrder(orderId);
 
     if (!result.data) {
       throw new Error("Failed to duplicate order");

@@ -9,6 +9,7 @@ import {
   orderStatusSchema,
 } from "../validations/orders";
 import { OrderStats } from "@/types/orders";
+import { v4 as uuidv4 } from 'uuid';
 
 export async function addOrderWithItems(
   rawOrderInput: z.infer<typeof orderSchema>,
@@ -284,7 +285,7 @@ export async function updateOrderWithItems(
   }
 }
 
-export async function duplicateOrder(orderId: string, newOrderId: string) {
+export async function duplicateOrder(orderId: string) {
   try {
     const result = await db.transaction(async (trx) => {
       // Obtener la orden original
@@ -302,6 +303,9 @@ export async function duplicateOrder(orderId: string, newOrderId: string) {
         .select()
         .from(orderItems)
         .where(eq(orderItems.orderId, orderId));
+
+      // Generar un nuevo UUID para la orden duplicada
+      const newOrderId = uuidv4();
 
       // Insertar la nueva orden con un estado "pending"
       const [newOrder] = await trx
@@ -324,7 +328,7 @@ export async function duplicateOrder(orderId: string, newOrderId: string) {
 
       // Insertar los ítems de la orden duplicada
       const duplicatedItems = existingItems.map((item, index) => ({
-        id: `${newOrderId}-${index}`,
+        id: `${newOrder.id}-${index}`,
         orderId: newOrder.id,
         accessory: item.accessory,
         category: item.category,

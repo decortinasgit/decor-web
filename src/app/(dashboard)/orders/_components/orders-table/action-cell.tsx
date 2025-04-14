@@ -99,25 +99,13 @@ const ActionsCell = ({
 
   async function duplicateOrder(orderId: string) {
     try {
-      const { data: lastOrderId } = await axios.get("/api/order/last-id");
-
-      if (!lastOrderId) {
-        toast.error("Lo siento", {
-          description: "Hubo un error al crear el pedido. Vuelva a intentarlo.",
-        });
-        return;
-      }
-
-      const newOrderId = (Number(lastOrderId.data) + 1).toString();
-
-      const response = await axios.post("/api/order/duplicate", {
+      const duplicateResponse = await axios.post("/api/order/duplicate", {
         orderId: orderId,
-        newOrderId: newOrderId,
       });
 
-      if (response.status === 201) {
+      if (duplicateResponse.status === 201) {
         toast.success("Pedido duplicado!", {
-          description: `Se creó un nuevo pedido con ID ${newOrderId}.`,
+          description: `Se creó un nuevo pedido con ID ${duplicateResponse.data.newOrder.id}.`,
         });
 
         if (handleFetchOrders) {
