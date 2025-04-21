@@ -497,7 +497,7 @@ const Step1 = ({
                     />
                   )}
 
-                  {isNotCategoryGOrC && isNotCategoryH && (
+                  {isNotCategoryGOrC && isNotCategoryHOrD && (
                     <FormField
                       control={form.control}
                       name={`curtains.${index}.height`}
