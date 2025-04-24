@@ -82,7 +82,7 @@ export const validateZebra = (width?: number) => {
 
 export const validateEuropeanRail = (width?: number) => {
   if (width && width > 600) {
-    return "El ancho máximo del riel en un paño es de 600 cm. En caso de superar esta medida, se deben cotizar como cortinas separadas.";
+    return "El ancho máximo del riel en un paño es de 600 cm. En caso de superar esta medida, se cortara el mismo en la cantidad de paños indicada, salvo que exista alguna aclaración en comentarios de cómo quiere que se fabriquen los mismos.";
   }
   return undefined;
 };
