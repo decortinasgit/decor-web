@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FieldArrayWithId,
   FieldErrors,
@@ -116,6 +116,42 @@ const Step1 = ({
 
         const matchingCurtain = getCurtainObject(index);
 
+        // Auto-select "-" for color if it's the only option
+        useEffect(() => {
+          if (
+            colorOptions.length === 1 && 
+            colorOptions[0] === "-" && 
+            !form.watch(`curtains.${index}.color`)
+          ) {
+            form.setValue(`curtains.${index}.color`, "-");
+            handleColorChange(index, "-");
+          }
+        }, [colorOptions, index, form, handleColorChange]);
+
+        // Auto-select "-" for accessory if it's the only option
+        useEffect(() => {
+          if (
+            matchingCurtain?.accessories?.length === 1 && 
+            matchingCurtain.accessories[0].type === "-" && 
+            !form.watch(`curtains.${index}.accessory`)
+          ) {
+            form.setValue(`curtains.${index}.accessory`, "-");
+            handleGetAccessory();
+          }
+        }, [matchingCurtain, index, form]);
+
+        // Auto-select "-" for chain if it's the only option
+        useEffect(() => {
+          if (
+            matchingCurtain?.chains?.length === 1 && 
+            matchingCurtain.chains[0].name === "-" && 
+            !form.watch(`curtains.${index}.chain`)
+          ) {
+            form.setValue(`curtains.${index}.chain`, "-");
+            handleGetChain();
+          }
+        }, [matchingCurtain, index, form]);
+
         const width = form.watch(`curtains.${index}.width`);
         const height = form.watch(`curtains.${index}.height`);
         const accessory = form.watch(`curtains.${index}.accessory`);
@@ -209,24 +245,37 @@ const Step1 = ({
           : 0;
 
         const handleGetAccessory = (): Accesory | undefined => {
+          const accessoryValue = form.watch(`curtains.${index}.accessory`);
+          
+          if (accessoryValue === "-") {
+            return undefined;
+          }
+          
           const matchingAccessory = matchingCurtain?.accessories?.filter(
-            (data) => data.type === form.watch(`curtains.${index}.accessory`)
+            (data) => data.type === accessoryValue
           );
 
-          if (matchingAccessory) {
-            return matchingAccessory![0];
+          if (matchingAccessory && matchingAccessory.length > 0) {
+            return matchingAccessory[0];
           } else {
             return undefined;
           }
         };
 
         const handleGetChain = (): Chain | undefined => {
+          const chainValue = form.watch(`curtains.${index}.chain`);
+          
+          // If the chain is "-", return undefined to use the default price calculation
+          if (chainValue === "-") {
+            return undefined;
+          }
+          
           const matchingChain = matchingCurtain?.chains?.filter(
-            (data) => data.name === form.watch(`curtains.${index}.chain`)
+            (data) => data.name === chainValue
           );
 
-          if (matchingChain) {
-            return matchingChain![0];
+          if (matchingChain && matchingChain.length > 0) {
+            return matchingChain[0];
           } else {
             return undefined;
           }
