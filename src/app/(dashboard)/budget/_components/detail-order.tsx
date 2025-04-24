@@ -74,7 +74,7 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
               <div className="shrink-0 bg-border h-[1px] w-full" />
               <div className="text-right">
                 <p className="text-lg font-semibold">
-                  Total: ${totalAmount(order.items)}
+                  Total: {formatPrice(calculateOrderTotals(order.items).totalAmount)}
                 </p>
               </div>
             </div>
