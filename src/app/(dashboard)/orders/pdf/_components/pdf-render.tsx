@@ -12,7 +12,7 @@ import { OrderWithItems } from "@/types/orders";
 import { formatPrice } from "@/lib/utils";
 
 // Definir la cantidad máxima de ítems por página
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 14;
 
 // Registrar fuentes
 Font.register({
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   tableHeader: {
     flexDirection: "row",
     alignItems: "center",
-    textAlign: "center", // Centrar el texto
+    textAlign: "center",
     paddingVertical: 2,
     fontSize: 7, // Reducir el tamaño de la fuente
   },
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     fontSize: 7, // Reducir el tamaño de la fuente
     alignItems: "center",
     justifyContent: "center",
-    textAlign: "center", // Centrar el texto
+    textAlign: "center",
   },
   truncate: {
     whiteSpace: "nowrap",
@@ -101,15 +101,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignSelf: "flex-end",
-    marginTop: 10, // Reducir el margen superior
+    marginTop: 10,
+    width: "100%",
+    borderTopWidth: 1,
+    borderTopColor: "#ddd",
+    paddingTop: 5,
   },
   totalRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
-    fontSize: 8, // Reducir el tamaño de la fuente
+    fontSize: 8,
     gap: 5,
     marginBottom: 5,
+    width: "30%",
   },
   totalRowText: {
     fontSize: 8, // Reducir el tamaño de la fuente
@@ -185,10 +190,8 @@ const splitItemsIntoPages = (items: any[]) => {
     pages.push(currentPage);
   }
 
-  // If we have between 3-9 items, add an empty page for comments, FAQ and footer
-  if (items.length >= 3 && items.length <= 9 && pages.length === 1) {
-    pages.push([]);
-  }
+  // Always add an empty page for comments, FAQ and footer
+  pages.push([]);
 
   return pages;
 };
@@ -280,7 +283,9 @@ export const PDFRender = ({ order }: { order: OrderWithItems }) => {
                   gap: 5,
                 }}
               >
-                <View style={{ flexDirection: "column", width: "100%", gap: 5 }}>
+                <View
+                  style={{ flexDirection: "column", width: "100%", gap: 5 }}
+                >
                   <View
                     style={{
                       flexDirection: "row",
@@ -335,10 +340,14 @@ export const PDFRender = ({ order }: { order: OrderWithItems }) => {
           {pageItems.length > 0 && (
             <View style={styles.table}>
               <View style={styles.tableHeader}>
-                <Text style={[styles.boldText, styles.tableCell, { flex: 0.8 }]}>
+                <Text
+                  style={[styles.boldText, styles.tableCell, { flex: 0.8 }]}
+                >
                   Cantidad
                 </Text>
-                <Text style={[styles.boldText, styles.tableCell, { flex: 1.5 }]}>
+                <Text
+                  style={[styles.boldText, styles.tableCell, { flex: 1.5 }]}
+                >
                   Nombre
                 </Text>
                 <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
@@ -347,7 +356,9 @@ export const PDFRender = ({ order }: { order: OrderWithItems }) => {
                 <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
                   Color
                 </Text>
-                <Text style={[styles.boldText, styles.tableCell, { flex: 1.5 }]}>
+                <Text
+                  style={[styles.boldText, styles.tableCell, { flex: 1.5 }]}
+                >
                   Dimensiones
                 </Text>
                 <Text style={[styles.boldText, styles.tableCell, { flex: 1 }]}>
@@ -425,27 +436,25 @@ export const PDFRender = ({ order }: { order: OrderWithItems }) => {
                   </Text>
                 </View>
               ))}
-            </View>
-          )}
 
-          {/* Totales (siempre en la primera página cuando hay 3-9 items) */}
-          {(pageIndex === 0 || order.items.length <= 2) && (
-            <View style={styles.totals}>
-              <View>
-                <View style={styles.totalRow}>
-                  <Text style={[styles.boldText, styles.totalRowText]}>
-                    Total:
-                  </Text>
-                  <Text style={[styles.boldText, styles.totalRowText]}>
-                    {formatPrice(total)}
-                  </Text>
+              {/* Totales (después del último item en la página donde aparece) */}
+              {pageItems.length > 0 && pageIndex === pages.length - 2 && (
+                <View style={styles.totals}>
+                  <View style={styles.totalRow}>
+                    <Text style={[styles.boldText, styles.totalRowText]}>
+                      Total:
+                    </Text>
+                    <Text style={[styles.boldText, styles.totalRowText]}>
+                      {formatPrice(total)}
+                    </Text>
+                  </View>
                 </View>
-              </View>
+              )}
             </View>
           )}
 
-          {/* Sección de Comentarios, FAQ y Footer (en segunda página cuando hay 3-9 items) */}
-          {(order.items.length <= 2 || pageIndex === 1) && (
+          {/* Sección de Comentarios, FAQ y Footer (siempre en la última página) */}
+          {pageIndex === pages.length - 1 && (
             <>
               {/* Sección de Comentarios */}
               {(order.comment || itemsWithComments.length > 0) && (
@@ -479,7 +488,9 @@ export const PDFRender = ({ order }: { order: OrderWithItems }) => {
                     title: "Formas de Pago",
                     content: (
                       <Text>
-                        <Text style={styles.text}>Anticipo 60% | Saldo 40% Contra entrega</Text>
+                        <Text style={styles.text}>
+                          Anticipo 60% | Saldo 40% Contra entrega
+                        </Text>
                       </Text>
                     ),
                   },
