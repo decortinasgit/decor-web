@@ -91,6 +91,55 @@ const Step1 = ({
   append,
   deleteRow,
 }: Props) => {
+  // Move useEffect hooks outside the map function
+  useEffect(() => {
+    fields.forEach((field, index) => {
+      const colorOptions = getUniqueValues(
+        curtains.filter(
+          (curtain) =>
+            curtain.name === selectedCurtainValues[index].name &&
+            curtain.type === selectedCurtainValues[index].type
+        ),
+        "color"
+      );
+
+      if (
+        colorOptions.length === 1 && 
+        colorOptions[0] === "-" && 
+        !form.watch(`curtains.${index}.color`)
+      ) {
+        form.setValue(`curtains.${index}.color`, "-");
+        handleColorChange(index, "-");
+      }
+    });
+  }, [fields, curtains, selectedCurtainValues, form, handleColorChange]);
+
+  useEffect(() => {
+    fields.forEach((field, index) => {
+      const matchingCurtain = getCurtainObject(index);
+      if (
+        matchingCurtain?.accessories?.length === 1 && 
+        matchingCurtain.accessories[0].type === "-" && 
+        !form.watch(`curtains.${index}.accessory`)
+      ) {
+        form.setValue(`curtains.${index}.accessory`, "-");
+      }
+    });
+  }, [fields, getCurtainObject, form]);
+
+  useEffect(() => {
+    fields.forEach((field, index) => {
+      const matchingCurtain = getCurtainObject(index);
+      if (
+        matchingCurtain?.chains?.length === 1 && 
+        matchingCurtain.chains[0].name === "-" && 
+        !form.watch(`curtains.${index}.chain`)
+      ) {
+        form.setValue(`curtains.${index}.chain`, "-");
+      }
+    });
+  }, [fields, getCurtainObject, form]);
+
   return (
     <>
       {fields.map((field, index) => {
@@ -115,42 +164,6 @@ const Step1 = ({
         );
 
         const matchingCurtain = getCurtainObject(index);
-
-        // Auto-select "-" for color if it's the only option
-        useEffect(() => {
-          if (
-            colorOptions.length === 1 && 
-            colorOptions[0] === "-" && 
-            !form.watch(`curtains.${index}.color`)
-          ) {
-            form.setValue(`curtains.${index}.color`, "-");
-            handleColorChange(index, "-");
-          }
-        }, [colorOptions, index, form, handleColorChange]);
-
-        // Auto-select "-" for accessory if it's the only option
-        useEffect(() => {
-          if (
-            matchingCurtain?.accessories?.length === 1 && 
-            matchingCurtain.accessories[0].type === "-" && 
-            !form.watch(`curtains.${index}.accessory`)
-          ) {
-            form.setValue(`curtains.${index}.accessory`, "-");
-            handleGetAccessory();
-          }
-        }, [matchingCurtain, index, form]);
-
-        // Auto-select "-" for chain if it's the only option
-        useEffect(() => {
-          if (
-            matchingCurtain?.chains?.length === 1 && 
-            matchingCurtain.chains[0].name === "-" && 
-            !form.watch(`curtains.${index}.chain`)
-          ) {
-            form.setValue(`curtains.${index}.chain`, "-");
-            handleGetChain();
-          }
-        }, [matchingCurtain, index, form]);
 
         const width = form.watch(`curtains.${index}.width`);
         const height = form.watch(`curtains.${index}.height`);
