@@ -107,10 +107,12 @@ export const priceCalculation = (
     sizes?.width &&
     sizes?.height
   ) {
-    let partA = parseFloat(accessory.price) * dolar * (sizes.width / 100);
+    // Ensure minimum width of 100
+    const effectiveWidth = Math.max(sizes.width, 100);
+    let partA = parseFloat(accessory.price) * dolar * (effectiveWidth / 100);
     // console.log(partA, 'partA');
 
-    let partB = price * (sizes.width / 100) * (sizes.height / 100 + 0.3);
+    let partB = price * (effectiveWidth / 100) * (sizes.height / 100 + 0.3);
     // console.log(partB, 'partB');
     let partC = 0;
 
