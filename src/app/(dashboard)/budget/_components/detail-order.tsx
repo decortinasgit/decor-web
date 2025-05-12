@@ -57,7 +57,12 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
                 </p>
                 <p className="text-gray-600">
                   Precio total:{" "}
-                  {formatPrice(calculateOrderTotals(order.items).totalAmount)}
+                  {formatPrice(
+                    order.items.reduce(
+                      (acc, item) => acc + (Number(item.price) || 0),
+                      0
+                    )
+                  )}
                 </p>
               </div>
               <div className="shrink-0 bg-border h-[1px] w-full" />
@@ -74,7 +79,13 @@ export default function DetailOrder({ order }: OrderSuccessProps) {
               <div className="shrink-0 bg-border h-[1px] w-full" />
               <div className="text-right">
                 <p className="text-lg font-semibold">
-                  Total: {formatPrice(calculateOrderTotals(order.items).totalAmount)}
+                  Total:{" "}
+                  {formatPrice(
+                    order.items.reduce(
+                      (acc, item) => acc + (Number(item.price) || 0),
+                      0
+                    )
+                  )}
                 </p>
               </div>
             </div>
