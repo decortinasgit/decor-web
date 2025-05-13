@@ -122,7 +122,6 @@ export const priceCalculation = (
     return { price: (partA + partB + partC) * quantity };
   } else if (
     category === Category.ITEM_E &&
-    accessory &&
     sizes?.width &&
     sizes?.height &&
     pinches &&
@@ -149,13 +148,6 @@ export const priceCalculation = (
         throw new Error("Pinches inválidos");
     }
 
-    // // Validar si el ancho excede el máximo permitido
-    // if (sizes.width / 100 > maxWidth) {
-    //   error = `El ancho (${
-    //     sizes.width / 100
-    //   } m) excede el máximo permitido para ${pinches} pellizcos (${maxWidth} m).`;
-    // }
-
     // Cálculo de la cantidad de tela
     const cantidadTela = fabricQuantity(
       { width: sizes.width, height: sizes.height },
@@ -165,7 +157,7 @@ export const priceCalculation = (
 
     // Parte 1: Costo del riel
     const railLength = Math.max(1.2, Math.ceil(sizes.width / 100 / 0.2) * 0.2);
-    const partA = railLength * (parseFloat(accessory.price) * dolar); // Precio del riel por tramo de 20 cm
+    const partA = railLength * (parseFloat(accessory?.price || "0") * dolar); // Precio del riel por tramo de 20 cm
 
     // Parte 2: Cantidad de tela x Item E
     const partB = cantidadTela! * price;
