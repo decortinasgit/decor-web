@@ -107,19 +107,17 @@ export const priceCalculation = (
     sizes?.width &&
     sizes?.height
   ) {
-    // Ensure minimum width of 100
+    // Ensure minimum width of 100 and height of 130
     const effectiveWidth = Math.max(sizes.width, 100);
+    const effectiveHeight = Math.max(sizes.height, 130);
     let partA = parseFloat(accessory.price) * dolar * (effectiveWidth / 100);
-    // console.log(partA, 'partA');
 
-    let partB = price * (effectiveWidth / 100) * (sizes.height / 100 + 0.3);
-    // console.log(partB, 'partB');
+    let partB = price * (effectiveWidth / 100) * (effectiveHeight / 100 + 0.3);
     let partC = 0;
 
     if (chain) {
       partC = parseFloat(chain.price) * dolar;
     }
-    // console.log(partC, 'partC');
 
     return { price: (partA + partB + partC) * quantity };
   } else if (
