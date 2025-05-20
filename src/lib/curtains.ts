@@ -174,10 +174,10 @@ export const priceCalculation = (
     const effectiveWidth = category === Category.ITEM_D 
       ? Math.max(sizes.width, 120) 
       : sizes.width;
-    
-    return { price: price * (effectiveWidth / 100) };
+
+    return { price: price * (effectiveWidth / 100) * quantity };
   } else if (category === Category.ITEM_I && sizes?.height) {
-    return { price: price * (sizes.height / 100) };
+    return { price: price * (sizes.height / 100) * quantity };
   }
   return { price: price * quantity };
 };
