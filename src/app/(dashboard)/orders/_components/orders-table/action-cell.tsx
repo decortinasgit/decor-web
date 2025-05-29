@@ -149,11 +149,9 @@ const ActionsCell = ({
           >
             Copiar ID
           </DropdownMenuItem>
-          {order.status === "completed" && (
             <DropdownMenuItem onClick={() => copyItemsToClipboard(order)}>
               Copiar CSV
             </DropdownMenuItem>
-          )}
           <DropdownMenuSeparator />
           {order.status === "pending" && (
             <DropdownMenuItem
