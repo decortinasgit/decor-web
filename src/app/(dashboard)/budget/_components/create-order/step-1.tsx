@@ -104,8 +104,8 @@ const Step1 = ({
       );
 
       if (
-        colorOptions.length === 1 && 
-        colorOptions[0] === "-" && 
+        colorOptions.length === 1 &&
+        colorOptions[0] === "-" &&
         !form.watch(`curtains.${index}.color`)
       ) {
         form.setValue(`curtains.${index}.color`, "-");
@@ -118,8 +118,8 @@ const Step1 = ({
     fields.forEach((field, index) => {
       const matchingCurtain = getCurtainObject(index);
       if (
-        matchingCurtain?.accessories?.length === 1 && 
-        matchingCurtain.accessories[0].type === "-" && 
+        matchingCurtain?.accessories?.length === 1 &&
+        matchingCurtain.accessories[0].type === "-" &&
         !form.watch(`curtains.${index}.accessory`)
       ) {
         form.setValue(`curtains.${index}.accessory`, "-");
@@ -131,8 +131,8 @@ const Step1 = ({
     fields.forEach((field, index) => {
       const matchingCurtain = getCurtainObject(index);
       if (
-        matchingCurtain?.chains?.length === 1 && 
-        matchingCurtain.chains[0].name === "-" && 
+        matchingCurtain?.chains?.length === 1 &&
+        matchingCurtain.chains[0].name === "-" &&
         !form.watch(`curtains.${index}.chain`)
       ) {
         form.setValue(`curtains.${index}.chain`, "-");
@@ -259,11 +259,7 @@ const Step1 = ({
 
         const handleGetAccessory = (): Accesory | undefined => {
           const accessoryValue = form.watch(`curtains.${index}.accessory`);
-          
-          if (accessoryValue === "-") {
-            return undefined;
-          }
-          
+
           const matchingAccessory = matchingCurtain?.accessories?.filter(
             (data) => data.type === accessoryValue
           );
@@ -277,12 +273,12 @@ const Step1 = ({
 
         const handleGetChain = (): Chain | undefined => {
           const chainValue = form.watch(`curtains.${index}.chain`);
-          
+
           // If the chain is "-", return undefined to use the default price calculation
           if (chainValue === "-") {
             return undefined;
           }
-          
+
           const matchingChain = matchingCurtain?.chains?.filter(
             (data) => data.name === chainValue
           );
